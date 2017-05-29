@@ -1,4 +1,4 @@
-# Advent Of Code ![Build status](https://travis-ci.org/JStege1206/AdventOfCode2016.svg?branch=master)
+# Advent Of Code [![Build Status](https://travis-ci.org/JStege1206/AdventOfCode.svg?branch=master)](https://travis-ci.org/JStege1206/AdventOfCode)
 
 ## Introduction
 This repository contains an implementations of the 2015 and 2016 versions of [Advent of Code](http://adventofcode.com/) created by [Eric Wastl](https://twitter.com/ericwastl).
