@@ -1,8 +1,9 @@
 package nl.jstege.adventofcode.aoccommon.utils
 
 import nl.jstege.adventofcode.aoccommon.days.Day
-import org.junit.Assert
+//import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.test.assertEquals
 
 /**
  *
@@ -12,11 +13,11 @@ abstract class DayTester(val day: Day) {
     companion object Runner {
         fun testFirst(day: Day, input: Sequence<String>, expectedOutput: String) {
             val actualOutput = day.first(input).toString()
-            Assert.assertEquals(expectedOutput, actualOutput)
+            assertEquals(expectedOutput, actualOutput)
         }
         fun testSecond(day: Day, input: Sequence<String>, expectedOutput: String) {
-            val actualOutput = day.first(input).toString()
-            Assert.assertEquals(expectedOutput, actualOutput)
+            val actualOutput = day.second(input).toString()
+            assertEquals(expectedOutput, actualOutput)
         }
 
         private fun loadOutput(c: Class<out Day>): List<String> = this::class.java.classLoader
@@ -35,6 +36,6 @@ abstract class DayTester(val day: Day) {
 
     @Test
     fun testSecond() {
-        Runner.testSecond(day, input, output[0])
+        Runner.testSecond(day, input, output[1])
     }
 }

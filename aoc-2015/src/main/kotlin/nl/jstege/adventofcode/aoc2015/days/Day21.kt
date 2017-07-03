@@ -38,12 +38,12 @@ class Day21 : Day() {
     override fun first(input: Sequence<String>) = ITEMS
             .generateBuilds(Player.of(OWN_PLAYER))
             .generateFights(Player.of(input.toList()))
-            .filter { it.second }.minBy { it.first }!!.first
+            .filter { it.second }.map { it.first }.min()!!//.minBy { it.first }!!.first
 
     override fun second(input: Sequence<String>) = ITEMS
             .generateBuilds(Player.of(OWN_PLAYER))
             .generateFights(Player.of(input.toList()))
-            .filter { !it.second }.maxBy { it.first }!!.first
+            .filter { !it.second }.map { it.first }.max()!!//.maxBy { it.first }!!.first
 
     private fun List<Pair<Int, Item>>.generateBuilds(player: Player) =
             this.filter { it.second is Item.Weapon }.flatMap { w ->

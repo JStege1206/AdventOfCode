@@ -12,40 +12,37 @@ class Day18 : Day() {
     private val ITERATIONS = 100
 
     override fun first(input: Sequence<String>) = (0 until ITERATIONS)
-            .fold(Grid.parse(input.toList()), { g, _ ->
+            .fold(Grid.parse(input.toList())) { g, _ ->
                 g.getTogglePoints().fold(g) { _, (x, y) -> g[x, y] = !g[x, y]; g }
-            }).cardinality()
+            }.cardinality()
 
     override fun second(input: Sequence<String>) = (0 until ITERATIONS)
-            .fold(Grid.parse(input.toList()), { g, _ ->
+            .fold(Grid.parse(input.toList())) { g, _ ->
                 g.getTogglePoints().asSequence()
                         .filterNot { (x, y) ->
-                            (y == 0 && x == 0) ||
-                                    (y == 0 && x == g.width - 1) ||
-                                    (y == g.height - 1 && x == 0) ||
-                                    (y == g.height - 1 && x == g.width - 1)
+                            (y == 0 || y == g.height - 1) &&
+                                    (x == 0 || x == g.width - 1)
                         }
                         .fold(g) { _, (x, y) -> g[x, y] = !g[x, y]; g }
-            }).cardinality()
+            }.cardinality()
 
 
-    private class Grid(val grid: BitSet, val height: Int, val width: Int) {
+    private class Grid private constructor(val grid: BitSet, val height: Int, val width: Int) {
+
         operator fun get(x: Int, y: Int) = grid[y * width + x]
         operator fun set(x: Int, y: Int, value: Boolean) = grid.set(y * width + x, value)
         fun cardinality() = grid.cardinality()
 
-        fun getTogglePoints(): Set<Point> {
-            val togglePoints = mutableSetOf<Point>()
-            for (y in (0 until height)) {
-                for (x in (0 until width)) {
-                    val n = countNeighbours(x, y)
-                    if ((this[x, y] && !(n == 2 || n == 3)) || (!this[x, y] && n == 3)) {
-                        togglePoints.add(Point.of(x, y))
+        fun getTogglePoints(): Set<Point> = (0 until height)
+                .flatMap { y ->
+                    (0 until width).map { x ->
+                        Point.of(x, y)
                     }
                 }
-            }
-            return togglePoints
-        }
+                .filter { (x, y) ->
+                    val n = countNeighbours(x, y)
+                    (this[x, y] && !(n == 2 || n == 3)) || (!this[x, y] && n == 3)
+                }.toSet()
 
 
         private fun countNeighbours(x: Int, y: Int): Int {

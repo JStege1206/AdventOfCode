@@ -1,6 +1,9 @@
 package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
+import nl.jstege.adventofcode.aoccommon.utils.extensions.component7
+import nl.jstege.adventofcode.aoccommon.utils.extensions.component8
 import nl.jstege.adventofcode.aoccommon.utils.extensions.isEven
 
 /**
@@ -8,90 +11,60 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.isEven
  * @author Jelle Stege
  */
 class Day21 : Day() {
-    private val SWAP_OPERATION_INDEX = 1
-    private val SWAP_V1_INDEX = 2
-    private val SWAP_V2_INDEX = 5
-
-    private val ROTATE_OP_INDEX = 1
-    private val ROTATE_V1_INDEX = 2
-    private val ROTATE_V2_INDEX = 6
-
-    private val REVERSE_V1_INDEX = 2
-    private val REVERSE_V2_INDEX = 4
-
-    private val MOVE_V1_INDEX = 2
-    private val MOVE_V2_INDEX = 5
+    private val INPUT_REGEX = ("(swap|rotate|reverse|move) " +
+            "(position|letter|right|left|(based on position of letter))s? " +
+            "([a-z0-9])(( [a-z]+)* ([a-z0-9]))?.*").toRegex()
 
     private val UNSCRAMBLED_INPUT = "abcdefgh".toCharArray()
     private val SCRAMBLED_INPUT = "fbgdceah".toCharArray()
 
-    override fun first(input: Sequence<String>): Any {
-         return String(input
-                 .map { it.split(' ') }
-                 .fold(UNSCRAMBLED_INPUT, { outputArray, it ->
-                     when (it.first()) {
-                         "swap" ->
-                             if (it[SWAP_OPERATION_INDEX] == "position") {
-                                 outputArray.swap(it[SWAP_V1_INDEX].toInt(), it[SWAP_V2_INDEX].toInt())
-                             } else {
-                                 outputArray.swap(it[SWAP_V1_INDEX][0], it[SWAP_V2_INDEX][0])
-                             }
-                         "rotate" ->
-                             if (it[ROTATE_OP_INDEX] == "based") {
-                                 outputArray.rotate(it[ROTATE_V2_INDEX][0], false)
-                             } else {
-                                 outputArray.rotate(
-                                         if (it[ROTATE_OP_INDEX] == "left") {
-                                             outputArray.size - it[ROTATE_V1_INDEX].toInt()
-                                         } else {
-                                             it[ROTATE_V1_INDEX].toInt()
-                                         }
-                                 )
-                             }
-                         "reverse" -> outputArray.reverse(it[REVERSE_V1_INDEX].toInt(),
-                                 it[REVERSE_V2_INDEX].toInt())
-
-                         "move" -> outputArray.move(it[MOVE_V1_INDEX].toInt(),
-                                 it[MOVE_V2_INDEX].toInt())
-
-                     }
-                     outputArray
-                 }))
-    }
-
-    override fun second(input: Sequence<String>): Any {
-        return String(input.toList().asReversed()
-                .map { it.split(' ') }
-                .fold(SCRAMBLED_INPUT, { outputArray, it ->
-                    when (it.first()) {
-                        "swap" ->
-                            if (it[SWAP_OPERATION_INDEX] == "position") {
-                                outputArray.swap(it[SWAP_V2_INDEX].toInt(), it[SWAP_V1_INDEX].toInt())
-                            } else {
-                                outputArray.swap(it[SWAP_V2_INDEX][0], it[SWAP_V1_INDEX][0])
-                            }
-                        "rotate" ->
-                            if (it[ROTATE_OP_INDEX] == "based") {
-                                outputArray.rotate(it[ROTATE_V2_INDEX][0], true)
-                            } else {
-                                outputArray.rotate(
-                                        if (it[ROTATE_OP_INDEX] == "right") {
-                                            outputArray.size - it[ROTATE_V1_INDEX].toInt()
-                                        } else {
-                                            it[ROTATE_V1_INDEX].toInt()
-                                        }
-                                )
-                            }
-                        "reverse" -> outputArray.reverse(it[REVERSE_V1_INDEX].toInt(),
-                                it[REVERSE_V2_INDEX].toInt())
-
-                        "move" -> outputArray.move(it[MOVE_V2_INDEX].toInt(),
-                                it[MOVE_V1_INDEX].toInt())
+    override fun first(input: Sequence<String>): Any = input
+            .map {
+                INPUT_REGEX.matchEntire(it)?.groupValues
+                        ?: throw IllegalArgumentException("Invalid input")
+            }
+            .fold(UNSCRAMBLED_INPUT) { outputArray, (_, op, op2, _, v1, _, _, v2) ->
+                when (op) {
+                    "swap" ->
+                        if (op2 == "position") outputArray.swap(v1.toInt(), v2.toInt())
+                        else outputArray.swap(v1[0], v2[0])
+                    "rotate" -> when(op2) {
+                        "right" -> outputArray.rotate(v1.toInt())
+                        "left" -> outputArray.rotate(outputArray.size - v1.toInt())
+                        else -> outputArray.rotate(v1[0], false)
                     }
-                    outputArray
-                }))
-    }
+                    "reverse" -> outputArray.reverse(v1.toInt(), v2.toInt())
+                    "move" -> outputArray.move(v1.toInt(), v2.toInt())
 
+                }
+                outputArray
+            }
+            .fold(StringBuilder(), StringBuilder::append)
+            .toString()
+
+    override fun second(input: Sequence<String>): Any = input
+            .toList().asReversed()
+            .map {
+                INPUT_REGEX.matchEntire(it)?.groupValues
+                        ?: throw IllegalArgumentException("Invalid input")
+            }
+            .fold(SCRAMBLED_INPUT) { outputArray, (_, op, op2, _, v1, _, _, v2) ->
+                when (op) {
+                    "swap" ->
+                        if (op2 == "position") outputArray.swap(v2.toInt(), v1.toInt())
+                        else outputArray.swap(v2[0], v1[0])
+                    "rotate" -> when (op2) {
+                        "right" -> outputArray.rotate(outputArray.size - v1.toInt())
+                        "left" -> outputArray.rotate(v1.toInt())
+                        else -> outputArray.rotate(v1[0], true)
+                    }
+                    "reverse" -> outputArray.reverse(v1.toInt(), v2.toInt())
+                    "move" -> outputArray.move(v2.toInt(), v1.toInt())
+                }
+                outputArray
+            }
+            .fold(StringBuilder(), StringBuilder::append)
+            .toString()
 
 
     private fun CharArray.swap(i: Int, j: Int) {
@@ -135,21 +108,15 @@ class Day21 : Day() {
 
     private fun CharArray.reverse(x: Int, y: Int) {
         (0..((y - x) / 2)).forEach {
-            val c = this[x + it]
-            this[x + it] = this[y - it]
-            this[y - it] = c
+            this.swap(x + it, y - it)
         }
     }
 
     private fun CharArray.move(x: Int, y: Int) {
-        val range: IntProgression
-        val mod: Int
-        if (x > y) {
-            range = (x downTo y + 1)
-            mod = -1
+        val (range, mod) = if (x > y) {
+            (x downTo y + 1) to -1
         } else {
-            range = (x until y)
-            mod = 1
+            (x until y) to 1
         }
         val r = this[x]
         range.forEach { this[it] = this[it + 1 * mod] }

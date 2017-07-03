@@ -11,7 +11,7 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.isOdd
  */
 class Day13 : Day() {
     private val SRC_POS = Point.ONE_ONE
-    private val DEST_POS = Point(31, 39)
+    private val DEST_POS = Point.of(31, 39)
     private val MAX_STEPS = 50
 
     override fun first(input: Sequence<String>): Any =

@@ -14,14 +14,14 @@ class Day16 : Day() {
     )
 
     override fun first(input: Sequence<String>) = input
-            .map { Aunt.Companion.parse(it) }
+            .map(Aunt.Companion::parse)
             .first { it.matches(TARGET_AUNT, false) }.nr
 
     override fun second(input: Sequence<String>) = input
-            .map { Aunt.Companion.parse(it) }
+            .map(Aunt.Companion::parse)
             .first { it.matches(TARGET_AUNT, true) }.nr
 
-    private class Aunt(val nr: Int, val compounds: Map<String, Int>) {
+    private class Aunt private constructor(val nr: Int, val compounds: Map<String, Int>) {
         operator fun get(compound: String): Int = compounds[compound] ?: Int.MIN_VALUE
 
         fun matches(target: Aunt, useRanges: Boolean): Boolean = POSSIBLE_COMPOUNDS
@@ -31,10 +31,10 @@ class Day16 : Day() {
             if (this[compound] == Int.MIN_VALUE || target[compound] == Int.MIN_VALUE) {
                 return true
             }
-            if (useRanges && GREATER_THAN_COMPOUNDS.contains(compound)) {
+            if (useRanges && compound in GREATER_THAN_COMPOUNDS) {
                 return this[compound] > target[compound]
             }
-            if (useRanges && FEWER_THAN_COMPOUNDS.contains(compound)) {
+            if (useRanges && compound in FEWER_THAN_COMPOUNDS) {
                 return this[compound] < target[compound]
             }
             return this[compound] == target[compound]

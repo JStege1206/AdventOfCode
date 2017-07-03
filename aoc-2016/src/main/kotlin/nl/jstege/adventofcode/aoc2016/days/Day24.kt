@@ -38,7 +38,6 @@ class Day24 : Day() {
         return goals.keys
                 .filter { it != START_NODE }
                 .permutations()
-                .asSequence()
                 .map { pathModifier(it) }
                 .map { it.map { goals[it]!! } }
                 .map {

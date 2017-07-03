@@ -43,20 +43,20 @@ class Program(var instructions: MutableList<Instruction>,
     }
 
     companion object Assembler {
-        /**
-         * Assembles a List of Strings to a [Program].
-         * @param rawInstructions A list of [Instruction] representations
-         * @param machine The machine the resulting [Program] will belong to.
-         * @param instructionParser The function that parses the given input to instructions.
-         * @return A [Program] corresponding to the given list of [Instruction] representations
-         */
-        @JvmStatic fun assemble(rawInstructions: List<String>, machine: Machine,
-                                instructionParser: (List<String>) -> List<Instruction>): Program {
-            return Program(instructionParser(rawInstructions).map {
-                it.machine = machine
-                it
-            }.toMutableList(), machine)
-        }
+//        /**
+//         * Assembles a List of Strings to a [Program].
+//         * @param rawInstructions A list of [Instruction] representations
+//         * @param machine The machine the resulting [Program] will belong to.
+//         * @param instructionParser The function that parses the given input to instructions.
+//         * @return A [Program] corresponding to the given list of [Instruction] representations
+//         */
+//        @JvmStatic fun assemble(rawInstructions: List<String>, machine: Machine,
+//                                instructionParser: (List<String>) -> List<Instruction>) =
+//            Program(instructionParser(rawInstructions).map {
+//                it.machine = machine
+//                it
+//            }.toMutableList(), machine)
+
 
         /**
          * Assembles a List of Strings to a [Program]. Will also optimize the resulting program to
@@ -70,8 +70,11 @@ class Program(var instructions: MutableList<Instruction>,
         @JvmStatic fun assemble(rawInstructions: List<String>, machine: Machine,
                                 instructionParser: (List<String>) -> List<Instruction>,
                                 optimizer: (MutableList<Instruction>) ->
-                               MutableList<Instruction>): Program {
-            return Program(optimizer(instructionParser(rawInstructions).toMutableList()), machine)
-        }
+                               MutableList<Instruction> = { it }) =
+                Program(optimizer(instructionParser(rawInstructions)
+                        .onEach { it.machine = machine }
+                        .toMutableList()
+                ), machine)
+
     }
 }

@@ -10,10 +10,10 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.isEven
  */
 class Day03 : Day() {
     val dirs = mapOf(
-            '^' to { p: Point -> p.addY(1) },
-            'v' to { p: Point -> p.subY(1) },
-            '<' to { p: Point -> p.subX(1) },
-            '>' to { p: Point -> p.addX(1) }
+            '^' to Point::incY,
+            'v' to Point::decY,
+            '<' to Point::decX,
+            '>' to Point::incX
     )
 
     override fun first(input: Sequence<String>): Any = input.first()

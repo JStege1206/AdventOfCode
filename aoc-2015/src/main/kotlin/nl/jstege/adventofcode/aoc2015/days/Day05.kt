@@ -7,17 +7,16 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day05 : Day() {
+    private val LIMITED_VOWELS = setOf('a', 'e', 'i', 'o', 'u')
     override fun first(input: Sequence<String>) = input.count { it.isNiceFirst() }
     override fun second(input: Sequence<String>) = input.count { it.isNiceSecond() }
 
     fun String.isNiceFirst() =
-            this.hasFowels(3) && this.containsDoubleLetters() && !containsIllegalPattern()
+            this.hasVowels(3) && this.containsDoubleLetters() && !containsIllegalPattern()
 
     private fun String.isNiceSecond(): Boolean = this.pairOccursTwice() && this.charRepeatsWrap()
 
-    private fun String.hasFowels(amount: Int) =
-            this.length - this.replace("[aeiou]".toRegex(), "").length >= amount
-
+    private fun String.hasVowels(amount: Int) = this.count { it in LIMITED_VOWELS } >= amount
 
     private fun String.containsDoubleLetters() = (0 until this.length - 1)
             .any { this[it] == this[it + 1] }

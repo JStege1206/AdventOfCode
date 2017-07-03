@@ -3,6 +3,10 @@ package nl.jstege.adventofcode.aoccommon.utils.machine
 /**
  * Simulates the execution of a [Program] on a [Machine]
  * @author Jelle Stege
+ *
+ * @property program The [Program] to run.
+ * @property machine The [Machine] to use.
+ * @constructor Sets the program and the machine to run a simulation on.
  */
 class Simulator(val program: Program, val machine: Machine) {
 
@@ -19,12 +23,7 @@ class Simulator(val program: Program, val machine: Machine) {
     /**
      * Executes a single [Instruction] of the [Program]
      */
-    fun step() {
-        val it = program.iterator()
-        if (it.hasNext()) {
-            (it.next())()
-        }
-    }
+    fun step() = step(1)
 
     /**
      * Executes a certain amount of [Instruction]s of the [Program], or the most present in the

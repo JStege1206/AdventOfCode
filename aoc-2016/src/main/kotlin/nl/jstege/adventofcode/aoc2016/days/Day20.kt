@@ -8,7 +8,7 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.sumBy
  * @author Jelle Stege
  */
 class Day20 : Day() {
-    val MAX_ADDRESS = (1L shl java.lang.Integer.SIZE) - 1
+    val MAX_ADDRESS = (1L shl Integer.SIZE) - 1
 
     override fun first(input: Sequence<String>): Any = input
             .map(Day20::IpRange).optimize().first
@@ -43,4 +43,3 @@ class Day20 : Day() {
         constructor(s: String) : this(s.split('-').map(String::toLong).sorted())
     }
 }
-

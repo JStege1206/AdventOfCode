@@ -29,8 +29,8 @@ class Day10 : Day() {
                     while ((j + k) < old.size && old[j + k] == nr) {
                         k++
                     }
-                    new.add(k)
-                    new.add(nr)
+                    new += k
+                    new += nr
                     j += k
                 }
                 new

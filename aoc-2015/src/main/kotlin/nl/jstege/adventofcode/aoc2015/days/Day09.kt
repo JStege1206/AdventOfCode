@@ -1,11 +1,7 @@
 package nl.jstege.adventofcode.aoc2015.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
-import nl.jstege.adventofcode.aoccommon.utils.extensions.head
-import nl.jstege.adventofcode.aoccommon.utils.extensions.permutations
-import nl.jstege.adventofcode.aoccommon.utils.extensions.tail
-import nl.jstege.adventofcode.aoccommon.utils.extensions.get
-import nl.jstege.adventofcode.aoccommon.utils.extensions.set
+import nl.jstege.adventofcode.aoccommon.utils.extensions.*
 
 /**
  *

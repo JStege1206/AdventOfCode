@@ -4,13 +4,42 @@ package nl.jstege.adventofcode.aoccommon.utils
  * Represents a point with a x and an y value. This class is immutable. Any
  * addition or subtraction will result in a new [Point] object.
  * @author Jelle Stege
+ *
+ * @property x The x value for this point.
+ * @property y The Y value for this property.
+ *
+ * @constructor Initializes a [Point] for the given x and y coordinates.
  */
-data class Point(val x: Int, val y: Int) : Comparable<Point> {
-    companion object Constants {
-        val ZERO_ZERO = Point(0, 0)
-        val ONE_ONE = Point(1, 1)
+data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point> {
+    /**
+     * Defines some constants and some builder functions.
+     */
+    companion object {
+        /**
+         * Represents a origin of (0,0)
+         */
+        val ZERO_ZERO = Point.of(0, 0)
+        /**
+         * Represents a coordinate at (1,1)
+         */
+        val ONE_ONE = Point.of(1, 1)
 
+        /**
+         * Creates a [Point] of the given x and y values.
+         *
+         * @param x The x value to use.
+         * @param y The y value to use.
+         * @return A new point with corresponding x and y values.
+         */
         fun of(x: Int, y: Int) = Point(x, y)
+
+        /**
+         * Creates a [Point] of the given [Pair], using the first value
+         * as x and the second value as y.
+         *
+         * @param p The pair to convert to a [Point]
+         * @return A new point with corresponding x and y values.
+         */
         fun of(p: Pair<Int, Int>) = Point(p.first, p.second)
     }
 
@@ -19,38 +48,56 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
      * Results in a new point.
      * @param ax The value to add to the x value of this point.
      * @param ay the value to add to the y value of this point.
+     * @return A new [Point] with the new values.
      */
-    fun add(ax: Int, ay: Int) = Point(x + ax, y + ay)
+    fun add(ax: Int, ay: Int) = Point.of(x + ax, y + ay)
 
     /**
      * Adds two points, results in a new object.
      * @param p the point to add.
+     * @return A new [Point] with the new values.
      */
     fun add(p: Point) = add(p.x, p.y)
 
     /**
      * Adds a value to the x value of this point. Results in a new object.
      * @param ax the value to add to the x value of this point.
+     * @return A new [Point] with the new values.
      */
     fun addX(ax: Int) = add(ax, 0)
 
     /**
      * Adds a value to the y value of this point. Results in a new object.
      * @param ay the value to add to the y value of this point.
+     * @return A new [Point] with the new values.
      */
     fun addY(ay: Int) = add(0, ay)
+
+    /**
+     * Increments the x value of this point by 1. Results in a new object.
+     * @return A new [Point] with the new values.
+     */
+    fun incX() = add(1, 0)
+
+    /**
+     * Increments the y value of this point by 1. Results in a new object.
+     * @return A new [Point] with the new values.
+     */
+    fun incY() = add(0, 1)
 
     /**
      * Subtracts some values from the x and y values of this point.
      * Results in a new point.
      * @param sx The value to subtract from the x value of this point.
      * @param sy the value to subtract from to the y value of this point.
+     * @return A new [Point] with the new values.
      */
-    fun sub(sx: Int, sy: Int) = add(sx * -1, sy * -1)
+    fun sub(sx: Int, sy: Int) = add(-sx, -sy)
 
     /**
      * Subtracts two points, results in a new object.
      * @param p the point to subtract.
+     * @return A new [Point] with the new values.
      */
     fun sub(p: Point) = sub(p.x, p.y)
 
@@ -58,6 +105,7 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
      * Subtracts a value from the x value of this point.
      * Results in a new object.
      * @param sx the value to subtract from the x value of this point.
+     * @return A new [Point] with the new values.
      */
     fun subX(sx: Int) = sub(sx, 0)
 
@@ -65,18 +113,33 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
      * Subtracts a value from the y value of this point.
      * Results in a new object.
      * @param sy the value to subtract from the y value of this point.
+     * @return A new [Point] with the new values.
      */
     fun subY(sy: Int) = sub(0, sy)
 
     /**
+     * Decrements the x value of this point by 1. Results in a new object.
+     * @return A new [Point] with the new values.
+     */
+    fun decX() = sub(1, 0)
+
+    /**
+     * Decrements the y value of this point by 1. Results in a new object.
+     * @return A new [Point] with the new values.
+     */
+    fun decY() = sub(0, 1)
+
+    /**
      * Adds two points, results in a new object.
      * @param p the point to add.
+     * @return A new [Point] with the new values.
      */
     operator fun plus(p: Point) = add(p)
 
     /**
      * Subtracts two points, results in a new object.
      * @param p the point to subtract.
+     * @return A new [Point] with the new values.
      */
     operator fun minus(p: Point) = sub(p)
 
@@ -101,7 +164,7 @@ data class Point(val x: Int, val y: Int) : Comparable<Point> {
 
     /**
      * Converts this point to a String representation.
-     *
+     * @return The String representation for this point, which is of the type (x, y)
      */
     override fun toString(): String {
         return "($x,$y)"

@@ -1,6 +1,8 @@
 package nl.jstege.adventofcode.aoc2015.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.mid
+import nl.jstege.adventofcode.aoccommon.utils.extensions.min
 
 /**
  *
@@ -9,17 +11,11 @@ import nl.jstege.adventofcode.aoccommon.days.Day
 class Day02 : Day() {
     override fun first(input: Sequence<String>) = input
             .map { it.split('x').map { it.toInt() } }
-            .map { (l, w, h) ->
-                2 * l * w + 2 * w * h + 2 * h * l + Math.min(Math.min(w * l, w * h), l * h)
+            .sumBy { (l, w, h) ->
+                2 * (w * l + w * h + h * l) + min(l * w, w * h, h * l)
             }
-            .sum()
 
     override fun second(input: Sequence<String>) = input
             .map { it.split('x').map { it.toInt() } }
-            .map { (l, w, h) ->
-                2 * Math.min(Math.min(l, w), h) +
-                        2 * Math.max(Math.min(w, l), Math.min(Math.max(w, l), h)) +
-                        l * w * h
-            }
-            .sum()
+            .sumBy { (l, w, h) -> 2 * min(l, w, h) + 2 * mid(l, w, h) + l * w * h }
 }

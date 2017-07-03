@@ -11,7 +11,7 @@ import kotlin.system.measureTimeMillis
  */
 abstract class Day {
     private companion object Constants {
-        @JvmStatic val INCOMPLETE_TEXT = "Assignment not started"
+        val INCOMPLETE_TEXT = "Assignment not started"
     }
     private var futureFirst = CompletableFuture<Pair<Any, Long>>()
     private var futureSecond = CompletableFuture<Pair<Any, Long>>()

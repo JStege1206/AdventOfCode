@@ -25,16 +25,19 @@ interface Instruction {
 
     /**
      * Returns this Instruction.
+     * @return This object.
      */
     operator fun component1() = this
 
     /**
      * Returns the operands of the Instruction.
+     * @return The operands for this instruction.
      */
     operator fun component2() = operands
 
     /**
      * Returns the machine of this Instruction.
+     * @return The machine used for this instruction.
      */
     operator fun component3() = machine
 }

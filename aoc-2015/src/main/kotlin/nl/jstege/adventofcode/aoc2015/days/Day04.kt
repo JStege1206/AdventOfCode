@@ -16,8 +16,7 @@ class Day04 : Day() {
         val prefix = input.first()
         val md5 = MessageDigest.getInstance("MD5")
         return (0 until Int.MAX_VALUE).asSequence()
-                .map { "$prefix$it".toByteArray() to it }
-                .map { md5.digest(it.first) to it.second }
+                .map { md5.digest("$prefix$it".toByteArray()) to it }
                 .first { it.first.prefixedWithZeroes(FIRST_ZEROES) }.second
     }
 
@@ -26,8 +25,7 @@ class Day04 : Day() {
         val md5 = MessageDigest.getInstance("MD5")
 
         return (0 until Int.MAX_VALUE).asSequence()
-                .map { "$prefix$it".toByteArray() to it }
-                .map { md5.digest(it.first) to it.second }
+                .map { md5.digest("$prefix$it".toByteArray()) to it }
                 .first { it.first.prefixedWithZeroes(SECOND_ZEROES) }.second
     }
 

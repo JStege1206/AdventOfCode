@@ -19,8 +19,8 @@ class Day17 : Day() {
     private val MIN_Y_COORD = 0
     private val MAX_X_COORD = 3
     private val MAX_Y_COORD = 3
-    private val STARTING_POINT = Point(MIN_X_COORD, MIN_Y_COORD)
-    private val DESTINATION_POINT = Point(MAX_X_COORD, MAX_Y_COORD)
+    private val STARTING_POINT = Point.of(MIN_X_COORD, MIN_Y_COORD)
+    private val DESTINATION_POINT = Point.of(MAX_X_COORD, MAX_Y_COORD)
 
     private val MIN_CAPACITY = 300
     private val ASSIGNMENT_MOD = mapOf(

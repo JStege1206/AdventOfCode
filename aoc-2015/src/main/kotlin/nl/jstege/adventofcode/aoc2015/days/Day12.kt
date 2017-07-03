@@ -21,7 +21,6 @@ class Day12 : Day() {
     private fun JsonNode.sumWithoutRed(): Int {
         if (this.isInt) return this.asInt()
 
-        var total = 0
         if (this.any { it.isTextual && it.asText() == "red" && this.isObject }) {
             return 0
         }

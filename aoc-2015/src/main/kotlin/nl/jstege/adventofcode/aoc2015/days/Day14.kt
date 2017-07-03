@@ -12,27 +12,22 @@ class Day14 : Day() {
 
     private val TRAVEL_TIME = 2503
 
-    override fun first(input: Sequence<String>) = input
+    override fun first(input: Sequence<String>) = input.parse()
             .map {
-                val i = INPUT_REGEX.matchEntire(it)?.groupValues
-                        ?: throw kotlin.IllegalArgumentException("Invalid input")
-                Triple(i[1].toInt(), i[2].toInt(), i[3].toInt())
-            }
-            .map { (speed, travelTime, restTime) ->
-                speed * (TRAVEL_TIME / (travelTime + restTime) * travelTime +
-                        (Math.min(TRAVEL_TIME % (travelTime + restTime), travelTime)))
+                it.travel(TRAVEL_TIME).distanceTravelled
             }
             .max()!!
 
     override fun second(input: Sequence<String>) =
             (1..TRAVEL_TIME)
-            .fold(input.parse().toList(), { rs, i ->
-                rs.onEach { it.travel(i) }.filter {
-                    it.distanceTravelled == rs.maxBy { it.distanceTravelled }!!.distanceTravelled
-                }.forEach { it.score++ }
-                rs
-            })
-            .maxBy { it.score }!!.score
+                    .fold(input.parse().toList()) { rs, i ->
+                        rs.onEach { it.travel(i) }.filter {
+                            it.distanceTravelled == rs.map { it.distanceTravelled }.max()
+                        }.forEach { it.score++ }
+                        rs
+                    }
+                    .map { it.score }
+                    .max()!!
 
 
     private fun Sequence<String>.parse() = this
@@ -40,17 +35,18 @@ class Day14 : Day() {
                 INPUT_REGEX.matchEntire(it)?.groupValues
                         ?: throw IllegalArgumentException("Invalid input")
             }
-            .map { (_, speed, tt, rt) ->
-                Reindeer(speed.toInt(), tt.toInt(), rt.toInt())
+            .map { (_, speed, travelTime, restTime) ->
+                Reindeer(speed.toInt(), travelTime.toInt(), restTime.toInt())
             }
 
     data class Reindeer(val speed: Int, val travelTime: Int, val restTime: Int) {
         var distanceTravelled = 0
         var score = 0
 
-        fun travel(current: Int) {
+        fun travel(current: Int): Reindeer {
             distanceTravelled = speed * (current / (travelTime + restTime) * travelTime +
                     (Math.min(current % (travelTime + restTime), travelTime)))
+            return this
         }
     }
 }

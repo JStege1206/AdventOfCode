@@ -1,6 +1,7 @@
 package nl.jstege.adventofcode.aoc2016
 
 import com.xenomachina.argparser.ArgParser
+import com.xenomachina.argparser.DefaultHelpFormatter
 import com.xenomachina.argparser.mainBody
 import nl.jstege.adventofcode.aoccommon.AdventOfCode
 import nl.jstege.adventofcode.aoccommon.days.Day
@@ -21,5 +22,5 @@ class AdventOfCode2016(parser: ArgParser) :
  * or look at the documentation for [AdventOfCode].
  */
 fun main(args: Array<String>) = mainBody("Advent Of Code 2016") {
-    AdventOfCode.run(AdventOfCode2016(ArgParser(args, helpFormatter = null)))
+    AdventOfCode.run(AdventOfCode2016(ArgParser(args, helpFormatter = DefaultHelpFormatter())))
 }

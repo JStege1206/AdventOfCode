@@ -1,9 +1,7 @@
 package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
-import nl.jstege.adventofcode.aoccommon.utils.extensions.isOdd
-import nl.jstege.adventofcode.aoccommon.utils.extensions.toHexChar
-import nl.jstege.adventofcode.aoccommon.utils.extensions.toUnsignedInt
+import nl.jstege.adventofcode.aoccommon.utils.extensions.*
 import java.security.MessageDigest
 
 /**
@@ -19,52 +17,41 @@ class Day05 : Day() {
     override fun first(input: Sequence<String>): Any {
         val doorId = input.first()
         val md5 = MessageDigest.getInstance("MD5")
-        val password = IntArray(PASSWORD_LENGTH) { INVALID_CHAR }
 
-        var charsFound = 0
-        var i = 0
-        while (charsFound < PASSWORD_LENGTH) {
-            val dig = md5.digest((doorId + i).toByteArray())
-
-            if (checkZeroPrefix(dig)) {
-                password[charsFound] = getPos(dig, REQUIRE_ZEROES_PREFIX)
-                charsFound++
-            }
-            i++
-        }
-        return password.map(Int::toHexChar).joinToString("")
+        return (0 until Int.MAX_VALUE).asSequence()
+                .map {
+                    md5.digest((doorId + it).toByteArray())
+                }
+                .filter { it.prefixedWithZeroes(REQUIRE_ZEROES_PREFIX) }
+                .map {
+                    getPos(it, REQUIRE_ZEROES_PREFIX)
+                }
+                .take(PASSWORD_LENGTH)
+                .map(Int::toHexChar).joinToString("")
     }
 
     override fun second(input: Sequence<String>): Any {
-        val prefix = input.first()
+        val doorId = input.first()
         val md5 = MessageDigest.getInstance("MD5")
-        val password = IntArray(PASSWORD_LENGTH) { INVALID_CHAR }
+        val positionsFound = BooleanArray(PASSWORD_LENGTH) { false }
 
-        var charsFound = 0
-        var i = 0
-        while (charsFound < PASSWORD_LENGTH) {
-            val digest = md5.digest((prefix + i).toByteArray())
-
-            if (checkZeroPrefix(digest)) {
-                val p = getPos(digest, REQUIRE_ZEROES_PREFIX)
-                if (p <= 7 && password[p] == INVALID_CHAR) {
-                    password[p] = getPos(digest, REQUIRE_ZEROES_PREFIX + 1)
-                    charsFound++
+        return (0 until Int.MAX_VALUE).asSequence()
+                .map {
+                    md5.digest((doorId + it).toByteArray())
                 }
-            }
-            i++
-        }
-        return password.map(Int::toHexChar).joinToString("")
-    }
-
-    private fun checkZeroPrefix(ar: ByteArray, zeroes: Int = REQUIRE_ZEROES_PREFIX): Boolean {
-        val checks = zeroes / 2
-        val zero = 0.toByte()
-        if (ar.size < checks) return false
-        (0 until checks)
-                .filter { ar[it] != zero }
-                .any { return false }
-        return !(zeroes.isOdd() && (ar.size < checks + 1) || ((ar[checks].toInt() and 0xF0 != 0)))
+                .filter { it.prefixedWithZeroes(REQUIRE_ZEROES_PREFIX) }
+                .map { getPos(it, REQUIRE_ZEROES_PREFIX) to it }
+                .filter { (i, _) ->
+                    i <= PASSWORD_LENGTH - 1 && !positionsFound[i]
+                }
+                .onEach {
+                    positionsFound[it.first] = true
+                }
+                .take(PASSWORD_LENGTH)
+                .sortedBy { (i, _) -> i }
+                .map { (_, digest) ->
+                    getPos(digest, REQUIRE_ZEROES_PREFIX + 1).toHexChar()
+                }.joinToString("")
     }
 
     private fun getPos(ar: ByteArray, pos: Int): Int =

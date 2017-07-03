@@ -9,10 +9,6 @@ import nl.jstege.adventofcode.aoccommon.days.Day
 class Day04 : Day() {
     private val INPUT_PATTERN = "^([a-z-]+)-(\\d+)\\[([a-z]{5})]$".toRegex()
 
-    private val ROOM_NAME_KEY = 1
-    private val SECTOR_ID_KEY = 2
-    private val CHECKSUM_KEY = 3
-
     private val CHECKSUM_LENGTH = 5
 
     private val SECRET_PHRASE = "northpole object storage"
@@ -24,20 +20,20 @@ class Day04 : Day() {
 
     override fun second(input: Sequence<String>): Any = input
             .getValidRooms()
-            .find { (encryptedName, sectorId) ->
+            .find { (encryptedName, sectorId, _) ->
                 SECRET_PHRASE == encryptedName.fold(StringBuilder(), { s, c ->
                     s.append(if (c != '-') 'a' + ((c - 'a' + (sectorId % 26)) % 26) else ' ')
                 }).toString().trim()
             }?.sectorId ?: throw IllegalStateException("No answer found")
 
-    private fun Sequence<String>.getValidRooms(): List<Room> {
+    private fun Sequence<String>.getValidRooms(): Sequence<Room> {
         return this
                 .map {
                     INPUT_PATTERN.matchEntire(it)?.groupValues
                             ?: throw IllegalStateException("Invalid input")
                 }
-                .map {
-                    Room(it[ROOM_NAME_KEY], it[SECTOR_ID_KEY].toInt(), it[CHECKSUM_KEY])
+                .map { (_, name, id, checksum) ->
+                    Room(name, id.toInt(), checksum)
                 }
                 .filter {
                     it.checksum == it.encryptedName
@@ -50,9 +46,10 @@ class Day04 : Day() {
                             })
                             .take(CHECKSUM_LENGTH)
                             .fold(StringBuilder(), { s, c -> s.append(c.key) })
-                            .toString()
                             .trim()
-                }.toList()
+                            .toString()
+
+                }
     }
 
     private data class Room(val encryptedName: String, val sectorId: Int, val checksum: String)

@@ -1,5 +1,6 @@
 package nl.jstege.adventofcode.aoc2015.days
 
+import com.sun.org.apache.xml.internal.utils.IntVector
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.Point
 import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
@@ -17,9 +18,9 @@ class Day06 : Day() {
             .parse()
             .fold(BooleanArray(GRID_ROWS * GRID_COLS), { grid, (op, from, to) ->
                 (from.y..to.y).forEach { y ->
-                    (from.x..to.x).forEach {
-                        grid[it, y] = (op == "turn on"
-                                || (op != "turn off" && !grid[it, y]))
+                    (from.x..to.x).forEach { x->
+                        grid[x, y] = (op == "turn on"
+                                || (op != "turn off" && !grid[x, y]))
                     }
                 }
                 grid
@@ -28,9 +29,9 @@ class Day06 : Day() {
     override fun second(input: Sequence<String>) = input
             .parse()
             .fold(IntArray(GRID_ROWS * GRID_COLS), { grid, (op, from, to) ->
-                for (y in from.y..to.y) {
-                    (from.x..to.x).forEach {
-                        grid[it, y] = Math.max(0, grid[it, y] + when (op) {
+                (from.y .. to.y).forEach { y ->
+                    (from.x..to.x).forEach { x ->
+                        grid[x, y] = Math.max(0, grid[x, y] + when (op) {
                             "turn on" -> 1
                             "turn off" -> -1
                             else -> 2
@@ -52,6 +53,7 @@ class Day06 : Day() {
                 var x2 = sx2.toInt()
                 var y2 = sy2.toInt()
 
+
                 if (x1 > x2) {
                     x1 += x2
                     x2 -= x2
@@ -69,13 +71,11 @@ class Day06 : Day() {
     private operator fun BooleanArray.get(x: Int, y: Int) = this[y * GRID_COLS + x]
     private operator fun IntArray.get(x: Int, y: Int) = this[y * GRID_COLS + x]
 
-    @Suppress("NOTHING_TO_INLINE")
-    inline private operator fun BooleanArray.set(x: Int, y: Int, v: Boolean) {
+    private operator fun BooleanArray.set(x: Int, y: Int, v: Boolean) {
         this[y * GRID_COLS + x] = v
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    inline private operator fun IntArray.set(x: Int, y: Int, v: Int) {
+    private operator fun IntArray.set(x: Int, y: Int, v: Int) {
         this[y * GRID_COLS + x] = v
     }
 }

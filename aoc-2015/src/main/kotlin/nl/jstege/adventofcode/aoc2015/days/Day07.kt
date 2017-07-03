@@ -13,7 +13,6 @@ class Day07 : Day() {
 
     override fun first(input: Sequence<String>) = input.compute()
 
-
     override fun second(input: Sequence<String>) = input.compute("b" to Wire(3176))
 
     private fun Sequence<String>.compute(vararg init: Pair<String, Wire>) = this

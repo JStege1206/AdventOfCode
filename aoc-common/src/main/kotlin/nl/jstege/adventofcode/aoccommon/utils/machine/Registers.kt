@@ -9,6 +9,7 @@ class Registers {
 
     /**
      * Returns the value of a register, or 0 if not present.
+     * @return The value of this register, or 0 if not present.
      */
     operator fun get(key: String): Int {
         return registers.getOrPut(key, { 0 })
@@ -16,6 +17,8 @@ class Registers {
 
     /**
      * Sets a register to a certain value.
+     * @param key The register name.
+     * @param value The register value.
      */
     operator fun set(key: String, value: Int) {
         registers[key] = value
