@@ -30,7 +30,7 @@ class Day24 : Day() {
                     this.combinations(it).filter { it.sum() == groupSize }
                 }
                 .filter { it.any() }
-                .firstOrElse { listOf(listOf(Int.MAX_VALUE)).asSequence() }
+                .orElse { listOf(listOf(Int.MAX_VALUE)).asSequence() }
                 .map { it.fold(1L, Long::times)}
                 .min()!!
     }

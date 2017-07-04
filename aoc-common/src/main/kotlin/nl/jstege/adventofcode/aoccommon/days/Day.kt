@@ -6,22 +6,49 @@ import java.util.concurrent.CompletableFuture
 import kotlin.system.measureTimeMillis
 
 /**
+ * Abstract implementation of a "Day" to be used for every Advent of Code assignment.
+ * Each Day exists of two assignments ("first" and "second"), which are methods in this class.
  *
  * @author Jelle Stege
+ *
+ * @constructor Initialises this [Day] with an incomplete text. To run the assignments, use the
+ * [Day.run] method.
  */
 abstract class Day {
+    /**
+     * Contains constants to be used by this [Day]
+     */
     private companion object Constants {
+        /**
+         * The text to be returned when the results of this [Day] are requested before it's started.
+         */
         val INCOMPLETE_TEXT = "Assignment not started"
     }
+
     private var futureFirst = CompletableFuture<Pair<Any, Long>>()
     private var futureSecond = CompletableFuture<Pair<Any, Long>>()
+
     init {
         futureFirst.complete(INCOMPLETE_TEXT to 0)
         futureSecond.complete(INCOMPLETE_TEXT to 0)
     }
 
+    /**
+     * The implementation for the first assignment of this [Day]
+     *
+     * @param input The input for this day, as a Sequence.
+     * @return The result of this assignment.
+     */
     abstract fun first(input: Sequence<String>): Any
+
+    /**
+     * The implementation for the first assignment of this [Day]
+     *
+     * @param input The input for this day, as a Sequence.
+     * @return The result of this assignment.
+     */
     abstract fun second(input: Sequence<String>): Any
+
     /**
      * Loads the input for this assignment and asynchronously executes the sub-assignments. Only
      * submits the sub-assignments to the ForkJoin common pool, does not check or wait for output.
@@ -66,21 +93,11 @@ abstract class Day {
      * @return The output, formatted.
      */
     override fun toString(): String {
-        val firstOutput = futureFirst.join()
-        val secondOutput = futureSecond.join()
-        val sb = StringBuilder()
-        sb.append(String.format("%s:\n", this::class.java.simpleName))
-        sb.append(String.format(
-                "  First:\n    Output: %s\n    Time taken: %sms\n",
-                firstOutput.first,
-                firstOutput.second
-        ))
-        sb.append(String.format(
-                "  Second:\n    Output: %s\n    Time taken: %sms\n",
-                secondOutput.first,
-                secondOutput.second
-        ))
-        return sb.toString()
+        val (firstOutput, firstTime) = futureFirst.join()
+        val (secondOutput, secondTime) = futureSecond.join()
+        return StringBuilder().append("${this::class.java.simpleName}\n")
+                .append("First:\n    Output: $firstOutput\n    Time taken: $firstTime\n")
+                .append("Second:\n    Output: $secondOutput\n    Time taken: $secondTime\n")
+                .toString()
     }
-
 }

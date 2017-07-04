@@ -1,0 +1,73 @@
+package nl.jstege.adventofcode.aoccommon.utils.extensions
+
+import java.util.concurrent.ThreadLocalRandom
+
+/**
+ * Methods to select a certain element from a given list of arguments.
+ * @author Jelle Stege
+ */
+
+/**
+ * Returns the minimal element of the given arguments.
+ *
+ * @param elements The elements to find the minimum of.
+ * @return The minimum in the given elements.
+ */
+fun <E : Comparable<E>> min(vararg elements: E): E = elements.minBy { it }!!
+
+/**
+ * Returns the maximum element of the given arguments.
+ *
+ * @param elements The elements to find the maximum of.
+ * @return The maximum in the given elements.
+ */
+fun <E : Comparable<E>> max(vararg elements: E): E = elements.maxBy { it }!!
+
+/**
+ * Returns the median element of the given arguments.
+ *
+ * @param elements The elements to find the median of.
+ * @return The median in the given elements.
+ */
+fun <E : Comparable<E>> mid(vararg elements: E) = elements.toList()
+        .quickSelect(elements.size / 2)
+
+private val RANDOM = ThreadLocalRandom.current()
+/**
+ * Finds the lowest kth element in the given List.
+ *
+ * @receiver The list to search for the lowest kth element.
+ * @param k The index of the element to find.
+ * @return The lowest kth element
+ */
+fun <E : Comparable<E>> List<E>.quickSelect(k: Int): E {
+    fun <E : Comparable<E>> MutableList<E>.partition(left: Int, right: Int, pivotIndex: Int): Int {
+        val pivot = this[pivotIndex]
+        this.swap(pivotIndex, right)
+        var storeIndex = left
+        (left until right).filter { this[it] < pivot }.forEach {
+            this.swap(storeIndex, it)
+            storeIndex++
+        }
+        this.swap(right, storeIndex)
+        return storeIndex
+    }
+
+    tailrec fun <E : Comparable<E>> MutableList<E>.recSelect(@Suppress("NAME_SHADOWING") k: Int,
+                                                             left: Int, right: Int): E {
+        if (left == right) {
+            return this[left]
+        }
+
+        val pivotIndex = this@recSelect.partition(left, right, RANDOM.nextInt(left, right))
+
+        if (k == pivotIndex) {
+            return this[k]
+        } else if (k < pivotIndex) {
+            return this.recSelect(k, left, pivotIndex - 1)
+        } else {
+            return this.recSelect(k, pivotIndex + 1, right)
+        }
+    }
+    return this.toMutableList().recSelect(k, 0, this.size - 1)
+}

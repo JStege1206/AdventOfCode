@@ -1,7 +1,5 @@
 package nl.jstege.adventofcode.aoccommon.utils.extensions
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
 import kotlin.coroutines.experimental.buildSequence
 
 /**
@@ -10,8 +8,13 @@ import kotlin.coroutines.experimental.buildSequence
  */
 
 /**
- * Transposes a list of lists in 2 dimensional space.
+ * Transposes a list of lists in 2 dimensional space. This function does not check whether all
+ * rows have an equal amount of elements. Rather, it assumes all rows have an equal amount of
+ * elements to the first row. Giving a 2D-list of varying row sizes results in undefined behaviour.
+ *
+ * @receiver The list to transpose.
  * @return The transposed list of lists.
+ * @throws IllegalArgumentException if the list is empty, or the columns are empty.
  */
 fun <E> List<List<E>>.transpose(): List<List<E>> {
     tailrec fun <E> List<List<E>>.transpose(accumulator: List<List<E>>): List<List<E>> =
@@ -26,57 +29,59 @@ fun <E> List<List<E>>.transpose(): List<List<E>> {
 }
 
 /**
- * Partitions a list into a list of sublists of a given size. If the chunk
+ * Partitions a list into a list of chunks of a given size. If the chunk
  * size is not a divisor of the size of the list, the last chunk will
  * be smaller.
  *
- * @param size The size of the sublists.
- *
+ * @receiver The list to cut into chunks.
+ * @param size The size of the chunks.
  * @return The partitioned list
+ * @throws IllegalArgumentException if the size of the chunks is less than 1.
  */
 fun <E> List<E>.chunked(size: Int): List<List<E>> {
-    tailrec fun <E> List<E>.chunked(@Suppress("NAME_SHADOWING") size: Int, acc: List<List<E>>): List<List<E>> =
-            if (this.isEmpty()) acc
-            else this.drop(size).chunked(size, acc + listOf(this.take(size)))
+    tailrec fun <E> List<E>.chunked(@Suppress("NAME_SHADOWING") size: Int,
+                                    accumulator: List<List<E>>): List<List<E>> =
+            if (this.isEmpty()) accumulator
+            else this.drop(size).chunked(size, accumulator + listOf(this.take(size)))
+
     return if (size < 1)
         throw IllegalArgumentException("Size too small")
     else this.chunked(size, listOf())
 }
 
 /**
- * Calculates all permutations of the given list.
+ * Calculates all permutations of the given collection.
+ *
+ * @receiver The collection to calculate permutations of.
+ * @return A sequence of all permutations.
  */
-fun <E> Collection<E>.permutations(): Sequence<List<E>> {
-    fun <E> MutableList<E>.swap(i: Int, j: Int) {
-        val t = this[i]
-        this[i] = this[j]
-        this[j] = t
-    }
+fun <E> Collection<E>.permutations(): Sequence<List<E>> = buildSequence {
+    val a = this@permutations.toMutableList()
+    val c = IntArray(this@permutations.size) { 0 }
+    yield(a.toList())
 
-    return buildSequence {
-        val a = this@permutations.toMutableList()
-        val c = IntArray(this@permutations.size) { 0 }
-        yield(a.toList())
+    var i = 0
+    while (i < a.size) {
+        if (c[i] < i) {
+            a.swap(if (i.isEven()) 0 else c[i], i)
 
-        var i = 0
-        while (i < a.size) {
-            if (c[i] < i) {
-                if (i.isEven()) {
-                    a.swap(0, i)
-                } else {
-                    a.swap(c[i], i)
-                }
-                yield(a.toList())
-                c[i] += 1
-                i = 0
-            } else {
-                c[i] = 0
-                i += 1
-            }
+            yield(a.toList())
+            c[i] += 1
+            i = 0
+        } else {
+            c[i] = 0
+            i += 1
         }
     }
 }
 
+/**
+ * Calculates and returns all combinations of a given size of the given collection.
+ *
+ * @receiver The collection to calculate combinations of.
+ * @param n The size of the combinations.
+ * @return A sequence of all combinations.
+ */
 fun <E> Collection<E>.combinations(n: Int): Sequence<List<E>> {
     fun IntArray.validCombination(@Suppress("NAME_SHADOWING") n: Int, k: Int): Boolean {
         if (this.size != k) {
@@ -89,7 +94,7 @@ fun <E> Collection<E>.combinations(n: Int): Sequence<List<E>> {
 
             (i + 1 until k)
                     .filter { this[i] >= this[it] }
-                    .onFirst { return false }
+                    .ifPresent { return false }
         }
         return true
     }
@@ -113,95 +118,15 @@ fun <E> Collection<E>.combinations(n: Int): Sequence<List<E>> {
     }
 }
 
-operator fun <E> java.util.ArrayDeque<E>.plusAssign(v: E) {
-    this.add(v)
-}
-
-inline fun <T> Iterable<T>.sumBy(selector: (T) -> Long): Long = this
-        .fold(0L) { sum, el -> sum + selector(el) }
-
-
-fun List<Int>.takeWhileSumGreaterThan(n: Int): List<Int> {
-    var sum = 0
-    return this.takeWhile {
-        sum += it
-        sum > n
-    }
-}
-
-fun List<Int>.takeWhileSumLessThan(n: Int): List<Int> {
-    var sum = 0
-    return this.takeWhile {
-        sum += it
-        sum < n
-    }
-}
-
-
-inline fun <T, R> Sequence<T>.foldWhile(predicate: (R, T) -> Boolean,
-                                        initial: R, operation: (acc: R, T) -> R): R {
-    var accumulator = initial
-    for (element in this) {
-        if (!predicate(accumulator, element)) {
-            return accumulator
-        }
-        accumulator = operation(accumulator, element)
-    }
-    return accumulator
-}
-
-inline fun <T, R> Iterable<T>.foldWhile(predicate: (R, T) -> Boolean,
-                                        initial: R, operation: (acc: R, T) -> R): R {
-    var accumulator = initial
-    for (element in this) {
-        if (!predicate(accumulator, element)) {
-            return accumulator
-        }
-        accumulator = operation(accumulator, element)
-    }
-    return accumulator
-}
-
-fun ByteArray.prefixedWithZeroes(amount: Int): Boolean {
-    val checks = amount / 2
-    val zero = 0.toByte()
-    if (this.size < checks) return false
-    (0 until checks)
-            .filter { this[it] != zero }
-            .onFirst { return false }
-    return amount.isEven() || (this.size >= checks + 1 && this[checks].toInt() and 0xF0 == 0)
-}
-
-inline fun <E> Iterable<E>.onFirst(action: () -> Unit) {
-    if (this.firstOrNull() != null) {
-        action()
-    }
-}
-
-inline fun <E> Sequence<E>.onFirst(action: () -> Unit) {
-    if (this.firstOrNull() != null) {
-        action()
-    }
-}
-
-operator fun <E> List<E>.component6() = this[5]
-operator fun <E> List<E>.component7() = this[6]
-operator fun <E> List<E>.component8() = this[7]
-inline val <E> Collection<E>.tail get() = this.drop(1)
-inline val <E> Collection<E>.head get() = this.first()
-inline val <E> Collection<E>.last get() = this.last()
-inline val <E> Collection<E>.init get() = this.take(this.size - 1)
-inline val <E> Sequence<E>.head get() = this.first()
-inline val <E> Sequence<E>.tail get() = this.drop(1)
-
-fun Sequence<String>.toJson(): JsonNode = ObjectMapper().readTree(this.first())!!
-
-operator fun <K, L, V> Map<K, Map<L, V>>.get(k1: K, k2: L) = this[k1]?.get(k2)
-operator fun <K, L, V> MutableMap<K, MutableMap<L, V>>.set(k1: K, k2: L, v: V): V? = this
-        .getOrPut(k1, { mutableMapOf() }).put(k2, v)
-
-inline fun <E> Sequence<E>.firstOrElse(block: () -> E) = this.firstOrNull() ?: block()
-inline fun <E> Sequence<E>.firstOrElse(predicate: (E) -> Boolean, block: () -> E): E {
-    for (element in this) if (predicate(element)) return element
-    return block()
+/**
+ * Swaps two elements in the given MutableList
+ *
+ * @receiver The MutableList to mutate.
+ * @param i The index of the first element.
+ * @param j The index of the second element.
+ */
+fun <E> MutableList<E>.swap(i: Int, j: Int) {
+    val t = this[i]
+    this[i] = this[j]
+    this[j] = t
 }
