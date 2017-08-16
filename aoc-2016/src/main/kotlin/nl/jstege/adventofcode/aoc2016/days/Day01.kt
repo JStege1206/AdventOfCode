@@ -11,13 +11,13 @@ import nl.jstege.adventofcode.aoccommon.utils.Point
 class Day01 : Day() {
     override fun first(input: Sequence<String>): Any {
         var dir = Direction.NORTH
-        val (x, y) = input.first().parse().fold(Point.ZERO_ZERO, { p, (turn, steps) ->
+        val (x, y) = input.first().parse().fold(Point.ZERO_ZERO) { p, (turn, steps) ->
             dir = dir.turn(turn)
             when (dir) {
                 Direction.NORTH, Direction.SOUTH -> p.addY(dir.modifier * steps)
                 else -> p.addX(dir.modifier * steps)
             }
-        })
+        }
         return Math.abs(x) + Math.abs(y)
     }
 

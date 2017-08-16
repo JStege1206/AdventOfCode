@@ -15,15 +15,20 @@ class Day04 : Day() {
 
     override fun first(input: Sequence<String>): Any = input
             .getValidRooms()
-            .map {it.sectorId}
+            .map { it.sectorId }
             .sum()
 
     override fun second(input: Sequence<String>): Any = input
             .getValidRooms()
             .find { (encryptedName, sectorId, _) ->
-                SECRET_PHRASE == encryptedName.fold(StringBuilder(), { s, c ->
-                    s.append(if (c != '-') 'a' + ((c - 'a' + (sectorId % 26)) % 26) else ' ')
-                }).toString().trim()
+                SECRET_PHRASE == encryptedName.asSequence()
+                        .map {
+                            if (it != '-') 'a' + ((it - 'a' + (sectorId % 26)) % 26)
+                            else ' '
+                        }
+                        .fold(StringBuilder(), StringBuilder::append)
+                        .trim()
+                        .toString()
             }?.sectorId ?: throw IllegalStateException("No answer found")
 
     private fun Sequence<String>.getValidRooms(): Sequence<Room> {
@@ -45,7 +50,8 @@ class Day04 : Day() {
                                 else 1
                             })
                             .take(CHECKSUM_LENGTH)
-                            .fold(StringBuilder(), { s, c -> s.append(c.key) })
+                            .map { it.key }
+                            .fold(StringBuilder(), StringBuilder::append)
                             .trim()
                             .toString()
 

@@ -1,6 +1,7 @@
 package nl.jstege.adventofcode.aoc2015.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 
 /**
  *
@@ -9,18 +10,18 @@ import nl.jstege.adventofcode.aoccommon.days.Day
 class Day10 : Day() {
     private val FIRST_ITERATIONS = 40
     private val SECOND_ITERATIONS = 50
-    override fun first(input: Sequence<String>) = input.first()
+    override fun first(input: Sequence<String>): Any = input.head
             .map { it - '0' }
             .iterate(FIRST_ITERATIONS)
             .size
 
-    override fun second(input: Sequence<String>) = input.first()
+    override fun second(input: Sequence<String>): Any = input.head
             .map { it - '0' }
             .iterate(SECOND_ITERATIONS)
             .size
 
-    private fun List<Int>.iterate(iterations: Int) = (0 until iterations)
-            .fold(this.toMutableList(), { old, _ ->
+    private fun List<Int>.iterate(iterations: Int): List<Int> = (0 until iterations)
+            .fold(this.toList()) { old, _ ->
                 val new = mutableListOf<Int>()
                 var j = 0
                 while (j < old.size) {
@@ -34,5 +35,5 @@ class Day10 : Day() {
                     j += k
                 }
                 new
-            })
+            }
 }

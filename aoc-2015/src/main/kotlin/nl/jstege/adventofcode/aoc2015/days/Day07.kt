@@ -9,18 +9,16 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
  */
 class Day07 : Day() {
     private val INPUT_REGEX =
-            "^(NOT)?\\s?([a-z0-9]+)\\s?(AND|OR|LSHIFT|RSHIFT)?\\s?([a-z0-9]*) -> ([a-z]+)$".toRegex()
+            "^(NOT)?\\s?([a-z0-9]+)\\s?(AND|OR|LSHIFT|RSHIFT)?\\s?([a-z0-9]*) -> ([a-z]+)$"
+                    .toRegex()
 
-    override fun first(input: Sequence<String>) = input.compute()
+    override fun first(input: Sequence<String>): Any = input.compute()
 
-    override fun second(input: Sequence<String>) = input.compute("b" to Wire(3176))
+    override fun second(input: Sequence<String>): Any = input.compute("b" to Wire(3176))
 
-    private fun Sequence<String>.compute(vararg init: Pair<String, Wire>) = this
-            .map {
-                INPUT_REGEX.matchEntire(it)?.groupValues
-                        ?: throw IllegalArgumentException("Invalid input")
-            }
-            .fold(mutableMapOf(*init), { wires, (_, opNot, w1, opR, w2, wo) ->
+    private fun Sequence<String>.compute(vararg init: Pair<String, Wire>): Int = this
+            .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
+            .fold(mutableMapOf(*init)) { wires, (_, opNot, w1, opR, w2, wo) ->
                 val op = if (opNot.isNotEmpty()) {
                     Operator.NOT
                 } else if (opR.isNotEmpty()) {
@@ -29,12 +27,12 @@ class Day07 : Day() {
                     Operator.MOVE
                 }
 
-                val wireOut = Wire.get(wo, wires)
+                val wireOut = Wire.getOrCreate(wo, wires)
                 wireOut.gate = Gate(op,
-                        Wire.get(w1, wires), Wire.get(w2, wires),
+                        Wire.getOrCreate(w1, wires), Wire.getOrCreate(w2, wires),
                         wireOut)
                 wires
-            })
+            }
             .getOrElse("a", { Wire() })
             .value
 
@@ -62,7 +60,7 @@ class Day07 : Day() {
         lateinit var gate: Gate
 
         companion object {
-            @JvmStatic fun get(ident: String, wires: MutableMap<String, Wire>) =
+            @JvmStatic fun getOrCreate(ident: String, wires: MutableMap<String, Wire>): Wire =
                     if (ident.matches("[0-9]+".toRegex())) {
                         Wire(ident.toInt())
                     } else {

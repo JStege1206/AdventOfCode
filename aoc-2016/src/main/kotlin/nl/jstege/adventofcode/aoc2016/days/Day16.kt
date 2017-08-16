@@ -44,8 +44,7 @@ class Day16 : Day() {
             }
 
     private fun StringBuilder.negate(): StringBuilder = (0 until this.length)
-            .fold(StringBuilder(), { sb, it ->
-                sb.append(if (this[it] == '1') '0' else '1')
-            })
+            .map { if (this[it] == '1') '0' else '1'}
+            .fold(StringBuilder(), StringBuilder::append)
 
 }

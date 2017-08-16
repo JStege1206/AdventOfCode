@@ -1,6 +1,7 @@
 package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 import nl.jstege.adventofcode.aoccommon.utils.extensions.permutations
 import java.util.*
 
@@ -25,7 +26,7 @@ class Day24 : Day() {
         val maze = Maze(this
                 .asSequence()
                 .flatMap(String::asSequence)
-                .foldIndexed(BitSet(this.size * this[0].length), { i, bs, c ->
+                .foldIndexed(BitSet(this.size * this.head.length)) { i, bs, c ->
                     if (c != '#') {
                         if (c.isDigit()) {
                             goals[c - '0'] = i
@@ -33,7 +34,7 @@ class Day24 : Day() {
                         bs.set(i)
                     }
                     bs
-                }), this[0].length)
+                }, this.head.length)
 
         return goals.keys
                 .filter { it != START_NODE }
@@ -41,9 +42,9 @@ class Day24 : Day() {
                 .map { pathModifier(it) }
                 .map { it.map { goals[it]!! } }
                 .map {
-                    it.fold(Pair(0, goals[START_NODE]!!), { (first, second), p ->
-                        Pair(first + maze.findShortestPath(second, p), p)
-                    }).first
+                    it.fold(0 to goals[START_NODE]!!) { (length, previousGoal), p ->
+                        (length + maze.findShortestPath(previousGoal, p)) to  p
+                    }.first
                 }.min() ?: throw IllegalArgumentException("No shortest route available")
     }
 

@@ -2,6 +2,8 @@ package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.Point
+import nl.jstege.adventofcode.aoccommon.utils.extensions.last
+import nl.jstege.adventofcode.aoccommon.utils.extensions.tail
 import nl.jstege.adventofcode.aoccommon.utils.extensions.toHexChar
 
 /**
@@ -42,8 +44,8 @@ class Day02 : Day() {
 
     private fun Sequence<String>.iterate(keypad: Array<Array<Int>>,
                         startingPosition: Point) =
-            this.fold(Pair(startingPosition, listOf<Int>()), { (pos, code), line ->
-                val newPos = line.fold(pos, { p, it ->
+            this.fold(listOf<Point>()) { ps, line ->
+                ps + line.fold(ps.lastOrNull() ?: startingPosition) { p, it ->
                     when (it) {
                         'L' -> if (keypad[p.y][p.x - 1] != INVALID) p.subX(1) else p
                         'R' -> if (keypad[p.y][p.x + 1] != INVALID) p.addX(1) else p
@@ -51,7 +53,6 @@ class Day02 : Day() {
                         'D' -> if (keypad[p.y + 1][p.x] != INVALID) p.addY(1) else p
                         else -> throw IllegalStateException("Invalid input")
                     }
-                })
-                Pair(newPos, code + keypad[newPos.y][newPos.x])
-            }).second
+                }
+            }.map { keypad[it.y][it.x] }
 }

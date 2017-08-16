@@ -9,8 +9,6 @@ import java.security.MessageDigest
  * @author Jelle Stege
  */
 class Day05 : Day() {
-    private val INVALID_CHAR = -1
-
     private val PASSWORD_LENGTH = 8
     private val REQUIRE_ZEROES_PREFIX = 5
 
@@ -22,7 +20,9 @@ class Day05 : Day() {
                 .map {
                     md5.digest((doorId + it).toByteArray())
                 }
-                .filter { it.prefixedWithZeroes(REQUIRE_ZEROES_PREFIX) }
+                .filter {
+                    it.prefixedWithZeroes(REQUIRE_ZEROES_PREFIX)
+                }
                 .map {
                     getPos(it, REQUIRE_ZEROES_PREFIX)
                 }
@@ -39,8 +39,12 @@ class Day05 : Day() {
                 .map {
                     md5.digest((doorId + it).toByteArray())
                 }
-                .filter { it.prefixedWithZeroes(REQUIRE_ZEROES_PREFIX) }
-                .map { getPos(it, REQUIRE_ZEROES_PREFIX) to it }
+                .filter {
+                    it.prefixedWithZeroes(REQUIRE_ZEROES_PREFIX)
+                }
+                .map {
+                    getPos(it, REQUIRE_ZEROES_PREFIX) to it
+                }
                 .filter { (i, _) ->
                     i <= PASSWORD_LENGTH - 1 && !positionsFound[i]
                 }

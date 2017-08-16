@@ -2,6 +2,7 @@ package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.extensions.bitCount
+import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
 
 /**
  *
@@ -60,15 +61,16 @@ class Day08 : Day() {
 
     private fun Sequence<String>.parseAndExecute(): LongArray = this
             .map {
-                INPUT_REGEX.matchEntire(it)?.groupValues ?: throw IllegalStateException("Invalid input")
+                INPUT_REGEX.matchEntire(it)?.groupValues
+                        ?: throw IllegalStateException("Invalid input")
             }
-            .fold(LongArray(SCREEN_HEIGHT), { screen, it ->
-                if (it[0].startsWith("rect")) {
-                    screen.rect(it[RECT_COMMAND_X].toInt(), it[RECT_COMMAND_Y].toInt())
-                } else if (it[ROT_COMMAND_AXIS] == "row") {
-                    screen.rotateRow(it[ROT_COMMAND_RC].toInt(), it[ROT_COMMAND_SHIFT].toInt())
+            .fold(LongArray(SCREEN_HEIGHT), { screen, (input, x, y, axis, rc, shift) ->
+                if (input.startsWith("rect")) {
+                    screen.rect(x.toInt(), y.toInt())
+                } else if (axis == "row") {
+                    screen.rotateRow(rc.toInt(), shift.toInt())
                 } else {
-                    screen.rotateColumn(it[ROT_COMMAND_RC].toInt(), it[ROT_COMMAND_SHIFT].toInt())
+                    screen.rotateColumn(rc.toInt(), shift.toInt())
                 }
                 screen
             })
@@ -81,38 +83,52 @@ class Day08 : Day() {
     }
 
     private fun LongArray.rotateRow(row: Int, shift: Int) {
-        val mask = (1L shl (shift % SCREEN_WIDTH)) - 1
-        val tail = this[row] and mask
-        val head = this[row] and mask.inv()
-        this[row] = (tail shl (SCREEN_WIDTH - (shift % SCREEN_WIDTH))) +
-                (head ushr (shift % SCREEN_WIDTH))
+        //To rotate the row, one can also swap the last n bits (the tail) with the first
+        // size - n bits (the head). In which n is the amount of bits to shift, with the screen
+        // size taken into account.
+        //The tail is then: row & (1 << shift - 1)
+        //The head is then: row ^ tail >>> shift, or simply row >>> shift
+        //The result would then be: row = (tail << (size - shift)) + (head >> shift)
+        //To make sure this result is not bigger than the screen size, the result is masked with
+        // 1 << size - 1, using an and-operation.
+        val rightShift = shift % SCREEN_WIDTH
+        val leftShift = SCREEN_WIDTH - rightShift
+        this[row] = ((this[row] shl leftShift) + (this[row] ushr rightShift)) and
+                ((1L shl SCREEN_WIDTH) - 1) //Make sure the result is not bigger than the screen
+        // width
     }
 
     private fun LongArray.rotateColumn(col: Int, shift: Int) {
-        val columnMask = 1L shl (SCREEN_WIDTH - col - 1)
-        val shiftMask = (1L shl (shift % SCREEN_HEIGHT)) - 1
-        val els = this.fold(0L, { n, it ->
-            (n shl 1) + ((it and columnMask) ushr (SCREEN_WIDTH - col - 1))
-        })
-        val head = (els and shiftMask.inv()) ushr (shift % SCREEN_HEIGHT)
-        val tail = (els and shiftMask) shl (SCREEN_HEIGHT - (shift % SCREEN_HEIGHT))
-        val shiftedBits = tail + head
-        this.forEachIndexed { i, _ ->
-            this[SCREEN_HEIGHT - i - 1] = this[SCREEN_HEIGHT - i - 1] and
-                    (columnMask.inv()) or (((shiftedBits ushr i) and 1) shl
-                    (SCREEN_WIDTH - col - 1))
-        }
+        val colIndex = (SCREEN_WIDTH - col - 1)
+        val colUnsetMask = (1L shl colIndex).inv()
+
+        val els = this
+                .fold(0L) { n, it ->
+                    (n shl 1) + ((it ushr colIndex) and 1)
+                }
+        val downShift = shift % SCREEN_HEIGHT
+        val upShift = SCREEN_HEIGHT - downShift
+        val shiftedBits = ((els shl upShift) + (els ushr downShift)) and
+                ((1L shl SCREEN_HEIGHT) - 1) //Make sure the result is not bigger than the screen
+        // height
+        (0 until this.size)
+                .forEach {
+                    this[it] = this[it] and colUnsetMask or //Unset specific bit
+                            // Set specific bit
+                            (((shiftedBits ushr (SCREEN_HEIGHT - it - 1)) and 1) shl colIndex)
+                }
     }
 
     private fun LongArray.ocr(): String {
         val mask = (1L shl ASCII_LETTER_WIDTH) - 1
-        return ((SCREEN_WIDTH - ASCII_LETTER_WIDTH) downTo 0 step ASCII_LETTER_WIDTH)
-                .fold(StringBuilder(), { s, it ->
-                    s.append(ASCII_LETTERS[
-                            this.fold(0, {
-                                n, l ->
+        return ((SCREEN_WIDTH - ASCII_LETTER_WIDTH) downTo 0 step ASCII_LETTER_WIDTH).asSequence()
+                .map {
+                    ASCII_LETTERS[this
+                            .fold(0) { n, l ->
                                 (n shl ASCII_LETTER_WIDTH) + ((l ushr it) and mask).toInt()
-                            })] ?: throw IllegalStateException("Can not OCR number"))
-                }).toString()
+                            }] ?: throw IllegalStateException("Can not OCR number")
+                }
+                .fold(StringBuilder(), StringBuilder::append)
+                .toString()
     }
 }

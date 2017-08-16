@@ -1,6 +1,7 @@
 package nl.jstege.adventofcode.aoc2015.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 import nl.jstege.adventofcode.aoccommon.utils.extensions.prefixedWithZeroes
 import java.security.MessageDigest
 
@@ -12,21 +13,17 @@ class Day04 : Day() {
     val FIRST_ZEROES = 5
     val SECOND_ZEROES = 6
 
-    override fun first(input: Sequence<String>): Any {
-        val prefix = input.first()
-        val md5 = MessageDigest.getInstance("MD5")
-        return (0 until Int.MAX_VALUE).asSequence()
-                .map { md5.digest("$prefix$it".toByteArray()) to it }
-                .first { it.first.prefixedWithZeroes(FIRST_ZEROES) }.second
-    }
+    override fun first(input: Sequence<String>): Any = input.head
+            .bruteforce(FIRST_ZEROES)
 
-    override fun second(input: Sequence<String>): Any {
-        val prefix = input.first()
+    override fun second(input: Sequence<String>): Any = input.head
+            .bruteforce(SECOND_ZEROES)
+
+    private fun String.bruteforce(zeroes: Int): Int {
         val md5 = MessageDigest.getInstance("MD5")
 
         return (0 until Int.MAX_VALUE).asSequence()
-                .map { md5.digest("$prefix$it".toByteArray()) to it }
-                .first { it.first.prefixedWithZeroes(SECOND_ZEROES) }.second
+                .map { md5.digest("$this$it".toByteArray()) to it }
+                .first { it.first.prefixedWithZeroes(zeroes) }.second
     }
-
 }

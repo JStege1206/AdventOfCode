@@ -1,19 +1,18 @@
 package nl.jstege.adventofcode.aoccommon
 
 /**
- * AdventOfCode 2016 implementation
+ * AdventOfCode implementation
  *
  * @author Jelle Stege
  */
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
 import nl.jstege.adventofcode.aoccommon.days.Day
-import nl.jstege.adventofcode.aoccommon.utils.extensions.format
+import org.apache.commons.lang3.time.DurationFormatUtils
 import org.reflections.Reflections
 import java.io.FileOutputStream
 import java.io.PrintStream
 import java.text.SimpleDateFormat
-import java.time.Duration
 import java.util.*
 import kotlin.system.measureTimeMillis
 
@@ -21,23 +20,25 @@ import kotlin.system.measureTimeMillis
  * Wrapper class for the AdventOfCode runner. This class will set the necessary parameters to only
  * run specified assignments when wanted.
  *
- * @param parser The [ArgParser] instance to use.
- * @param assignmentLocation The location of the assignment classes.
  * @property output The [java.io.PrintStream] to use. Defaults to [System.out]
  * @property days The instances of the [Day] assignments to execute.Defaults to all 25 [Day]
  * implementations of the year.
  * @constructor Creates an [AdventOfCode] instance by parsing the arguments given to the program.
+ * @param parser The [ArgParser] instance to use.
+ * @param assignmentLocation The location of the assignment classes.
  */
 abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
     val output by parser.storing(
-            help = "The file to print output to. If not present, will print to std out."
-    ) { PrintStream(FileOutputStream(this, true)) }.default(System.out!!)
+            help = "The file to print output to. " +
+                    "If not present, will print to standard out.") {
+        PrintStream(FileOutputStream(this, true))
+    }.default(System.out!!)
 
-    val days by parser.storing(help = "The day assignments to execute. " +
-            "If not present, will execute all 25 Days.") {
-        getAssignments<Day>(assignmentLocation,
-                *(this.split(',').map { it.toInt() }.toIntArray()))
-    }.default(getAssignments<Day>(assignmentLocation, *(1..25).toList().toIntArray()))
+    val days by parser.storing(
+            help = "The day assignments to execute. " +
+                    "If not present, will execute all 25 Days.") {
+        getAssignments<Day>(assignmentLocation, this.split(',').map { it.toInt() })
+    }.default(getAssignments<Day>(assignmentLocation, (1..25).toList()))
 
     /**
      * Returns the String representation of this object.
@@ -66,12 +67,21 @@ abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
                             .asSequence() // Continue as sequence to print when output present.
                             .forEach(output::println) //toString blocks until output present
                 }
-                output.println("Total time taken: " + Duration.ofMillis(timeTaken).format())
+                output.println("Total time taken: " +
+                        DurationFormatUtils.formatDurationHMS(timeTaken))
             }
         }
 
-        private inline fun <reified E> getAssignments(location: String, vararg ass: Int): List<E> {
-            val assignments = ass.map { String.format("Day%02d", it) }
+        /**
+         * Returns all [Day] instances in a certain location with given identifiers.
+         *
+         * @param location The package in which to search for [Day] instances.
+         * @param assignmentIds The ids of the assignments to select.
+         * @return A list of all instances of [Day], or an empty list if none can be found.
+         */
+        private inline fun <reified E> getAssignments(location: String,
+                                                      assignmentIds: List<Int>): List<E> {
+            val assignments = assignmentIds.map { String.format("Day%02d", it) }
             return Reflections(location)
                     .getSubTypesOf(E::class.java)
                     .filterNotNull()

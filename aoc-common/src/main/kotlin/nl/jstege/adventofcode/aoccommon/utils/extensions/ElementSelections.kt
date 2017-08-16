@@ -37,37 +37,38 @@ private val RANDOM = ThreadLocalRandom.current()
  * Finds the lowest kth element in the given List.
  *
  * @receiver The list to search for the lowest kth element.
- * @param k The index of the element to find.
+ * @param index The index of the element to find.
  * @return The lowest kth element
  */
-fun <E : Comparable<E>> List<E>.quickSelect(k: Int): E {
+fun <E : Comparable<E>> List<E>.quickSelect(index: Int): E {
     fun <E : Comparable<E>> MutableList<E>.partition(left: Int, right: Int, pivotIndex: Int): Int {
         val pivot = this[pivotIndex]
         this.swap(pivotIndex, right)
         var storeIndex = left
-        (left until right).filter { this[it] < pivot }.forEach {
-            this.swap(storeIndex, it)
-            storeIndex++
-        }
+        (left until right)
+                .filter { this[it] < pivot }
+                .forEach {
+                    this.swap(storeIndex, it)
+                    storeIndex++
+                }
         this.swap(right, storeIndex)
         return storeIndex
     }
 
-    tailrec fun <E : Comparable<E>> MutableList<E>.recSelect(@Suppress("NAME_SHADOWING") k: Int,
-                                                             left: Int, right: Int): E {
+    tailrec fun <E : Comparable<E>> MutableList<E>.select(k: Int, left: Int, right: Int): E {
         if (left == right) {
             return this[left]
         }
 
-        val pivotIndex = this@recSelect.partition(left, right, RANDOM.nextInt(left, right))
+        val pivotIndex = this@select.partition(left, right, RANDOM.nextInt(left, right))
 
         if (k == pivotIndex) {
             return this[k]
         } else if (k < pivotIndex) {
-            return this.recSelect(k, left, pivotIndex - 1)
+            return this.select(k, left, pivotIndex - 1)
         } else {
-            return this.recSelect(k, pivotIndex + 1, right)
+            return this.select(k, pivotIndex + 1, right)
         }
     }
-    return this.toMutableList().recSelect(k, 0, this.size - 1)
+    return this.toMutableList().select(index, 0, this.size - 1)
 }

@@ -17,7 +17,6 @@ import java.io.PrintStream
 class Day25 : Day() {
     private val TEST_STRING_LENGTH = 16
 
-    private val MAX_CHECK = Int.MAX_VALUE
     private val INPUT_REGISTER = "a"
     private val STEP_SIZE = 1000
 
@@ -31,25 +30,20 @@ class Day25 : Day() {
         val sim = Simulator(program, machine)
         machine.outStream = ps
 
-        var initValue = 0
-        var isAlternating: Boolean
-        while (initValue < MAX_CHECK) {
-            os.reset()
-            machine.reset()
-            machine.registers[INPUT_REGISTER] = initValue
+        return (0 until Int.MAX_VALUE).asSequence()
+                .onEach {
+                    os.reset()
+                    machine.reset()
+                    machine.registers[INPUT_REGISTER] = it
+                }.map {
+                    var isAlternating: Boolean
+                    do {
+                        sim.step(STEP_SIZE)
+                        isAlternating = os.toByteArray().isAlternating()
+                    } while (isAlternating && os.size() < TEST_STRING_LENGTH)
+                    isAlternating to it
+                }.first { it.first }.second
 
-            do {
-                sim.step(STEP_SIZE)
-                isAlternating = os.toByteArray().isAlternating()
-            } while (isAlternating && os.size() < TEST_STRING_LENGTH)
-
-            if (isAlternating) {
-                break
-            }
-            initValue++
-        }
-
-        return initValue
     }
 
     override fun second(input: Sequence<String>): Any {

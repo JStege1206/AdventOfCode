@@ -11,9 +11,6 @@ class Day15 : Day() {
     private val INPUT_REGEX =
             "Disc #(\\d+) has (\\d+) positions; at time=0, it is at position (\\d+)\\."
                     .toRegex()
-    private val N_INDEX = 2
-    private val A_INDEX = 1
-    private val A_MOD_INDEX = 3
 
     private val SECOND_EXTRA_DISC = "Disc #7 has 11 positions; at time=0, it is at position 0."
 
@@ -23,18 +20,13 @@ class Day15 : Day() {
 
 
     private fun Sequence<String>.parse(): List<Disc> = this
-            .map {
-                INPUT_REGEX.matchEntire(it)?.groupValues
-                        ?: throw IllegalStateException("Invalid input")
-            }
-            .map {
-                val n = it[N_INDEX].toLong()
-                Disc(n, (-it[A_INDEX].toLong() - it[A_MOD_INDEX].toLong()) floorMod n)
-            }
+            .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
+            .map { it.map { it.toLongOrNull() ?: 0 } }
+            .map { (_, a, n, aMod) -> Disc(n, (-a - aMod) floorMod n) }
             .toList()
 
     private fun List<Disc>.calculateCrt(): Long {
-        val N: Long = this.fold(1L, { t, n -> t * n.n })
+        val N = this.map { it.n }.fold(1L, Long::times)
 
         var i = 0
         var x: Long = 0

@@ -19,10 +19,7 @@ class Day21 : Day() {
     private val SCRAMBLED_INPUT = "fbgdceah".toCharArray()
 
     override fun first(input: Sequence<String>): Any = input
-            .map {
-                INPUT_REGEX.matchEntire(it)?.groupValues
-                        ?: throw IllegalArgumentException("Invalid input")
-            }
+            .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
             .fold(UNSCRAMBLED_INPUT) { outputArray, (_, op, op2, _, v1, _, _, v2) ->
                 when (op) {
                     "swap" ->
@@ -44,10 +41,7 @@ class Day21 : Day() {
 
     override fun second(input: Sequence<String>): Any = input
             .toList().asReversed()
-            .map {
-                INPUT_REGEX.matchEntire(it)?.groupValues
-                        ?: throw IllegalArgumentException("Invalid input")
-            }
+            .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
             .fold(SCRAMBLED_INPUT) { outputArray, (_, op, op2, _, v1, _, _, v2) ->
                 when (op) {
                     "swap" ->

@@ -1,9 +1,9 @@
 package nl.jstege.adventofcode.aoc2015.days
 
-import com.sun.org.apache.xml.internal.utils.IntVector
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.Point
 import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
+import nl.jstege.adventofcode.aoccommon.utils.extensions.sortTo
 
 /**
  *
@@ -16,20 +16,20 @@ class Day06 : Day() {
 
     override fun first(input: Sequence<String>): Any = input
             .parse()
-            .fold(BooleanArray(GRID_ROWS * GRID_COLS), { grid, (op, from, to) ->
+            .fold(BooleanArray(GRID_ROWS * GRID_COLS)) { grid, (op, from, to) ->
                 (from.y..to.y).forEach { y ->
-                    (from.x..to.x).forEach { x->
-                        grid[x, y] = (op == "turn on"
-                                || (op != "turn off" && !grid[x, y]))
+                    (from.x..to.x).forEach { x ->
+                        grid[x, y] = op == "turn on" || op == "toggle" && !grid[x, y]
                     }
                 }
                 grid
-            }).count { it }
+            }
+            .count { it }
 
-    override fun second(input: Sequence<String>) = input
+    override fun second(input: Sequence<String>): Any = input
             .parse()
-            .fold(IntArray(GRID_ROWS * GRID_COLS), { grid, (op, from, to) ->
-                (from.y .. to.y).forEach { y ->
+            .fold(IntArray(GRID_ROWS * GRID_COLS)) { grid, (op, from, to) ->
+                (from.y..to.y).forEach { y ->
                     (from.x..to.x).forEach { x ->
                         grid[x, y] = Math.max(0, grid[x, y] + when (op) {
                             "turn on" -> 1
@@ -39,37 +39,19 @@ class Day06 : Day() {
                     }
                 }
                 grid
-            })
+            }
             .sum()
 
-    private fun Sequence<String>.parse() = this
-            .map {
-                INPUT_PATTERN.matchEntire(it)?.groupValues
-                        ?: throw IllegalArgumentException("Invalid input")
-            }
+    private fun Sequence<String>.parse(): Sequence<Triple<String, Point, Point>> = this
+            .map { INPUT_PATTERN.matchEntire(it)?.groupValues!! }
             .map { (_, op, sx1, sy1, sx2, sy2) ->
-                var x1 = sx1.toInt()
-                var y1 = sy1.toInt()
-                var x2 = sx2.toInt()
-                var y2 = sy2.toInt()
-
-
-                if (x1 > x2) {
-                    x1 += x2
-                    x2 -= x2
-                    x1 -= x1
-                }
-                if (y1 > y2) {
-                    y1 += y2
-                    y2 -= y2
-                    y1 -= y2
-                }
-
+                val (x1, x2) = sx1.toInt() sortTo sx2.toInt()
+                val (y1, y2) = sy1.toInt() sortTo sy2.toInt()
                 Triple(op, Point.of(x1, y1), Point.of(x2, y2))
             }
 
-    private operator fun BooleanArray.get(x: Int, y: Int) = this[y * GRID_COLS + x]
-    private operator fun IntArray.get(x: Int, y: Int) = this[y * GRID_COLS + x]
+    private operator fun BooleanArray.get(x: Int, y: Int): Boolean = this[y * GRID_COLS + x]
+    private operator fun IntArray.get(x: Int, y: Int): Int = this[y * GRID_COLS + x]
 
     private operator fun BooleanArray.set(x: Int, y: Int, v: Boolean) {
         this[y * GRID_COLS + x] = v

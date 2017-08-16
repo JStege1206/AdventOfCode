@@ -47,7 +47,7 @@ class Day10 : Day() {
         }
         return OUTPUTS_TO_MULTIPLY
                 .map { outputs[it] ?: throw IllegalStateException("No answer found") }
-                .fold(1, { s, i -> s * i })
+                .fold(1, Int::times)
     }
 
     private fun String.parse(bots: MutableMap<Int, MutableList<Int>>,

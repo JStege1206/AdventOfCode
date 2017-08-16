@@ -22,7 +22,7 @@ class Day03 : Day() {
                 (s + np) to np
             }).first.size
 
-    override fun second(input: Sequence<String>) = input.first()
+    override fun second(input: Sequence<String>): Any = input.first()
             .foldIndexed(setOf(Point.ZERO_ZERO) to Pair(Point.ZERO_ZERO, Point.ZERO_ZERO),
                     { i, (s, p), c ->
                         val np = dirs[c]!!(if (i.isEven()) p.first else p.second)

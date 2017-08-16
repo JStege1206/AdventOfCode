@@ -7,10 +7,10 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day08 : Day() {
-    override fun first(input: Sequence<String>) = input
+    override fun first(input: Sequence<String>): Any = input
             .sumBy { it.length - it.unescapedLength }
 
-    override fun second(input: Sequence<String>) = input
+    override fun second(input: Sequence<String>): Any = input
             .sumBy { it.escapedLength - it.length }
 
     private val String.unescapedLength: Int

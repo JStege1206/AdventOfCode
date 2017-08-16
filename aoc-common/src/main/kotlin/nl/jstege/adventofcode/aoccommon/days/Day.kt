@@ -96,8 +96,8 @@ abstract class Day {
         val (firstOutput, firstTime) = futureFirst.join()
         val (secondOutput, secondTime) = futureSecond.join()
         return StringBuilder().append("${this::class.java.simpleName}\n")
-                .append("First:\n    Output: $firstOutput\n    Time taken: $firstTime\n")
-                .append("Second:\n    Output: $secondOutput\n    Time taken: $secondTime\n")
+                .append("First:\n    Output: $firstOutput\n    Time taken: ${firstTime}ms\n")
+                .append("Second:\n    Output: $secondOutput\n    Time taken: ${secondTime}ms\n")
                 .toString()
     }
 }
