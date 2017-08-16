@@ -57,17 +57,16 @@ abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
         fun run(aoc: AdventOfCode) {
             aoc.run {
                 output.println(aoc)
-                output.print("Started on ")
-                output.println(SimpleDateFormat("yy-MM-d HH:mm:ss")
-                        .format(Calendar.getInstance().time))
+                output.printf("Started on %s%n",
+                        SimpleDateFormat("yy-MM-d HH:mm:ss").format(Calendar.getInstance().time))
                 output.print("Running assignments: ")
-                output.println(days.map { it::class.java.simpleName }.joinToString(", "))
+                output.println(days.joinToString(", ") { it::class.java.simpleName })
                 val timeTaken = measureTimeMillis {
                     days.onEach { it.run() } // Start all days.
                             .asSequence() // Continue as sequence to print when output present.
                             .forEach(output::println) //toString blocks until output present
                 }
-                output.println("Total time taken: " +
+                output.printf("Total time taken: %ss%n",
                         DurationFormatUtils.formatDurationHMS(timeTaken))
             }
         }
