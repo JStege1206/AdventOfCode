@@ -11,7 +11,7 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class AdventOfCode2016(parser: ArgParser) :
-        AdventOfCode(parser, "nl.jstege.adventofcode.aoc2016.days")
+        AdventOfCode(parser, AdventOfCode2016::class.java.`package`.name + ".days")
 
 /**
  * Starts the application. Without an argument, this application will run

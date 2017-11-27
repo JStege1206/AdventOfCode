@@ -14,11 +14,12 @@
         <module>aoc-common</module>
         <module>aoc-2015</module>
         <module>aoc-2016</module>
+        <module>aoc-2017</module>
     </modules>
 
 
     <properties>
-        <kotlin.version>1.1.4</kotlin.version>
+        <kotlin.version>1.1.60</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <dokka.version>0.9.13</dokka.version>

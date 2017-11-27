@@ -9,15 +9,18 @@ import nl.jstege.adventofcode.aoccommon.utils.Point
  * @author Jelle Stege
  */
 class Day22 : Day() {
-    private val INPUT_REGEX = "^/dev/grid/node-x(\\d+)-y(\\d+)\\s+(\\d+)T\\s+(\\d+)T.*$".toRegex()
+    private companion object Configuration {
+        private const val INPUT_PATTERN_STRING =
+                """^/dev/grid/node-x(\d+)-y(\d+)\s+(\d+)T\s+(\d+)T.*$"""
+        private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
 
-    private val DESTINATION_POINT = Point.ZERO_ZERO
-    private val WANTED_FUNC = { grid: List<Node> ->
-        grid.find { (coords) ->
-            coords.y == 0 && coords.x == grid.maxBy { it.coords.x }!!.coords.x
-        } ?: throw IllegalStateException("Incorrect input")
+        private val DESTINATION_POINT = Point.ZERO_ZERO
+        private val WANTED_FUNC = { grid: List<Node> ->
+            grid.find { (coords) ->
+                coords.y == 0 && coords.x == grid.maxBy { it.coords.x }!!.coords.x
+            } ?: throw IllegalStateException("Incorrect input")
+        }
     }
-
 
     override fun first(input: Sequence<String>): Any {
         val grid = input.parse()

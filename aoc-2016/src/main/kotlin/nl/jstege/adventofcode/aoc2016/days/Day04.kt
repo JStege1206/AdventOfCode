@@ -7,11 +7,12 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day04 : Day() {
-    private val INPUT_PATTERN = "^([a-z-]+)-(\\d+)\\[([a-z]{5})]$".toRegex()
-
-    private val CHECKSUM_LENGTH = 5
-
-    private val SECRET_PHRASE = "northpole object storage"
+    private companion object Configuration {
+        private const val CHECKSUM_LENGTH = 5
+        private const val SECRET_PHRASE = "northpole object storage"
+        private const val INPUT_PATTERN_STRING = """^([a-z-]+)-(\d+)\[([a-z]{5})]$"""
+        private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+    }
 
     override fun first(input: Sequence<String>): Any = input
             .getValidRooms()
@@ -34,7 +35,7 @@ class Day04 : Day() {
     private fun Sequence<String>.getValidRooms(): Sequence<Room> {
         return this
                 .map {
-                    INPUT_PATTERN.matchEntire(it)?.groupValues
+                    INPUT_REGEX.matchEntire(it)?.groupValues
                             ?: throw IllegalStateException("Invalid input")
                 }
                 .map { (_, name, id, checksum) ->

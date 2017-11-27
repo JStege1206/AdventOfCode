@@ -11,11 +11,13 @@ import nl.jstege.adventofcode.aoccommon.utils.machine.Simulator
  * @author Jelle Stege
  */
 class Day23 : Day() {
-    private val INIT_REGISTER_KEY = "a"
-    private val OUTPUT_REGISTER = "a"
+    private companion object {
+        private const val INIT_REGISTER_KEY = "a"
+        private const val OUTPUT_REGISTER = "a"
 
-    private val FIRST_INIT_REGISTER_VAL = 7
-    private val SECOND_INIT_REGISTER_VAL = 12
+        private const val FIRST_INIT_REGISTER_VAL = 7
+        private const val SECOND_INIT_REGISTER_VAL = 12
+    }
 
     override fun first(input: Sequence<String>): Any = run(input.toList(), mapOf(
             INIT_REGISTER_KEY to FIRST_INIT_REGISTER_VAL
@@ -25,7 +27,7 @@ class Day23 : Day() {
             INIT_REGISTER_KEY to SECOND_INIT_REGISTER_VAL
     ))
 
-    fun run(input: List<String>, registers: Map<String, Int>): Int {
+    private fun run(input: List<String>, registers: Map<String, Int>): Int {
         val machine = Machine()
         machine.registers.putAll(registers)
 

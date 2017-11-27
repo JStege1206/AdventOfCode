@@ -1,14 +1,18 @@
 package nl.jstege.adventofcode.aoc2015.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
+import nl.jstege.adventofcode.aoccommon.utils.extensions.component7
 
 /**
  *
  * @author Jelle Stege
  */
 class Day15 : Day() {
-    private val TEASPOONS = 100
-    private val CALORIES = 500
+    private companion object Configuration {
+        private val TEA_SPOONS_AMOUNT = 100
+        private val NEEDED_CALORIES = 500
+    }
 
     override fun first(input: Sequence<String>) = input
             .map(Ingredient.Parser::parse)
@@ -24,13 +28,14 @@ class Day15 : Day() {
     private fun Map<String, Ingredient>.calculateMaxScore(useCalories: Boolean = false): Int {
         var score = 0
         var sprinkle = 0
-        while (sprinkle < TEASPOONS) {
+        while (sprinkle < TEA_SPOONS_AMOUNT) {
             var butterscotch = 0
-            while (butterscotch < TEASPOONS - butterscotch) {
+            while (butterscotch < TEA_SPOONS_AMOUNT - butterscotch) {
                 var chocolate = 0
-                while (chocolate < TEASPOONS - butterscotch - sprinkle) {
-                    val candy = TEASPOONS - chocolate - butterscotch - sprinkle
-                    val tScore = this.calculateScore(sprinkle, butterscotch, chocolate, candy, useCalories)
+                while (chocolate < TEA_SPOONS_AMOUNT - butterscotch - sprinkle) {
+                    val candy = TEA_SPOONS_AMOUNT - chocolate - butterscotch - sprinkle
+                    val tScore = this.calculateScore(sprinkle, butterscotch, chocolate, candy,
+                            useCalories)
 
                     if (tScore > score) {
                         score = tScore
@@ -62,7 +67,7 @@ class Day15 : Day() {
                 chocolate * chocolates.texture + candy * candies.texture
         val calories = sprinkle * sprinkles.calories + butterscotch * butterscotches.calories +
                 chocolate * chocolates.calories + candy * candies.calories
-        if (useCalories && calories != CALORIES) {
+        if (useCalories && calories != NEEDED_CALORIES) {
             return 0
         }
 
@@ -72,31 +77,21 @@ class Day15 : Day() {
                 Math.max(texScore, 0)
     }
 
-    data class Ingredient(
-            val name: String,
-            val capacity: Int,
-            val durability: Int,
-            val flavor: Int,
-            val texture: Int,
-            val calories: Int) {
+    private data class Ingredient(val name: String, val capacity: Int, val durability: Int,
+                                  val flavor: Int, val texture: Int, val calories: Int) {
         companion object Parser {
-
-            @JvmStatic private val INPUT_REGEX = ("(\\w+): " +
+            private val INPUT_REGEX = ("(\\w+): " +
                     "capacity (-?\\d+), " +
                     "durability (-?\\d+), flavor (-?\\d+), " +
                     "texture (-?\\d+), " +
                     "calories (-?\\d+)").toRegex()
 
-            @JvmStatic fun parse(input: String): Ingredient {
-                val g = INPUT_REGEX.matchEntire(input)?.groupValues
+            fun parse(input: String): Ingredient {
+                val (_, name, capacity, durability, flavor, texture, calories) = INPUT_REGEX
+                        .matchEntire(input)?.groupValues
                         ?: throw IllegalArgumentException("Invalid input")
-                return Ingredient(
-                        name = g[1],
-                        capacity = g[2].toInt(),
-                        durability = g[3].toInt(),
-                        flavor = g[4].toInt(),
-                        texture = g[5].toInt(),
-                        calories = g[6].toInt())
+                return Ingredient(name, capacity.toInt(), durability.toInt(),
+                        flavor.toInt(), texture.toInt(), calories.toInt())
             }
         }
     }

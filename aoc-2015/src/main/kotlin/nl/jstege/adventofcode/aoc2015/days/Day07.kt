@@ -8,35 +8,45 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
  * @author Jelle Stege
  */
 class Day07 : Day() {
-    private val INPUT_REGEX =
-            "^(NOT)?\\s?([a-z0-9]+)\\s?(AND|OR|LSHIFT|RSHIFT)?\\s?([a-z0-9]*) -> ([a-z]+)$"
-                    .toRegex()
+    private companion object Configuration {
+        private const val INPUT_PATTERN_STRING =
+                """^(NOT)?\s?([a-z0-9]+)\s?(AND|OR|LSHIFT|RSHIFT)?\s?([a-z0-9]*) -> ([a-z]+)$"""
+        private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+        private val SECOND_INIT = "b" to Wire(3176)
+    }
 
     override fun first(input: Sequence<String>): Any = input.compute()
 
-    override fun second(input: Sequence<String>): Any = input.compute("b" to Wire(3176))
+    override fun second(input: Sequence<String>): Any = input.compute(SECOND_INIT)
 
     private fun Sequence<String>.compute(vararg init: Pair<String, Wire>): Int = this
-            .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
+            .map {
+                INPUT_REGEX.matchEntire(it)?.groupValues
+                        ?: throw IllegalArgumentException("Invalid input $it")
+            }
             .fold(mutableMapOf(*init)) { wires, (_, opNot, w1, opR, w2, wo) ->
-                val op = if (opNot.isNotEmpty()) {
-                    Operator.NOT
-                } else if (opR.isNotEmpty()) {
-                    Operator.valueOf(opR)
-                } else {
-                    Operator.MOVE
+                val op = when {
+                    opNot.isNotEmpty() -> Operator.NOT
+                    opR.isNotEmpty() -> Operator.valueOf(opR)
+                    else -> Operator.MOVE
                 }
 
-                val wireOut = Wire.getOrCreate(wo, wires)
-                wireOut.gate = Gate(op,
-                        Wire.getOrCreate(w1, wires), Wire.getOrCreate(w2, wires),
-                        wireOut)
+                val wireOut = wires.getOrCreate(wo)
+                wireOut.gate = Gate(op, wires.getOrCreate(w1), wires.getOrCreate(w2), wireOut)
                 wires
             }
             .getOrElse("a", { Wire() })
             .value
 
-    data class Gate(val op: Operator, val wire1: Wire, val wire2: Wire, val wireOut: Wire) {
+    private fun MutableMap<String, Wire>.getOrCreate(ident: String): Wire =
+            if (ident.isNotEmpty() && ident.all { it in '0'..'9' }) {
+                Wire(ident.toInt())
+            } else {
+                this.getOrPut(ident, { Wire() })
+            }
+
+
+    private data class Gate(val op: Operator, val wire1: Wire, val wire2: Wire, val wireOut: Wire) {
         operator fun invoke() {
             wireOut.value = when (op) {
                 Operator.MOVE -> wire1.value
@@ -49,7 +59,7 @@ class Day07 : Day() {
         }
     }
 
-    data class Wire(private val _value: Int = -1) {
+    private data class Wire(private val _value: Int = -1) {
         var value = _value
             get() {
                 if (field < 0) {
@@ -58,19 +68,9 @@ class Day07 : Day() {
                 return field
             }
         lateinit var gate: Gate
-
-        companion object {
-            @JvmStatic fun getOrCreate(ident: String, wires: MutableMap<String, Wire>): Wire =
-                    if (ident.matches("[0-9]+".toRegex())) {
-                        Wire(ident.toInt())
-                    } else {
-                        wires.getOrPut(ident, { Wire() })
-                    }
-        }
     }
 
-
-    enum class Operator {
+    private enum class Operator {
         AND, OR, LSHIFT, RSHIFT, NOT, MOVE
     }
 }

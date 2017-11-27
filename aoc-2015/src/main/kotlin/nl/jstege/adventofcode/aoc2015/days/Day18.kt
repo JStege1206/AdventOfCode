@@ -9,11 +9,17 @@ import java.util.*
  * @author Jelle Stege
  */
 class Day18 : Day() {
-    private val ITERATIONS = 100
+    private companion object Configuration {
+        private const val ITERATIONS = 100
+    }
 
     override fun first(input: Sequence<String>) = (0 until ITERATIONS)
             .fold(Grid.parse(input.toList())) { g, _ ->
-                g.getTogglePoints().fold(g) { _, (x, y) -> g[x, y] = !g[x, y]; g }
+                g.getTogglePoints()
+                        .fold(g) { _, (x, y) ->
+                            g[x, y] = !g[x, y];
+                            g
+                        }
             }.cardinality()
 
     override fun second(input: Sequence<String>) = (0 until ITERATIONS)

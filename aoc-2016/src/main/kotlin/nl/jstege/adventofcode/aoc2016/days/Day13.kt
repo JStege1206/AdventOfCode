@@ -10,9 +10,11 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.isOdd
  * @author Jelle Stege
  */
 class Day13 : Day() {
-    private val SRC_POS = Point.ONE_ONE
-    private val DEST_POS = Point.of(31, 39)
-    private val MAX_STEPS = 50
+    private companion object Configuration {
+        private val SRC_POS = Point.ONE_ONE
+        private val DEST_POS = Point.of(31, 39)
+        private val MAX_STEPS = 50
+    }
 
     override fun first(input: Sequence<String>): Any =
             findPathLength(SRC_POS, DEST_POS, input.first().toInt())
@@ -51,15 +53,13 @@ class Day13 : Day() {
     }
 
     private fun nextPositions(queue: HashSet<Point>, visited: HashSet<Point>, wallModifier: Int) {
-        visited.addAll(queue)
-        queue.addAll(queue.flatMap {
+        visited += queue
+        queue += queue.flatMap {
             setOf(it.subX(1), it.subY(1), it.addX(1), it.addY(1))
                     .filter {
-                        it.y >= 0 && it.x >= 0
-                                && !isWall(it, wallModifier)
-                                && it !in visited
+                        it.y >= 0 && it.x >= 0 && !isWall(it, wallModifier) && it !in visited
                     }
-        })
+        }
         queue.removeAll(visited)
     }
 }

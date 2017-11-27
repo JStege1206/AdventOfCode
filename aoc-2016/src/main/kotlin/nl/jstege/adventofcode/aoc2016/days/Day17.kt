@@ -12,23 +12,27 @@ import kotlin.reflect.KFunction2
  * @author Jelle Stege
  */
 class Day17 : Day() {
-    private val FIRST = true
-    private val SECOND = !FIRST
+    private companion object Configuration {
+        private const val FIRST = true
+        private const val SECOND = !FIRST
 
-    private val MIN_X_COORD = 0
-    private val MIN_Y_COORD = 0
-    private val MAX_X_COORD = 3
-    private val MAX_Y_COORD = 3
-    private val STARTING_POINT = Point.of(MIN_X_COORD, MIN_Y_COORD)
-    private val DESTINATION_POINT = Point.of(MAX_X_COORD, MAX_Y_COORD)
+        private const val MIN_X_COORD = 0
+        private const val MIN_Y_COORD = 0
+        private const val MAX_X_COORD = 3
+        private const val MAX_Y_COORD = 3
 
-    private val MIN_CAPACITY = 300
-    private val ASSIGNMENT_MOD = mapOf(
-            FIRST to Pair(ArrayDeque<Pair<String, Point>>::add,
-                    { p1: String, p2: String -> p1.isEmpty() || p1.length > p2.length }),
-            SECOND to Pair(ArrayDeque<Pair<String, Point>>::addFirst,
-                    { p1: String, p2: String -> p1.length < p2.length })
-    )
+        private const val MIN_CAPACITY = 300
+
+        private val STARTING_POINT = Point.of(MIN_X_COORD, MIN_Y_COORD)
+        private val DESTINATION_POINT = Point.of(MAX_X_COORD, MAX_Y_COORD)
+        
+        private val ASSIGNMENT_MOD = mapOf(
+                FIRST to Pair(ArrayDeque<Pair<String, Point>>::add,
+                        { p1: String, p2: String -> p1.isEmpty() || p1.length > p2.length }),
+                SECOND to Pair(ArrayDeque<Pair<String, Point>>::addFirst,
+                        { p1: String, p2: String -> p1.length < p2.length })
+        )
+    }
 
     override fun first(input: Sequence<String>): Any =
             findPath(input.first(), STARTING_POINT, DESTINATION_POINT, ASSIGNMENT_MOD[FIRST]!!)

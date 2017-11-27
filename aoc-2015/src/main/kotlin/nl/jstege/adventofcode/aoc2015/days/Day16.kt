@@ -8,10 +8,12 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day16 : Day() {
-    private val TARGET_AUNT = Aunt.parse(
-            "Sue 0: children: 3, cats: 7, samoyeds: 2, pomeranians: 3, akitas: 0, " +
-                    "vizslas: 0, goldfish: 5, trees: 3, cars: 2, perfumes: 1"
-    )
+    private companion object Configuration {
+        private const val TARGET_AUNT_STRING =
+                "Sue 0: children: 3, cats: 7, samoyeds: 2, pomeranians: 3, akitas: 0, " +
+                        "vizslas: 0, goldfish: 5, trees: 3, cars: 2, perfumes: 1"
+        private val TARGET_AUNT = Aunt.parse(TARGET_AUNT_STRING)
+    }
 
     override fun first(input: Sequence<String>) = input
             .map(Aunt.Companion::parse)
@@ -41,7 +43,7 @@ class Day16 : Day() {
         }
 
         companion object {
-            @JvmStatic private val POSSIBLE_COMPOUNDS = setOf(
+            private val POSSIBLE_COMPOUNDS = setOf(
                     "children",
                     "cats",
                     "samoyeds",
@@ -54,17 +56,17 @@ class Day16 : Day() {
                     "perfumes"
             )
 
-            @JvmStatic private val GREATER_THAN_COMPOUNDS = setOf(
+            private val GREATER_THAN_COMPOUNDS = setOf(
                     "cats",
                     "trees"
             )
 
-            @JvmStatic private val FEWER_THAN_COMPOUNDS = setOf(
+            private val FEWER_THAN_COMPOUNDS = setOf(
                     "pomeranians",
                     "goldfish"
             )
 
-            @JvmStatic fun parse(input: String): Aunt {
+            fun parse(input: String): Aunt {
                 val parts = input.split(": ", limit = 2)
                 return Aunt(parts[0].substring(4).toInt(), parts[1]
                         .split(", ")

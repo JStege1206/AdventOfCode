@@ -8,10 +8,12 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.head
  * @author Jelle Stege
  */
 class Day25 : Day() {
-    private val STARTING_VALUE = 20151125L
-    private val MULTIPLY_VALUE = 252533L
-    private val DIVIDING_VALUE = 33554393L
-    private val MULDIV_VALUE = MULTIPLY_VALUE % DIVIDING_VALUE
+    private companion object Configuration {
+        private const val STARTING_VALUE = 20151125L
+        private const val MULTIPLY_VALUE = 252533L
+        private const val DIVIDING_VALUE = 33554393L
+        private const val MULDIV_VALUE = MULTIPLY_VALUE % DIVIDING_VALUE
+    }
 
     override fun first(input: Sequence<String>): Any {
         val (row, column) = input.parse()

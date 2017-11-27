@@ -8,7 +8,11 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.*
  * @author Jelle Stege
  */
 class Day09 : Day() {
-    val INPUT_REGEX = "(\\w+) to (\\w+) = (\\d+)".toRegex()
+    private companion object Configuration {
+        private const val INPUT_PATTERN_STRING = """(\w+) to (\w+) = (\d+)"""
+        private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+    }
+
     override fun first(input: Sequence<String>): Any = input
             .parse().determineCosts().min()!!
 
@@ -27,9 +31,7 @@ class Day09 : Day() {
     private class RouteMap {
         private val routes = mutableMapOf<String, MutableMap<String, Int>>()
 
-        operator fun get(k1: String, k2: String): Int? {
-            return routes[k1, k2]
-        }
+        operator fun get(k1: String, k2: String): Int? = routes[k1, k2]
 
         operator fun set(k1: String, k2: String, v: Int) {
             routes[k1, k2] = v

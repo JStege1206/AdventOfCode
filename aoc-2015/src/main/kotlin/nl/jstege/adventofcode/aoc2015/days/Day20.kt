@@ -9,9 +9,11 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.head
  * @author Jelle Stege
  */
 class Day20 : Day() {
-    private val FIRST_PRESENTS_PER_HOUSE = 10
-    private val SECOND_PRESENTS_PER_HOUSE = 11
-    private val MAX_HOUSES_VISITED = 50
+    private companion object Configuration {
+        private const val FIRST_PRESENTS_PER_HOUSE = 10
+        private const val SECOND_PRESENTS_PER_HOUSE = 11
+        private const val MAX_HOUSES_VISITED = 50
+    }
 
     override fun first(input: Sequence<String>): Any {
         val wantedPresents = input.head.toInt()
@@ -27,7 +29,10 @@ class Day20 : Day() {
                 break
             }
 
-            elfList.filter { elf + it <= wantedPresents / 10 }
+            elfList
+                    .filter {
+                        elf + it <= wantedPresents / 10
+                    }
                     .forEach { elves.getOrPut(elf + it, { mutableListOf() }) += it }
             elf++
         }
@@ -52,10 +57,14 @@ class Day20 : Day() {
                 break
             }
 
-            elfList.filter { elf + it < wantedPresents / 10 && elf + it <= it * MAX_HOUSES_VISITED }
+            elfList
+                    .filter {
+                        (elf + it < wantedPresents / 10) && (elf + it <= it * MAX_HOUSES_VISITED)
+                    }
                     .forEach { elves.getOrPut(elf + it, { mutableListOf() }) += it }
             elf++
         }
         return elf
     }
+
 }

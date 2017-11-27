@@ -8,7 +8,9 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.sumBy
  * @author Jelle Stege
  */
 class Day20 : Day() {
-    val MAX_ADDRESS = (1L shl Integer.SIZE) - 1
+    private companion object Configuration {
+        private const val MAX_ADDRESS = (1L shl Integer.SIZE) - 1
+    }
 
     override fun first(input: Sequence<String>): Any = input
             .map(Day20::IpRange).optimize().first
@@ -38,7 +40,7 @@ class Day20 : Day() {
         return Pair(blockedRanges, allowedRanges)
     }
 
-    data class IpRange(val start: Long, val end: Long) {
+    private data class IpRange(val start: Long, val end: Long) {
         constructor(i: List<Long>) : this(i[0], i[1])
         constructor(s: String) : this(s.split('-').map(String::toLong).sorted())
     }

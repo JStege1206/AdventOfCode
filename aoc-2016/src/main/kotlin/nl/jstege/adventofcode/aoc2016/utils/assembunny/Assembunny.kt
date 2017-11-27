@@ -12,7 +12,8 @@ abstract class Assembunny(override var operands: List<String>,
     override fun toString(): String = "${this::class.java.simpleName.toLowerCase()} $operands"
 
     companion object {
-        private val INPUT_REGEX = Regex("([a-z]{3}) ([a-z]|-?\\d+) ?([a-z]|-?\\d+)?")
+        private const val INPUT_PATTERN_STRING = """([a-z]{3}) ([a-z]|-?\d+) ?([a-z]|-?\d+)?"""
+        private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
 
         fun assemble(input: List<String>, machine: Machine): List<Instruction> {
             return input.map {
@@ -32,7 +33,6 @@ abstract class Assembunny(override var operands: List<String>,
         }
 
         fun optimize(instrs: MutableList<Instruction>): MutableList<Instruction> {
-            //val i = mutableListOf(*instrs.toTypedArray())
             val i = instrs.toMutableList()
             for (it in (0 until i.size - 3)) {
                 if (i[it] is Inc && i[it + 1] is Dec

@@ -11,12 +11,15 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.isEven
  * @author Jelle Stege
  */
 class Day21 : Day() {
-    private val INPUT_REGEX = ("(swap|rotate|reverse|move) " +
-            "(position|letter|right|left|(based on position of letter))s? " +
-            "([a-z0-9])(( [a-z]+)* ([a-z0-9]))?.*").toRegex()
+    private companion object Configuration {
+        private const val INPUT_PATTERN_STRING = "(swap|rotate|reverse|move) " +
+                "(position|letter|right|left|(based on position of letter))s? " +
+                "([a-z0-9])(( [a-z]+)* ([a-z0-9]))?.*"
+        private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
 
-    private val UNSCRAMBLED_INPUT = "abcdefgh".toCharArray()
-    private val SCRAMBLED_INPUT = "fbgdceah".toCharArray()
+        private val UNSCRAMBLED_INPUT = "abcdefgh".toCharArray()
+        private val SCRAMBLED_INPUT = "fbgdceah".toCharArray()
+    }
 
     override fun first(input: Sequence<String>): Any = input
             .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
@@ -25,14 +28,13 @@ class Day21 : Day() {
                     "swap" ->
                         if (op2 == "position") outputArray.swap(v1.toInt(), v2.toInt())
                         else outputArray.swap(v1[0], v2[0])
-                    "rotate" -> when(op2) {
+                    "rotate" -> when (op2) {
                         "right" -> outputArray.rotate(v1.toInt())
                         "left" -> outputArray.rotate(outputArray.size - v1.toInt())
                         else -> outputArray.rotate(v1[0], false)
                     }
                     "reverse" -> outputArray.reverse(v1.toInt(), v2.toInt())
                     "move" -> outputArray.move(v1.toInt(), v2.toInt())
-
                 }
                 outputArray
             }

@@ -20,7 +20,7 @@ class Day08 : Day() {
             var i = 1
             while (i < this.length - 1) {
                 if (this[i] == '\\') {
-                    i += if (this[i + 1] == 'x') 3 else 1
+                    i += (if (this[i + 1] == 'x') 3 else 1)
                 }
 
                 length++
@@ -32,7 +32,6 @@ class Day08 : Day() {
 
     private val String.escapedLength: Int
         get() = this.fold(2, { length, c ->
-            length + if (c == '"' || c == '\\') 2 else 1
+            length + (if (c == '"' || c == '\\') 2 else 1)
         })
-
 }

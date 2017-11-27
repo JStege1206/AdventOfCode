@@ -7,19 +7,22 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day10 : Day() {
-    private val SRC_BOT_INDEX = 1
-    private val DEST1_SELECTOR_INDEX = 5
-    private val DEST1_INDEX = 6
-    private val DEST2_SELECTOR_INDEX = 10
-    private val DEST2_INDEX = 11
+    private companion object Configuration {
+        private const val SRC_BOT_INDEX = 1
+        private const val DEST1_SELECTOR_INDEX = 5
+        private const val DEST1_INDEX = 6
+        private const val DEST2_SELECTOR_INDEX = 10
+        private const val DEST2_INDEX = 11
 
-    private val INIT_VAL_INDEX = 1
-    private val INIT_BOT_INDEX = 5
+        private const val INIT_VAL_INDEX = 1
+        private const val INIT_BOT_INDEX = 5
 
-    private val REQUIRED_LOW_CHIP = 17
-    private val REQUIRED_HIGH_CHIP = 61
+        private const val REQUIRED_LOW_CHIP = 17
+        private const val REQUIRED_HIGH_CHIP = 61
 
-    private val OUTPUTS_TO_MULTIPLY = listOf(0, 1, 2)
+        private val OUTPUTS_TO_MULTIPLY = listOf(0, 1, 2)
+    }
+
     override fun first(input: Sequence<String>): Any {
         val queue = input.toMutableList()
         val bots = mutableMapOf<Int, MutableList<Int>>()

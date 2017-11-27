@@ -15,10 +15,11 @@ import java.io.PrintStream
  * @author Jelle Stege
  */
 class Day25 : Day() {
-    private val TEST_STRING_LENGTH = 16
-
-    private val INPUT_REGISTER = "a"
-    private val STEP_SIZE = 1000
+    private companion object Configuration {
+        private const val TEST_STRING_LENGTH = 16
+        private const val INPUT_REGISTER = "a"
+        private const val STEP_SIZE = 1000
+    }
 
     override fun first(input: Sequence<String>): Any {
         val os = ByteArrayOutputStream()
@@ -35,7 +36,8 @@ class Day25 : Day() {
                     os.reset()
                     machine.reset()
                     machine.registers[INPUT_REGISTER] = it
-                }.map {
+                }
+                .map {
                     var isAlternating: Boolean
                     do {
                         sim.step(STEP_SIZE)
@@ -46,9 +48,7 @@ class Day25 : Day() {
 
     }
 
-    override fun second(input: Sequence<String>): Any {
-        return "-"
-    }
+    override fun second(input: Sequence<String>): Any = "-"
 
     private fun ByteArray.isAlternating(): Boolean {
         if (this.size <= 2) {

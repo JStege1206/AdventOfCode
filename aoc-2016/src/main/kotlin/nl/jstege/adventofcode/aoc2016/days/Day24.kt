@@ -10,9 +10,11 @@ import java.util.*
  * @author Jelle Stege
  */
 class Day24 : Day() {
-    private val START_NODE = 0
-    private val END_NODE = 0
-    private val DEFAULT_SIZE = 300
+    private companion object Configuration {
+        private const val START_NODE = 0
+        private const val END_NODE = 0
+        private const val DEFAULT_SIZE = 300
+    }
 
     override fun first(input: Sequence<String>): Any = input.toList()
             .findShortestRoute { it }
@@ -43,7 +45,7 @@ class Day24 : Day() {
                 .map { it.map { goals[it]!! } }
                 .map {
                     it.fold(0 to goals[START_NODE]!!) { (length, previousGoal), p ->
-                        (length + maze.findShortestPath(previousGoal, p)) to  p
+                        (length + maze.findShortestPath(previousGoal, p)) to p
                     }.first
                 }.min() ?: throw IllegalArgumentException("No shortest route available")
     }
@@ -61,9 +63,7 @@ class Day24 : Day() {
     private inner class Maze(val maze: BitSet, val width: Int) {
         private val cache = mutableMapOf<Path, Int>()
 
-        operator fun get(c: Int): Boolean {
-            return maze[c]
-        }
+        operator fun get(c: Int): Boolean = maze[c]
 
         operator fun set(c: Int, v: Boolean) {
             maze[c] = v

@@ -7,16 +7,19 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day05 : Day() {
-    private val LIMITED_VOWELS = setOf('a', 'e', 'i', 'o', 'u')
+    private companion object Configuration {
+        private val LIMITED_VOWELS = setOf('a', 'e', 'i', 'o', 'u')
+    }
 
     override fun first(input: Sequence<String>): Any = input
-            .count { it.hasVowels(3)
-                    && it.containsDoubleLetters()
-                    && !it.containsIllegalPattern()
+            .count {
+                it.hasVowels(3) && it.containsDoubleLetters() && !it.containsIllegalPattern()
             }
 
     override fun second(input: Sequence<String>): Any = input
-            .count { it.pairOccursTwice() && it.charRepeatsWrap() }
+            .count {
+                it.pairOccursTwice() && it.charRepeatsWrap()
+            }
 
     private fun String.hasVowels(amount: Int): Boolean = this
             .count { it in LIMITED_VOWELS } >= amount

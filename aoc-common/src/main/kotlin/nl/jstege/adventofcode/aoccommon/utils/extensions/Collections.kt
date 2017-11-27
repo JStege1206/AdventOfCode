@@ -59,7 +59,6 @@ fun <E> Collection<E>.permutations(): Sequence<List<E>> = buildSequence {
     val a = this@permutations.toMutableList()
     val c = IntArray(this@permutations.size) { 0 }
     yield(a.toList())
-
     var i = 0
     while (i < a.size) {
         if (c[i] < i) {

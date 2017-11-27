@@ -8,21 +8,24 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.*
  * @author Jelle Stege
  */
 class Day24 : Day() {
-    val FIRST_SHARES = 3
-    val SECOND_SHARES = 4
+    private companion object Configuration {
+        val FIRST_SHARES = 3
+        val SECOND_SHARES = 4
+    }
+
     override fun first(input: Sequence<String>): Any = input
             .map { it.toInt() }
             .sorted()
             .toList()
-            .findQe(FIRST_SHARES)
+            .findQuantumEntanglement(FIRST_SHARES)
 
     override fun second(input: Sequence<String>): Any = input
             .map { it.toInt() }
             .sorted()
             .toList()
-            .findQe(SECOND_SHARES)
+            .findQuantumEntanglement(SECOND_SHARES)
 
-    fun List<Int>.findQe(groups: Int): Long {
+    private fun List<Int>.findQuantumEntanglement(groups: Int): Long {
         val groupSize = this.sum() / groups
         val start = this.sortedDescending().takeWhileSumLessThan(groupSize).size
         return (start until this.size).asSequence()
@@ -31,7 +34,8 @@ class Day24 : Day() {
                 }
                 .filter { it.any() }
                 .orElse { listOf(listOf(Int.MAX_VALUE)).asSequence() }
-                .map { it.fold(1L, Long::times)}
+                .map { it.map { it.toLong() } }
+                .map { it.reduce(Long::times) }
                 .min()!!
     }
 

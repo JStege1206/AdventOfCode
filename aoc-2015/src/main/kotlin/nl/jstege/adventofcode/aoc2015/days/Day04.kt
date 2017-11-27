@@ -10,8 +10,10 @@ import java.security.MessageDigest
  * @author Jelle Stege
  */
 class Day04 : Day() {
-    val FIRST_ZEROES = 5
-    val SECOND_ZEROES = 6
+    private companion object Configuration {
+        private const val FIRST_ZEROES = 5
+        private const val SECOND_ZEROES = 6
+    }
 
     override fun first(input: Sequence<String>): Any = input.head
             .bruteforce(FIRST_ZEROES)

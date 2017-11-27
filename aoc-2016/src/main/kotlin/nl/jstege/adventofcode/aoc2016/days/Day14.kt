@@ -10,11 +10,13 @@ import java.security.MessageDigest
  * @author Jelle Stege
  */
 class Day14 : Day() {
-    private val INVALID_CHAR = (-1).toChar()
-    private val KEYS_REQUIRED = 64
+    private companion object Configuration {
+        private const val INVALID_CHAR = (-1).toChar()
+        private const val KEYS_REQUIRED = 64
 
-    private val ADDITIONAL_STRETCHING_ITERATIONS = 2016
-    private val CORRESPONDING_HASH_WITHIN_ITERATIONS = 1000
+        private const val ADDITIONAL_STRETCHING_ITERATIONS = 2016
+        private const val CORRESPONDING_HASH_WITHIN_ITERATIONS = 1000
+    }
 
     override fun first(input: Sequence<String>): Any {
         val prefix = input.first()
@@ -112,8 +114,7 @@ class Day14 : Day() {
             val (c1, c2) = this[i].getChars()
             val (c3, c4) = this[i + 1].getChars()
             val (c5, c6) = this[i + 2].getChars()
-            if ((c1 == c && c2 == c && c3 == c && c4 == c && c5 == c)
-                    || (c2 == c && c3 == c && c4 == c && c5 == c && c6 == c)) {
+            if (c2 == c && c3 == c && c4 == c && c5 == c && (c1 == c || c6 == c)) {
                 return true
             }
             i++

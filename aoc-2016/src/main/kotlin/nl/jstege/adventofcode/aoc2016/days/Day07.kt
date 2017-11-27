@@ -7,8 +7,10 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day07 : Day() {
-    private val HYPERNET = true
-    private val NOT_HYPERNET = false
+    private companion object Configuration {
+        private const val HYPERNET = true
+        private const val NOT_HYPERNET = false
+    }
 
     override fun first(input: Sequence<String>): Any = input
             .map {
@@ -32,17 +34,18 @@ class Day07 : Day() {
         val segments = Ipv7Segments()
 
         var isHypernet = false
-        segments[isHypernet].add(this.fold(StringBuilder()) { p, it ->
-            if (it == '[' || it == ']') {
-                if (p.isNotEmpty()) {
-                    segments[isHypernet].add(p.toString())
-                    isHypernet = it == '['
-                }
-                StringBuilder()
-            } else {
-                p.append(it)
-            }
-        }.toString())
+        segments[isHypernet].add(
+                this.fold(StringBuilder()) { p, it ->
+                    if (it == '[' || it == ']') {
+                        if (p.isNotEmpty()) {
+                            segments[isHypernet].add(p.toString())
+                            isHypernet = it == '['
+                        }
+                        StringBuilder()
+                    } else {
+                        p.append(it)
+                    }
+                }.toString())
         return segments
     }
 
@@ -59,7 +62,7 @@ class Day07 : Day() {
 
     private fun String.calculateBab(): String = "${this[1]}${this[0]}${this[1]}"
 
-    data class Ipv7Segments(
+    private data class Ipv7Segments(
             var hypernet: MutableSet<String> = mutableSetOf(),
             var notHypernet: MutableSet<String> = mutableSetOf()
     ) {

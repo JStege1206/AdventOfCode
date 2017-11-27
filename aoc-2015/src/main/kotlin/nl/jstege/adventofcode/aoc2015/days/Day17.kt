@@ -9,7 +9,9 @@ import java.util.*
  * @author Jelle Stege
  */
 class Day17 : Day() {
-    private val CAPACITY = 150
+    private companion object Configuration {
+        private const val CAPACITY = 150
+    }
 
     override fun first(input: Sequence<String>) = input
             .map { it.toInt() }

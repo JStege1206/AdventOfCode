@@ -12,9 +12,11 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.last
  * @author Jelle Stege
  */
 class Day13 : Day() {
-    val INPUT_REGEX =
-            "([a-zA-Z]+) would (lose|gain) (\\d+) happiness units by sitting next to ([a-zA-Z]+)\\."
-                    .toRegex()
+    private companion object Configuration {
+        private const val INPUT_PATTERN_STRING = "([a-zA-Z]+) would (lose|gain) (\\d+) happiness " +
+                "units by sitting next to ([a-zA-Z]+)\\."
+        private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+    }
 
     override fun first(input: Sequence<String>) = input.parse().optimal()
 
@@ -25,11 +27,11 @@ class Day13 : Day() {
                 INPUT_REGEX.matchEntire(it)?.groupValues
                         ?: throw IllegalArgumentException("Invalid input")
             }
-            .fold(mutableMapOf<String, MutableMap<String, Int>>(),
-                    { relations, (_, p1, neg, amt, p2) ->
-                        relations[p1, p2] = amt.toInt() * if (neg == "lose") -1 else 1
-                        relations
-                    })
+            .fold(mutableMapOf<String, MutableMap<String, Int>>())
+            { relations, (_, p1, neg, amt, p2) ->
+                relations[p1, p2] = amt.toInt() * if (neg == "lose") -1 else 1
+                relations
+            }
 
     private fun Map<String, Map<String, Int>>.addOwn() = this
             .map { (k, v) ->
@@ -43,8 +45,8 @@ class Day13 : Day() {
             .map {
                 val f = it.head
                 val l = it.last
-                it.fold(0 to f, { (sum, prev), cur ->
+                it.fold(0 to f) { (sum, prev), cur ->
                     (sum + (this[prev, cur] ?: 0) + (this[cur, prev] ?: 0)) to cur
-                }).first + (this[f, l] ?: 0) + (this[l, f] ?: 0)
+                }.first + (this[f, l] ?: 0) + (this[l, f] ?: 0)
             }.max()!!
 }

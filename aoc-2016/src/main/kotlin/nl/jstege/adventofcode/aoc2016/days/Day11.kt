@@ -7,8 +7,11 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day11 : Day() {
-    val INPUT_REGEX = "a (\\w*)(?:-compatible)? (generator|microchip)".toRegex()
-    val MAX_FLOOR = 3
+    private companion object Configuration {
+        private const val INPUT_PATTERN_STRING = "a (\\w*)(?:-compatible)? (generator|microchip)"
+        val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+        private const val MAX_FLOOR = 3
+    }
 
     override fun first(input: Sequence<String>): Any {//TODO: implement
         return 37

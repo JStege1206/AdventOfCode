@@ -10,9 +10,13 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.sortTo
  * @author Jelle Stege
  */
 class Day06 : Day() {
-    val GRID_ROWS = 1000
-    val GRID_COLS = 1000
-    val INPUT_PATTERN = "(turn on|turn off|toggle) (\\d+),(\\d+) through (\\d+),(\\d+)".toRegex()
+    private companion object Configuration {
+        private const val GRID_COLS = 1000
+        private const val GRID_ROWS = 1000
+        private const val INPUT_PATTERN_STRING =
+                """(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)"""
+        private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+    }
 
     override fun first(input: Sequence<String>): Any = input
             .parse()
@@ -43,7 +47,7 @@ class Day06 : Day() {
             .sum()
 
     private fun Sequence<String>.parse(): Sequence<Triple<String, Point, Point>> = this
-            .map { INPUT_PATTERN.matchEntire(it)?.groupValues!! }
+            .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
             .map { (_, op, sx1, sy1, sx2, sy2) ->
                 val (x1, x2) = sx1.toInt() sortTo sx2.toInt()
                 val (y1, y2) = sy1.toInt() sortTo sy2.toInt()
@@ -51,6 +55,7 @@ class Day06 : Day() {
             }
 
     private operator fun BooleanArray.get(x: Int, y: Int): Boolean = this[y * GRID_COLS + x]
+    
     private operator fun IntArray.get(x: Int, y: Int): Int = this[y * GRID_COLS + x]
 
     private operator fun BooleanArray.set(x: Int, y: Int, v: Boolean) {

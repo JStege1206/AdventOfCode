@@ -14,11 +14,13 @@ import java.math.BigInteger
  * @author Jelle Stege
  */
 class Day18 : Day() {
-    private val ROW_LENGTH = 100
-    private val ROW_MASK = (BigInteger.ONE shl ROW_LENGTH) - BigInteger.ONE
+    private companion object Configuration {
+        private const val ROW_LENGTH = 100
+        private val ROW_MASK = (BigInteger.ONE shl ROW_LENGTH) - BigInteger.ONE
 
-    private val ITERATIONS_FIRST = 40
-    private val ITERATIONS_SECOND = 400000
+        private const val ITERATIONS_FIRST = 40
+        private const val ITERATIONS_SECOND = 400000
+    }
 
     override fun first(input: Sequence<String>): Any = input.first()
             .replace(listOf('^', '.'), listOf('1', '0'))

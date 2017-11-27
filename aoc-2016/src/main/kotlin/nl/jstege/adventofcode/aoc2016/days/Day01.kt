@@ -45,9 +45,11 @@ class Day01 : Day() {
         throw IllegalStateException("No answer found.")
     }
 
-    private fun String.parse(): List<Instruction> = this.split(", ").map {
-        Instruction(Turn.parse(it.substring(0, 1)), it.substring(1).toInt())
-    }
+    private fun String.parse(): List<Instruction> = this
+            .split(", ")
+            .map {
+                Instruction(Turn.parse(it.substring(0, 1)), it.substring(1).toInt())
+            }
 
     private data class Instruction(val turn: Turn, val steps: Int)
 

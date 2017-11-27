@@ -12,7 +12,8 @@ abstract class SimpleInstructionSet(override var operands: List<String>,
     override fun toString() = "${this::class.java.simpleName.toLowerCase()} $operands"
 
     companion object {
-        private val INPUT_REGEX = "([a-z]{3}) ([a-z+\\-0-9]+)(, ([+-]\\d+))?".toRegex()
+        private const val INPUT_PATTERN_STRING = """([a-z]{3}) ([a-z+\-0-9]+)(, ([+-]\d+))?"""
+        private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
 
         fun assemble(input: List<String>, machine: Machine): List<Instruction> = input
                 .map {

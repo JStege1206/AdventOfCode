@@ -8,8 +8,10 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.isOdd
  * @author Jelle Stege
  */
 class Day16 : Day() {
-    private val DISK_SIZE_FIRST = 272
-    private val DISK_SIZE_SECOND = 35651584
+    private companion object Configuration {
+        private const val DISK_SIZE_FIRST = 272
+        private const val DISK_SIZE_SECOND = 35651584
+    }
 
 
     override fun first(input: Sequence<String>): Any = input.first()
@@ -44,7 +46,7 @@ class Day16 : Day() {
             }
 
     private fun StringBuilder.negate(): StringBuilder = (0 until this.length)
-            .map { if (this[it] == '1') '0' else '1'}
+            .map { if (this[it] == '1') '0' else '1' }
             .fold(StringBuilder(), StringBuilder::append)
 
 }

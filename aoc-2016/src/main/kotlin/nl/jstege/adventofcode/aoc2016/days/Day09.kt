@@ -7,8 +7,11 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day09 : Day() {
-    val DECOMPRESS_RECURSIVELY_FIRST = false
-    val DECOMPRESS_RECURSIVELY_SECOND = true
+    private companion object Configuration {
+        val DECOMPRESS_RECURSIVELY_FIRST = false
+        val DECOMPRESS_RECURSIVELY_SECOND = true
+    }
+
     override fun first(input: Sequence<String>): Any = input.first()
             .calcDecompressedLength(DECOMPRESS_RECURSIVELY_FIRST)
 

@@ -1,7 +1,10 @@
 package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
-import nl.jstege.adventofcode.aoccommon.utils.extensions.*
+import nl.jstege.adventofcode.aoccommon.utils.extensions.isOdd
+import nl.jstege.adventofcode.aoccommon.utils.extensions.prefixedWithZeroes
+import nl.jstege.adventofcode.aoccommon.utils.extensions.toHexChar
+import nl.jstege.adventofcode.aoccommon.utils.extensions.toUnsignedInt
 import java.security.MessageDigest
 
 /**
@@ -9,8 +12,10 @@ import java.security.MessageDigest
  * @author Jelle Stege
  */
 class Day05 : Day() {
-    private val PASSWORD_LENGTH = 8
-    private val REQUIRE_ZEROES_PREFIX = 5
+    private companion object Configuration {
+        private const val PASSWORD_LENGTH = 8
+        private const val REQUIRE_ZEROES_PREFIX = 5
+    }
 
     override fun first(input: Sequence<String>): Any {
         val doorId = input.first()

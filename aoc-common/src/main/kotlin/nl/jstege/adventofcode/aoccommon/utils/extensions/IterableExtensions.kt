@@ -57,14 +57,30 @@ fun Iterable<Int>.takeWhileSumLessThan(n: Int): List<Int> {
  * @param operation The operation used to fold the current element to the accumulator.
  * @return The folded accumulator.
  */
-inline fun <T, R> Iterable<T>.foldWhile(predicate: (R, T) -> Boolean,
-                                        initial: R, operation: (acc: R, T) -> R): R {
+inline fun <T, R> Iterable<T>.foldWhile(
+        initial: R,
+        predicate: (R, T) -> Boolean,
+        operation: (acc: R, T) -> R): R {
     var accumulator = initial
     for (element in this) {
         if (!predicate(accumulator, element)) {
             return accumulator
         }
         accumulator = operation(accumulator, element)
+    }
+    return accumulator
+}
+
+inline fun <T, R> Iterable<T>.foldWhileIndexed(
+        initial: R,
+        predicate: (Int, R, T) -> Boolean,
+        operation: (Int, R, T) -> R): R {
+    var accumulator = initial
+    for ((index, element) in this.withIndex()) {
+        if (!predicate(index, accumulator, element)) {
+            return accumulator
+        }
+        accumulator = operation(index, accumulator, element)
     }
     return accumulator
 }

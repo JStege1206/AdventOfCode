@@ -7,10 +7,13 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day11 : Day() {
-    private val ILLEGAL_CHARS = setOf('i', 'o', 'l')
+    private companion object Configuration {
+        private val ILLEGAL_CHARS = setOf('i', 'o', 'l')
+    }
+
     override fun first(input: Sequence<String>): Any {
         val chars = input.first().toCharArray()
-        while(!chars.isValid()) {
+        while (!chars.isValid()) {
             chars.next()
         }
         return String(chars)
@@ -19,7 +22,7 @@ class Day11 : Day() {
     override fun second(input: Sequence<String>): Any {
         val chars = input.first().toCharArray()
         var valid = 0
-        while(valid < 2) {
+        while (valid < 2) {
             chars.next()
             if (chars.isValid()) {
                 valid++
@@ -28,7 +31,7 @@ class Day11 : Day() {
         return String(chars)
     }
 
-    private fun CharArray.next(){
+    private fun CharArray.next() {
         var curPos = this.size - 1
         this[curPos] = this[curPos] + 1
         while (curPos >= 0 && this[curPos] > 'z') {

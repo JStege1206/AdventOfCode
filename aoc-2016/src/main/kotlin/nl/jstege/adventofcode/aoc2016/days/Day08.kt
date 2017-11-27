@@ -9,46 +9,43 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
  * @author Jelle Stege
  */
 class Day08 : Day() {
-    private val INPUT_REGEX = "rect (\\d+)x(\\d+)|rotate (row|column) [xy]=(\\d+) by (\\d+)"
-            .toRegex()
-    private val RECT_COMMAND_X = 1
-    private val RECT_COMMAND_Y = 2
-    private val ROT_COMMAND_AXIS = 3
-    private val ROT_COMMAND_RC = 4
-    private val ROT_COMMAND_SHIFT = 5
+    private companion object Configuration {
+        private const val SCREEN_WIDTH = 50
+        private const val SCREEN_HEIGHT = 6
+        private const val INPUT_PATTERN_STRING =
+                """rect (\d+)x(\d+)|rotate (row|column) [xy]=(\d+) by (\d+)"""
+        private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
 
-    private val SCREEN_WIDTH = 50
-    private val SCREEN_HEIGHT = 6
-
-    private val ASCII_LETTER_WIDTH = 5
-    private val ASCII_LETTERS = mapOf(
-            0b011001001010010111101001010010 to 'A',
-            0b111001001011100100101001011100 to 'B',
-            0b011001001010000100001001001100 to 'C',
-            0b111001001010010100101001011100 to 'D',
-            0b111101000011100100001000011110 to 'E',
-            0b111101000011100100001000010000 to 'F',
-            0b011001001010000101101001001110 to 'G',
-            0b100101001011110100101001010010 to 'H',
-            0b011100010000100001000010001110 to 'I',
-            0b001100001000010000101001001100 to 'J',
-            0b100101010011000101001010010010 to 'K',
-            0b100001000010000100001000011110 to 'L',
-            //M missing
-            //N missing
-            0b011001001010010100101001001100 to 'O',
-            0b111001001010010111001000010000 to 'P',
-            //Q missing
-            0b111001001010010111001010010010 to 'R',
-            0b011101000010000011000001011100 to 'S',
-            0b011100010000100001000010000100 to 'T',
-            0b100101001010010100101001001100 to 'U',
-            //V missing
-            //W missing
-            //X missing
-            0b100011000101010001000010000100 to 'Y',
-            0b111100001000100010001000011110 to 'Z'
-    )
+        private const val ASCII_LETTER_WIDTH = 5
+        private val ASCII_LETTERS = mapOf(
+                0b011001001010010111101001010010 to 'A',
+                0b111001001011100100101001011100 to 'B',
+                0b011001001010000100001001001100 to 'C',
+                0b111001001010010100101001011100 to 'D',
+                0b111101000011100100001000011110 to 'E',
+                0b111101000011100100001000010000 to 'F',
+                0b011001001010000101101001001110 to 'G',
+                0b100101001011110100101001010010 to 'H',
+                0b011100010000100001000010001110 to 'I',
+                0b001100001000010000101001001100 to 'J',
+                0b100101010011000101001010010010 to 'K',
+                0b100001000010000100001000011110 to 'L',
+                //M missing
+                //N missing
+                0b011001001010010100101001001100 to 'O',
+                0b111001001010010111001000010000 to 'P',
+                //Q missing
+                0b111001001010010111001010010010 to 'R',
+                0b011101000010000011000001011100 to 'S',
+                0b011100010000100001000010000100 to 'T',
+                0b100101001010010100101001001100 to 'U',
+                //V missing
+                //W missing
+                //X missing
+                0b100011000101010001000010000100 to 'Y',
+                0b111100001000100010001000011110 to 'Z'
+        )
+    }
 
     override fun first(input: Sequence<String>): Any = input
             .parseAndExecute()
@@ -65,12 +62,10 @@ class Day08 : Day() {
                         ?: throw IllegalStateException("Invalid input")
             }
             .fold(LongArray(SCREEN_HEIGHT), { screen, (input, x, y, axis, rc, shift) ->
-                if (input.startsWith("rect")) {
-                    screen.rect(x.toInt(), y.toInt())
-                } else if (axis == "row") {
-                    screen.rotateRow(rc.toInt(), shift.toInt())
-                } else {
-                    screen.rotateColumn(rc.toInt(), shift.toInt())
+                when {
+                    input.startsWith("rect") -> screen.rect(x.toInt(), y.toInt())
+                    axis == "row" -> screen.rotateRow(rc.toInt(), shift.toInt())
+                    else -> screen.rotateColumn(rc.toInt(), shift.toInt())
                 }
                 screen
             })
@@ -83,13 +78,13 @@ class Day08 : Day() {
     }
 
     private fun LongArray.rotateRow(row: Int, shift: Int) {
-        //To rotate the row, one can also swap the last n bits (the tail) with the first
+        // To rotate the row, one can also swap the last n bits (the tail) with the first
         // size - n bits (the head). In which n is the amount of bits to shift, with the screen
         // size taken into account.
-        //The tail is then: row & (1 << shift - 1)
-        //The head is then: row ^ tail >>> shift, or simply row >>> shift
-        //The result would then be: row = (tail << (size - shift)) + (head >> shift)
-        //To make sure this result is not bigger than the screen size, the result is masked with
+        // The tail is then: row & (1 << shift - 1)
+        // The head is then: row ^ tail >>> shift, or simply row >>> shift
+        // The result would then be: row = (tail << (size - shift)) + (head >> shift)
+        // To make sure this result is not bigger than the screen size, the result is masked with
         // 1 << size - 1, using an and-operation.
         val rightShift = shift % SCREEN_WIDTH
         val leftShift = SCREEN_WIDTH - rightShift
