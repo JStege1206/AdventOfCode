@@ -23,7 +23,7 @@
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <dokka.version>0.9.13</dokka.version>
-        <kotlinx.coroutines.core.version>0.16</kotlinx.coroutines.core.version>
+        <kotlinx.coroutines.core.version>0.19.3</kotlinx.coroutines.core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
