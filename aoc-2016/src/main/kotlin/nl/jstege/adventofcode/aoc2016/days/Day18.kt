@@ -2,11 +2,6 @@ package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.extensions.replace
-import nl.jstege.adventofcode.aoccommon.utils.extensions.shl
-import nl.jstege.adventofcode.aoccommon.utils.extensions.shr
-import nl.jstege.adventofcode.aoccommon.utils.extensions.xor
-import nl.jstege.adventofcode.aoccommon.utils.extensions.and
-import nl.jstege.adventofcode.aoccommon.utils.extensions.toBigInteger
 import java.math.BigInteger
 
 /**

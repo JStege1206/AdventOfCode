@@ -27,14 +27,6 @@ private tailrec fun Long.factorial(acc: Long = 1): Long = when (this) {
 }
 
 /**
- * Calculates the factorial of the given integer.
- *
- * @receiver The argument for the factorial function.
- * @returns The factorial result, as a long.
- */
-fun Int.factorial(): Long = this.toLong().factorial()
-
-/**
  * Determines if the receiving integer is even.
  *
  * @receiver The integer to check.
@@ -58,9 +50,8 @@ fun Int.isOdd(): Boolean = this % 2 != 0
  *
  * @throws ArrayIndexOutOfBoundsException if the given integer x is not within range 0 <= x <= 15
  */
-fun Int.toHexChar(): Char = HEX_CHARS[this]
-
-private val HEX_CHARS = "0123456789abcdef".toCharArray()
+fun Int.toHexChar(): Char = hexChars[this]
+private val hexChars = "0123456789abcdef".toCharArray()
 
 /**
  * Counts all set bits in the integer.

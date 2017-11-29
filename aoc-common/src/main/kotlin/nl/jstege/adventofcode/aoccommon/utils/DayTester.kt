@@ -1,7 +1,7 @@
 package nl.jstege.adventofcode.aoccommon.utils
 
 import nl.jstege.adventofcode.aoccommon.days.Day
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**

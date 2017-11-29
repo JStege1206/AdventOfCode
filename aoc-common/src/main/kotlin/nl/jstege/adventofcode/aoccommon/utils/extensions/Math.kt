@@ -1,5 +1,7 @@
 package nl.jstege.adventofcode.aoccommon.utils.extensions
 
+import kotlin.math.log
+
 /**
  *
  * @author Jelle Stege
@@ -24,16 +26,6 @@ infix fun Long.floorMod(y: Long): Long = Math.floorMod(this, y)
  * @return The result of receiver ^ n, as an integer.
  */
 infix fun Int.pow(n: Int): Int = Math.pow(this.toDouble(), n.toDouble()).toInt()
-
-/**
- * Fast access to a logarithm function with a definable base.
- * @see Math.log
- *
- * @param d The value to take the logarithm of.
- * @param base The base of the logarithm, defaults to e.
- */
-fun log(d: Double, base: Double = Math.E): Double = Math.log(d) / Math.log(base)
-
 
 /**
  * Fast access to a logarithm function with a definable base. For integers.

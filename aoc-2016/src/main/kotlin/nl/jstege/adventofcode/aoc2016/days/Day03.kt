@@ -2,7 +2,6 @@ package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.extensions.transpose
-import nl.jstege.adventofcode.aoccommon.utils.extensions.chunked
 
 
 /**

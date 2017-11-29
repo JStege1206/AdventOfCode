@@ -43,20 +43,6 @@ class CollectionsTest {
     }
 
     @Test
-    fun chunkedTest() {
-        val l1 = (1..10).toList()
-        val el1 = listOf(listOf(1, 2), listOf(3, 4), listOf(5, 6), listOf(7, 8), listOf(9, 10))
-        assertEquals(l1.chunked(2), el1)
-
-        val el2 = listOf(listOf(1, 2, 3), listOf(4, 5, 6), listOf(7, 8, 9), listOf(10))
-        assertEquals(l1.chunked(3), el2)
-
-        assertEquals(listOf<Int>().chunked(2), listOf<List<Int>>())
-
-        assertEquals(l1.chunked(l1.size + 1), listOf(l1))
-    }
-
-    @Test
     fun permutationsTest() {
         val l1 = listOf<Int>()
         assertEquals(setOf(listOf<Int>()), l1.permutations().toSet())

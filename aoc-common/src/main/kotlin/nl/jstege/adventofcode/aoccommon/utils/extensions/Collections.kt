@@ -24,29 +24,8 @@ fun <E> List<List<E>>.transpose(): List<List<E>> {
     return if (this.isEmpty() || this.head.isEmpty()) {
         throw IllegalArgumentException("Empty columns or rows found. Can not transpose.")
     } else {
-        this.transpose(listOf())
+        this.transpose(mutableListOf())
     }
-}
-
-/**
- * Partitions a list into a list of chunks of a given size. If the chunk
- * size is not a divisor of the size of the list, the last chunk will
- * be smaller.
- *
- * @receiver The list to cut into chunks.
- * @param size The size of the chunks.
- * @return The partitioned list
- * @throws IllegalArgumentException if the size of the chunks is less than 1.
- */
-fun <E> List<E>.chunked(size: Int): List<List<E>> {
-    tailrec fun <E> List<E>.chunked(@Suppress("NAME_SHADOWING") size: Int,
-                                    accumulator: List<List<E>>): List<List<E>> =
-            if (this.isEmpty()) accumulator
-            else this.drop(size).chunked(size, accumulator + listOf(this.take(size)))
-
-    return if (size < 1)
-        throw IllegalArgumentException("Size too small")
-    else this.chunked(size, listOf())
 }
 
 /**
