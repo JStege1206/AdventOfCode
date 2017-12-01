@@ -2,7 +2,9 @@ package nl.jstege.adventofcode.aoccommon.days
 
 
 import nl.jstege.adventofcode.aoccommon.utils.Resource
+import java.sql.Time
 import java.util.concurrent.CompletableFuture
+import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
 
 /**
@@ -72,7 +74,7 @@ abstract class Day {
             input: Sequence<String>
     ) = {
         var output: Any = object {}
-        val timeTaken = measureTimeMillis {
+        val timeTaken = measureNanoTime {
             output = action(input)
         }
         Pair(output, timeTaken)
@@ -96,8 +98,12 @@ abstract class Day {
         val (firstOutput, firstTime) = futureFirst.join()
         val (secondOutput, secondTime) = futureSecond.join()
         return StringBuilder().append("${this::class.java.simpleName}\n")
-                .append("First:\n    Output: $firstOutput\n    Time taken: ${firstTime}ms\n")
-                .append("Second:\n    Output: $secondOutput\n    Time taken: ${secondTime}ms\n")
+                .appendln("First:")
+                .appendln("    Output: $firstOutput")
+                .appendln("    Time taken: ${firstTime / 1000000F}ms")
+                .appendln("Second:\n")
+                .appendln("    Output: $secondOutput")
+                .appendln("    Time taken: ${secondTime / 1000000F}ms")
                 .toString()
     }
 }
