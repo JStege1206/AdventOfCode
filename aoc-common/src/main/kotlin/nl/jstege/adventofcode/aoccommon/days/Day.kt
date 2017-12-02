@@ -101,7 +101,7 @@ abstract class Day {
                 .appendln("First:")
                 .appendln("    Output: $firstOutput")
                 .appendln("    Time taken: ${firstTime / 1000000F}ms")
-                .appendln("Second:\n")
+                .appendln("Second:")
                 .appendln("    Output: $secondOutput")
                 .appendln("    Time taken: ${secondTime / 1000000F}ms")
                 .toString()
