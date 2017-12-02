@@ -15,14 +15,14 @@ class Day02 : Day() {
     }
 
     override fun second(input: Sequence<String>): Any {
-        return input.parse()
+        return input.parse().toList()
                 .map {
-                    val (a, n) = it
+                    it
                             .sortedDescending()
                             .combinations(2)
                             .first { (a, n) -> a % n == 0 }
-                    a / n
-                }.sum()
+                }
+                .sumBy { (a, n) -> a / n }
     }
 
     private fun Sequence<String>.parse() = this

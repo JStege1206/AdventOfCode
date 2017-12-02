@@ -58,7 +58,7 @@ abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
             aoc.run {
                 output.println(aoc)
                 output.printf("Started on %s%n",
-                        SimpleDateFormat("yy-MM-d HH:mm:ss").format(Calendar.getInstance().time))
+                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().time))
                 output.print("Running assignments: ")
                 output.println(days.joinToString(", ") { it::class.java.simpleName })
                 val timeTaken = measureTimeMillis {
