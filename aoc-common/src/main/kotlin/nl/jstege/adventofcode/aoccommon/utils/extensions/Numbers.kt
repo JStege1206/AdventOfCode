@@ -42,6 +42,8 @@ fun Int.isEven(): Boolean = this % 2 == 0
  */
 fun Int.isOdd(): Boolean = this % 2 != 0
 
+fun Long.isEven(): Boolean = this % 2L == 0L
+fun Long.isOdd(): Boolean = this % 2L != 0L
 /**
  * Casts an integer x within range 0 <= x <= 15 to it's hexadecimal character.
  *

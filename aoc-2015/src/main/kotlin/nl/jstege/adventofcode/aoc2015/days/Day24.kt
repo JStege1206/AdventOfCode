@@ -27,11 +27,17 @@ class Day24 : Day() {
 
     private fun List<Int>.findQuantumEntanglement(groups: Int): Long {
         val groupSize = this.sum() / groups
-        val start = this.sortedDescending().takeWhileSumLessThan(groupSize).size
-        return (start until this.size).asSequence()
-                .map {
-                    this.combinations(it).filter { it.sum() == groupSize }
+        val start = this
+                .asSequence()
+                .sortedDescending()
+                .scan(0 to listOf<Int>()) { (sum, r), i ->
+                    sum + i to r + i
                 }
+                .takeWhile { (sum, _) -> sum < groupSize }
+                .toList().size
+        return (start until this.size)
+                .asSequence()
+                .map { this.combinations(it).filter { it.sum() == groupSize } }
                 .filter { it.any() }
                 .orElse { listOf(listOf(Int.MAX_VALUE)).asSequence() }
                 .map { it.map { it.toLong() } }

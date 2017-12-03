@@ -41,7 +41,32 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
          * @return A new point with corresponding x and y values.
          */
         fun of(p: Pair<Int, Int>) = Point(p.first, p.second)
+
+        private val ADJECENT_WITH_DIAGONALS = setOf(
+                Point.of(-1, -1), Point.of(0, -1), Point.of(1, -1),
+                Point.of(-1, 0), Point.of(1, 0),
+                Point.of(-1, 1), Point.of(0, 1), Point.of(1, 1)
+        )
+        private val ADJECENT_WITHOUT_DIAGONALS = setOf(
+                Point.of(0, -1), Point.of(-1, 0), Point.of(1, 0), Point.of(0, 1)
+        )
     }
+
+    /**
+     * All adjecent [Point]s, includes the 4 orthogonal and 4 diagonal directions.
+     */
+    val adjecentWithDiagonals: Set<Point>
+        get() = ADJECENT_WITH_DIAGONALS
+                .map { this + it }
+                .toSet()
+
+    /**
+     * All adjecent [Point]s without diagonals, thus only the 4 orthogonal directions.
+     */
+    val adjecentWithoutDiagonals: Set<Point>
+        get() = ADJECENT_WITHOUT_DIAGONALS
+                .map { this + it }
+                .toSet()
 
     /**
      * Adds some values to the x and y values of this point.

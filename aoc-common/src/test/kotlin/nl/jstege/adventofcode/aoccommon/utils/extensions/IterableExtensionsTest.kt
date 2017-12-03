@@ -10,12 +10,7 @@ import kotlin.test.assertEquals
 class IterableExtensionsTest {
 
     @Test
-    fun testFoldWhile() {
-        val i = (1 until 20).toList()
-        assertEquals((1..10).toList(), i.foldWhile(
-                Pair(0, listOf<Int>()),
-                {(sum, _), i -> (sum + i) <= 55 },
-                { (sum, els), i -> (sum + i) to (els + i) }
-        ).second)
+    fun testScan() {
+        assertEquals(listOf(0, 1, 3, 6), (1..3).scan(0, Int::plus))
     }
 }

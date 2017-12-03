@@ -2,32 +2,28 @@ package nl.jstege.adventofcode.aoccommon.utils.extensions
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import kotlin.coroutines.experimental.buildSequence
 
 /**
  *
  * @author Jelle Stege
  */
+
 /**
- * Folds the Sequence while the given predicate is true. If the predicate evaluates to false,
- * the folding stops and the result up until then is returned.
+ * Applies an operation to a Sequence and emits each successive value.
  *
- * @receiver The sequence to fold.
- * @param predicate The predicate to use, receives the accumulator as first argument and the
- * current element as second.
- * @param initial The initial value used as accumulator.
- * @param operation The operation used to fold the current element to the accumulator.
- * @return The folded accumulator.
+ * @param initial The initial value to be emitted, used as accumulative value for the operation.
+ * @param operation The operation to invoke with the previously calculated value and the new value.
+ * @return A new sequence with values calculated by the operation function.
  */
-inline fun <T, R> Sequence<T>.foldWhile(predicate: (R, T) -> Boolean,
-                                        initial: R, operation: (acc: R, T) -> R): R {
-    var accumulator = initial
-    for (element in this) {
-        if (!predicate(accumulator, element)) {
-            return accumulator
-        }
-        accumulator = operation(accumulator, element)
+inline fun <T, R> Sequence<T>.scan(
+        initial: R, crossinline operation: (acc: R, T) -> R): Sequence<R> = buildSequence {
+    yield(initial)
+    var acc = initial
+    for (el in this@scan) {
+        acc = operation(acc, el)
+        yield(acc)
     }
-    return accumulator
 }
 
 /**

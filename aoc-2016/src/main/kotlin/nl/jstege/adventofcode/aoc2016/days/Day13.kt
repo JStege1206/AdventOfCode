@@ -55,7 +55,7 @@ class Day13 : Day() {
     private fun nextPositions(queue: HashSet<Point>, visited: HashSet<Point>, wallModifier: Int) {
         visited += queue
         queue += queue.flatMap {
-            setOf(it.subX(1), it.subY(1), it.addX(1), it.addY(1))
+            it.adjecentWithoutDiagonals
                     .filter {
                         it.y >= 0 && it.x >= 0 && !isWall(it, wallModifier) && it !in visited
                     }
