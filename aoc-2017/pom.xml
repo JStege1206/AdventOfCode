@@ -14,7 +14,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <main.class>nl.jstege.adventofcode.aoc2016.AdventOfCode2016Kt</main.class>
+        <main.class>nl.jstege.adventofcode.aoc2017.AdventOfCode2017Kt</main.class>
     </properties>
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
