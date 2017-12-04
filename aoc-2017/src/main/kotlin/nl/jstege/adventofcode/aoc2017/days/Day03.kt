@@ -22,23 +22,22 @@ class Day03 : Day() {
     }
 
     override fun first(input: Sequence<String>): Any {
-        return (input.head.toInt()).spiralIndexToPoint().run { abs(x) + abs(y) }
+        return input.head.toInt().spiralIndexToPoint().run { abs(x) + abs(y) }
     }
 
     override fun second(input: Sequence<String>): Any {
         //Start summing at 2 -> (1, 0) since the sequence is started with index 1 -> (0,0) having 1.
         return (2 until Int.MAX_VALUE).asSequence()
                 .map { it.spiralIndexToPoint() }
-                .scan(INITIAL_VALUE) { (_, values), it ->
-                    val sum = it.adjecentWithDiagonals
-                            .map { p -> values.getOrDefault(p, 0) }
+                .scan(INITIAL_VALUE) { (_, values), point ->
+                    val sum = point.adjecentWithDiagonals
+                            .map { values[it] ?: 0 }
                             .sum()
-                    sum to (values + (it to sum))
+                    sum to (values + (point to sum))
                 }
                 .first { (sum, _) -> sum > input.head.toInt() }
                 .first
     }
-
 
     private fun Int.spiralIndexToPoint(): Point {
         fun calculateCoordinate(k: Int, m: Int, n: Int) = (k + m * m - n - (m % 2)) / 2 * (-1 pow m)

@@ -15,6 +15,14 @@ package nl.jstege.adventofcode.aoccommon.utils.extensions
 inline fun <T> Iterable<T>.sumBy(selector: (T) -> Long): Long = this
         .fold(0L) { sum, el -> sum + selector(el) }
 
+/**
+ * Scan is similar to [Iterable.fold], but returns a list of successive reduced values.
+ *
+ * @receiver The List to accumulate.
+ * @param initial The initial value
+ * @param operation The operation used to reduced values
+ * @return a list of successive reduced values.
+ */
 inline fun <T, R> Iterable<T>.scan(initial: R, operation: (R, T) -> R): List<R> {
     val result = mutableListOf(initial)
     var acc = initial

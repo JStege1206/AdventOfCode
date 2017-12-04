@@ -19,11 +19,7 @@ import kotlin.coroutines.experimental.buildSequence
 inline fun <T, R> Sequence<T>.scan(
         initial: R, crossinline operation: (acc: R, T) -> R): Sequence<R> = buildSequence {
     yield(initial)
-    var acc = initial
-    for (el in this@scan) {
-        acc = operation(acc, el)
-        yield(acc)
-    }
+    this@scan.fold(initial) { a, el -> operation(a, el).also { yield(it) } }
 }
 
 /**
