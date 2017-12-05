@@ -25,7 +25,7 @@ class Day05 : Day() {
 
     private fun IntArray.walk(incrementalStep: (Int) -> Int): Int {
         tailrec fun walk(i: Int, accumulator: Int = 0): Int {
-            if (i >= this.size) return accumulator
+            if (i >= this.size || i < 0) return accumulator
             val t = this[i]
             this[i] += incrementalStep(t)
             return walk(i + t, accumulator + 1)
