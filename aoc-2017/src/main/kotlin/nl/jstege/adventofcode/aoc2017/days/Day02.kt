@@ -8,17 +8,20 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.combinations
  * @author Jelle Stege
  */
 class Day02 : Day() {
+    private companion object Configuration {
+        private const val WHITESPACE_STRING = """\s+"""
+        private val WHITESPACE_REGEX = WHITESPACE_STRING.toRegex()
+    }
+
     override fun first(input: Sequence<String>): Any {
         return input.parse()
-                .map { it.max()!! - it.min()!! }
-                .sum()
+                .sumBy { it.max()!! - it.min()!! }
     }
 
     override fun second(input: Sequence<String>): Any {
-        return input.parse().toList()
+        return input.parse()
                 .map {
-                    it
-                            .sortedDescending()
+                    it.sortedDescending()
                             .combinations(2)
                             .first { (a, n) -> a % n == 0 }
                 }
@@ -26,6 +29,6 @@ class Day02 : Day() {
     }
 
     private fun Sequence<String>.parse() = this
-            .map { it.split("""\s+""".toRegex()) }
+            .map { it.split(WHITESPACE_REGEX) }
             .map { it.map(String::toInt) }
 }
