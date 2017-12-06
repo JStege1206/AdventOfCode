@@ -40,9 +40,8 @@ class Day06 : Day() {
                     while (value-- > 0) banks[++index % banks.size]++
                     banks.toList()
                 }
-                .withIndex()
-                .onEach { (cycle, banksCpy) -> if (banksCpy !in states) states[banksCpy] = cycle }
-                .map { (cycle, banksCpy) -> cycle to states[banksCpy]!! }
-                .first { (cycle, previousCycle) -> cycle != previousCycle }
+                .onEach { if (it !in states) states[it] = states.size + 1}
+                .first { states.size != states[it]!! }
+                .let { states.size to states[it]!! }
     }
 }
