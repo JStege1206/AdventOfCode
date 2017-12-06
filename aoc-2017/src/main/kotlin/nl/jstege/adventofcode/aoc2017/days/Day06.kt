@@ -35,13 +35,21 @@ class Day06 : Day() {
         val states = mutableMapOf<List<Int>, Int>()
         return generateSequence { this }
                 .map { banks ->
+                    // Note that banks is a reference to "this", the same reference is passed
+                    // to map { } every time, an update would therefore also update future
+                    // executions of this method.
                     var (index, value) = banks.withIndex().maxBy { it.value }!!
                     banks[index] = 0
                     while (value-- > 0) banks[++index % banks.size]++
+
+                    // Copy the list and pass it on.
                     banks.toList()
                 }
-                .onEach { if (it !in states) states[it] = states.size + 1}
+                .onEach { if (it !in states) states[it] = states.size + 1 }
                 .first { states.size != states[it]!! }
-                .let { states.size to states[it]!! }
+                // Since we've encountered a double, states.size
+                // is not equal to the current cycle index,
+                // thus, increase it by one
+                .let { states.size + 1 to states[it]!! }
     }
 }
