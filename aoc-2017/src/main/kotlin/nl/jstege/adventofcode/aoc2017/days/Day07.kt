@@ -35,11 +35,11 @@ class Day07 : Day() {
         val cache = mutableMapOf<String, Program>()
         return this
                 .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
-                .map { (_, name, weight, _, subs) ->
+                .map { (_, name, weight, _, nodes) ->
                     val p = cache.getOrPut(name, { Program(name) })
                     p.weight = weight.toInt()
-                    if (subs.isNotBlank()) {
-                        p.children += subs.split(", ").map { cache.getOrPut(it, { Program(it) }) }
+                    if (nodes.isNotBlank()) {
+                        p.children += nodes.split(", ").map { cache.getOrPut(it, { Program(it) }) }
                     }
 
                     p.children.forEach { it.parent = p }
