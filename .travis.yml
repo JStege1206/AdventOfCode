@@ -5,3 +5,4 @@ jdk:
 cache:
   directories:
     - $HOME/.m2
+    - $TRAVIS_BUILD_DIR/target
