@@ -28,7 +28,7 @@ class Day06 : Day() {
                 .map(String::toInt)
                 .toMutableList()
                 .cycle()
-                .let { (currentCycle, previousCycle) -> currentCycle - previousCycle }
+                .run { first - second }
     }
 
     private fun MutableList<Int>.cycle(): Pair<Int, Int> {
@@ -45,7 +45,7 @@ class Day06 : Day() {
                     // Copy the list and pass it on.
                     banks.toList()
                 }
-                .onEach { if (it !in states) states[it] = states.size + 1 }
+                .onEach { states.getOrPut(it, { states.size + 1 }) }
                 .first { states.size != states[it]!! }
                 // Since we've encountered a double, states.size
                 // is not equal to the current cycle index,

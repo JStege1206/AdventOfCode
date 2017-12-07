@@ -23,13 +23,13 @@ class Day03 : Day() {
             }.toList().size
 
     override fun second(input: Sequence<String>): Any = input
-            .map {
-                it.trim().split(WHITESPACE_REGEX).map(String::toInt)
-            }.toList()
-            .transpose().flatten().chunked(3)
-            .filter {
-                isValid(it[0], it[1], it[2])
-            }.size
+            .map { it.trim().split(WHITESPACE_REGEX).map(String::toInt) }
+            .toList()
+            .transpose()
+            .flatten()
+            .chunked(3)
+            .filter { isValid(it[0], it[1], it[2]) }
+            .size
 
     private fun isValid(x: Int, y: Int, z: Int): Boolean = (x + y > z) && (x + z > y) && (y + z > x)
 }

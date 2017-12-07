@@ -4,7 +4,6 @@ import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.Point
 import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 import nl.jstege.adventofcode.aoccommon.utils.extensions.isEven
-import nl.jstege.adventofcode.aoccommon.utils.extensions.reduce
 
 /**
  *
@@ -34,6 +33,6 @@ class Day03 : Day() {
                     s to (r + DIRECTION_MODIFIERS[c]!!(r.last()))
                 }
             }
-            .reduce { first, second -> first + second }
+            .let { (first, second) -> first + second }
             .toSet().size
 }
