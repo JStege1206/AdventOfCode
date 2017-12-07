@@ -21,11 +21,11 @@ class Day07 : Day() {
     }
 
     private tailrec fun Program.findWrongWeight(): Int {
-        val subs = children.groupBy { it.totalWeight }
-        val wrongNode = subs.values.minBy { it.size }!!.first()
+        val groups = children.groupBy { it.totalWeight }
+        val wrongNode = groups.values.minBy { it.size }!!.first()
 
         if (wrongNode.children.map { it.totalWeight }.toSet().size < 2) {
-            return subs.values.maxBy { it.size }!!.first()
+            return groups.values.maxBy { it.size }!!.first()
                     .totalWeight - (wrongNode.totalWeight - wrongNode.weight)
         }
         return wrongNode.findWrongWeight()

@@ -19,7 +19,7 @@ class Day06 : Day() {
                 .map(String::toInt)
                 .toMutableList()
                 .cycle()
-                .first + 1
+                .first
     }
 
     override fun second(input: Sequence<String>): Any {
