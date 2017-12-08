@@ -20,6 +20,25 @@ class Day07 : Day() {
         return input.findRoot().findWrongWeight()
     }
 
+    private fun Sequence<String>.findRoot(): Program {
+        val cache = mutableMapOf<String, Program>()
+        return this
+                .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
+                .map { (_, name, weight, _, nodes) ->
+                    val p = cache.getOrPut(name, { Program(name) })
+                    p.weight = weight.toInt()
+                    if (nodes.isNotBlank()) {
+                        p.children += nodes.split(", ").asSequence()
+                                .map { cache.getOrPut(it, { Program(it) }) }
+                                .onEach { it.parent = p }.toList()
+                    }
+
+                    p
+                }
+                .toList()
+                .first { it.parent == null }
+    }
+
     private tailrec fun Program.findWrongWeight(): Int {
         val groups = children.groupBy { it.totalWeight }
         val wrongNode = groups.values.minBy { it.size }!!.first()
@@ -29,25 +48,6 @@ class Day07 : Day() {
                     .totalWeight - (wrongNode.totalWeight - wrongNode.weight)
         }
         return wrongNode.findWrongWeight()
-    }
-
-    private fun Sequence<String>.findRoot(): Program {
-        val cache = mutableMapOf<String, Program>()
-        return this
-                .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
-                .map { (_, name, weight, _, nodes) ->
-                    val p = cache.getOrPut(name, { Program(name) })
-                    p.weight = weight.toInt()
-                    if (nodes.isNotBlank()) {
-                        p.children += nodes.split(", ").map { cache.getOrPut(it, { Program(it) }) }
-                    }
-
-                    p.children.forEach { it.parent = p }
-
-                    p
-                }
-                .toList()
-                .first { it.parent == null }
     }
 
     private data class Program(val name: String) {
