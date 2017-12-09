@@ -20,7 +20,7 @@ class Day24 : Day() {
             .findShortestRoute { it }
 
     override fun second(input: Sequence<String>): Any = input.toList()
-            .findShortestRoute { it + listOf(END_NODE) }
+            .findShortestRoute { it + END_NODE }
 
 
     fun List<String>.findShortestRoute(pathModifier: (List<Int>) -> List<Int>): Int {

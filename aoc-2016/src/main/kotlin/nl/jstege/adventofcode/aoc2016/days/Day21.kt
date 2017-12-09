@@ -37,9 +37,7 @@ class Day21 : Day() {
                     "move" -> outputArray.move(v1.toInt(), v2.toInt())
                 }
                 outputArray
-            }
-            .fold(StringBuilder(), StringBuilder::append)
-            .toString()
+            }.let { String(it) }
 
     override fun second(input: Sequence<String>): Any = input
             .toList().asReversed()
@@ -58,9 +56,7 @@ class Day21 : Day() {
                     "move" -> outputArray.move(v2.toInt(), v1.toInt())
                 }
                 outputArray
-            }
-            .fold(StringBuilder(), StringBuilder::append)
-            .toString()
+            }.let { String(it) }
 
 
     private fun CharArray.swap(i: Int, j: Int) {
@@ -88,7 +84,7 @@ class Day21 : Day() {
     }
 
     private fun CharArray.rotate(c: Char, reverse: Boolean) {
-        val index = (0 until this.size).first { this[it] == c }
+        val index = this.withIndex().first { (_, t) -> t == c }.index
         val shift = if (reverse) {
             this.size - ((index +
                     if (index != 0 && index.isEven()) {

@@ -31,7 +31,7 @@ class Day15 : Day() {
             .toList()
 
     private fun List<Disc>.calculateCrt(): Long {
-        val maxN = this.map { it.n }.fold(1L, Long::times)
+        val maxN = this.map { it.n }.reduce(Long::times)
 
         var i = 0
         var x = 0L

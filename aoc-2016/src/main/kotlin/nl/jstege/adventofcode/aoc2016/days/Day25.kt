@@ -37,32 +37,25 @@ class Day25 : Day() {
                     machine.reset()
                     machine.registers[INPUT_REGISTER] = it
                 }
-                .map {
+                .first {
                     var isAlternating: Boolean
                     do {
                         sim.step(STEP_SIZE)
                         isAlternating = os.toByteArray().isAlternating()
                     } while (isAlternating && os.size() < TEST_STRING_LENGTH)
-                    isAlternating to it
-                }.first { it.first }.second
+                    isAlternating
+                }
 
     }
 
     override fun second(input: Sequence<String>): Any = "-"
 
-    private fun ByteArray.isAlternating(): Boolean {
-        if (this.size <= 2) {
-            if (this.size == 2 && this[0] == this[1]) {
-                return false
+    private fun ByteArray.isAlternating(): Boolean = this.size < 2 || this
+            .withIndex()
+            .partition { (i, _) -> i.isEven() }
+            .let { (es, os) ->
+                es.first().value != os.first().value
+                        && es.map { it.value }.toSet().size == 1
+                        && os.map { it.value }.toSet().size == 1
             }
-            return true
-        }
-        val (c1, c2) = this
-        this.forEachIndexed { i, b ->
-            if (i.isEven() && b != c1 || i.isOdd() && b != c2) {
-                return false
-            }
-        }
-        return true
-    }
 }

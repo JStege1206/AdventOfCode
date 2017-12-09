@@ -1,6 +1,7 @@
 package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 import nl.jstege.adventofcode.aoccommon.utils.extensions.toHexString
 import nl.jstege.adventofcode.aoccommon.utils.extensions.toUnsignedInt
 import java.security.MessageDigest
@@ -19,58 +20,31 @@ class Day14 : Day() {
     }
 
     override fun first(input: Sequence<String>): Any {
-        val prefix = input.first()
-        val md5 = MessageDigest.getInstance("MD5")
-        val foundKeys = hashSetOf<Int>()
-        val possibleKeys = HashMap<Int, Char>()
-
-        var iteration = 0
-        while (foundKeys.size < KEYS_REQUIRED || possibleKeys.isNotEmpty()) {
-            val digest = md5.digest((prefix + iteration).toByteArray())
-            if (foundKeys.size < KEYS_REQUIRED) {
-                val c = digest.contains3AndGet()
-                if (c != INVALID_CHAR) {
-                    possibleKeys[iteration] = c
-                }
-            }
-
-            val iter = possibleKeys.iterator()
-            while (iter.hasNext()) {
-                val (key, value) = iter.next()
-                if ((iteration - key >= CORRESPONDING_HASH_WITHIN_ITERATIONS)) {
-                    iter.remove()
-                    continue
-                }
-                if (key != iteration && digest.contains5Of(value)) {
-                    foundKeys.add(key)
-                    iter.remove()
-                    continue
-                }
-            }
-            iteration++
+        return input.head.bruteforce { md5, prefix, iteration ->
+            md5.digest((prefix + iteration).toByteArray())
         }
-        return foundKeys.sorted()[KEYS_REQUIRED - 1]
     }
 
     override fun second(input: Sequence<String>): Any {
-        val prefix = input.first()
+        return input.head.bruteforce { md5, prefix, iteration ->
+            (0 until ADDITIONAL_STRETCHING_ITERATIONS)
+                    .fold(md5.digest((prefix + iteration).toByteArray())) { previous, _ ->
+                        md5.digest(previous.toHexString().toByteArray())
+                    }
+        }
+    }
+
+    private fun String.bruteforce(hasher: (MessageDigest, String, Int) -> ByteArray): Int {
         val md5 = MessageDigest.getInstance("MD5")
         val foundKeys = mutableListOf<Int>()
-        val possibleKeys = HashMap<Int, Char>()
+        val possibleKeys = mutableMapOf<Int, Char>()
 
         var iteration = 0
         while (foundKeys.size < KEYS_REQUIRED || possibleKeys.isNotEmpty()) {
-            var digest = md5.digest((prefix + iteration).toByteArray())
-
-            (0 until ADDITIONAL_STRETCHING_ITERATIONS).forEach {
-                digest = md5.digest(digest.toHexString().toByteArray())
-            }
+            val digest = hasher(md5, this, iteration)
 
             if (foundKeys.size < KEYS_REQUIRED) {
-                val c = digest.contains3AndGet()
-                if (c != INVALID_CHAR) {
-                    possibleKeys[iteration] = c
-                }
+                digest.contains3AndGet()?.let { possibleKeys[iteration] = it }
             }
 
             val iter = possibleKeys.iterator()
@@ -91,21 +65,20 @@ class Day14 : Day() {
         return foundKeys.sorted()[KEYS_REQUIRED - 1]
     }
 
-
-    private fun ByteArray.contains3AndGet(): Char {
+    private fun ByteArray.contains3AndGet(): Char? {
         var i = 0
         while (i < this.size - 1) {
-            val c = this[i].toUnsignedInt() and 0x0F
-            if ((c == (this[i].toUnsignedInt() and 0xF0 ushr 4)
-                    && c == (this[i + 1].toUnsignedInt() and 0xF0 ushr 4))
-                    || (c == (this[i + 1].toUnsignedInt() and 0xF0 ushr 4)
-                    && c == (this[i + 1].toUnsignedInt() and 0x0F))) {
+            val c = this[i].toInt() and 0x0F
+            if ((c == (this[i].toInt() and 0xF0 ushr 4)
+                    && c == (this[i + 1].toInt() and 0xF0 ushr 4))
+                    || (c == (this[i + 1].toInt() and 0xF0 ushr 4)
+                    && c == (this[i + 1].toInt() and 0x0F))) {
                 return c.toChar()
             }
             i++
         }
 
-        return INVALID_CHAR
+        return null
     }
 
     private fun ByteArray.contains5Of(c: Char): Boolean {
@@ -124,7 +97,6 @@ class Day14 : Day() {
     }
 
     private fun Byte.getChars(): Pair<Char, Char> {
-        return Pair((this.toUnsignedInt() and 0xF0 ushr 4).toChar(),
-                (this.toUnsignedInt() and 0x0F).toChar())
+        return (this.toInt() and 0xF0 ushr 4).toChar() to (this.toInt() and 0x0F).toChar()
     }
 }

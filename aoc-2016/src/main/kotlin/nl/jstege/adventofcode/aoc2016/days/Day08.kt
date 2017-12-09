@@ -71,9 +71,8 @@ class Day08 : Day() {
             })
 
     private fun LongArray.rect(endX: Int, endY: Int) {
-        val mask = ((1L shl endX) - 1) shl (SCREEN_WIDTH - endX)
-        (0 until endY).forEach {
-            this[it] = this[it] or mask
+        (((1L shl endX) - 1) shl (SCREEN_WIDTH - endX)).let { mask ->
+            (0 until endY).forEach { this[it] = this[it] or mask }
         }
     }
 
@@ -115,15 +114,15 @@ class Day08 : Day() {
     }
 
     private fun LongArray.ocr(): String {
-        val mask = (1L shl ASCII_LETTER_WIDTH) - 1
-        return ((SCREEN_WIDTH - ASCII_LETTER_WIDTH) downTo 0 step ASCII_LETTER_WIDTH).asSequence()
-                .map {
-                    ASCII_LETTERS[this
-                            .fold(0) { n, l ->
-                                (n shl ASCII_LETTER_WIDTH) + ((l ushr it) and mask).toInt()
-                            }] ?: throw IllegalStateException("Can not OCR number")
-                }
-                .fold(StringBuilder(), StringBuilder::append)
-                .toString()
+        return ((1L shl ASCII_LETTER_WIDTH) - 1).let { mask ->
+            ((SCREEN_WIDTH - ASCII_LETTER_WIDTH) downTo 0 step ASCII_LETTER_WIDTH)
+                    .map {
+                        this.fold(0) { n, l ->
+                            (n shl ASCII_LETTER_WIDTH) + ((l ushr it) and mask).toInt()
+                        }.let {
+                            ASCII_LETTERS[it] ?: throw IllegalStateException("Can not OCR number")
+                        }
+                    }.let { String(it.toCharArray()) }
+        }
     }
 }

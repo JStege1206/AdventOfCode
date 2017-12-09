@@ -15,6 +15,9 @@ package nl.jstege.adventofcode.aoccommon.utils.extensions
 fun String.replace(old: List<Char>, new: List<Char>): String = old.zip(new)
         .fold(this, { s, (first, second) -> s.replace(first, second) })
 
+fun String.replace(vararg replacements: Pair<Char, Char>): String = replacements
+        .fold(this) { s, (old, new) -> s.replace(old, new) }
+
 /**
  * Checks whether this string is castable to an integer. Also returns true if the first character
  * is either a - or + symbol.
