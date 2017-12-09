@@ -17,33 +17,24 @@ class Day09 : Day() {
     }
 
     private fun String.cleanUp(): Pair<Int, Int> {
-        tailrec fun cleanUp(
-                index: Int, score: Int, nest: Int, garbageCnt: Int, state: State): Pair<Int, Int> {
-            if (index >= this.length) return score to garbageCnt
-            return when (state) {
-                State.DEFAULT -> when (this[index]) {
-                // Move to garbage state
-                    '<' -> cleanUp(index + 1, score, nest, garbageCnt, State.GARBAGE)
-                // Open new nesting level
-                    '{' -> cleanUp(index + 1, score, nest + 1, garbageCnt, state)
-                // Close nesting level
-                    '}' -> cleanUp(index + 1, score + nest, nest - 1, garbageCnt, state)
-                // Move over extraneous characters, not present in my input, but we need an
-                // else clause --'
-                    else -> cleanUp(index + 1, score, nest, garbageCnt, state)
+        tailrec fun cleanUp(index: Int, score: Int, nest: Int, garbageCnt: Int,
+                            state: State): Pair<Int, Int> =
+                if (index >= this.length)
+                    score to garbageCnt
+                else when (state) {
+                    State.DEFAULT -> when (this[index]) {
+                        '<' -> cleanUp(index + 1, score, nest, garbageCnt, State.GARBAGE)
+                        '{' -> cleanUp(index + 1, score, nest + 1, garbageCnt, state)
+                        '}' -> cleanUp(index + 1, score + nest, nest - 1, garbageCnt, state)
+                        else -> cleanUp(index + 1, score, nest, garbageCnt, state)
+                    }
+                    State.GARBAGE -> when (this[index]) {
+                        '!' -> cleanUp(index + 1, score, nest, garbageCnt, State.CANCEL)
+                        '>' -> cleanUp(index + 1, score, nest, garbageCnt, State.DEFAULT)
+                        else -> cleanUp(index + 1, score, nest, garbageCnt + 1, state)
+                    }
+                    State.CANCEL -> cleanUp(index + 1, score, nest, garbageCnt, State.GARBAGE)
                 }
-                State.GARBAGE -> when (this[index]) {
-                // Move to cancel state
-                    '!' -> cleanUp(index + 1, score, nest, garbageCnt, State.CANCEL)
-                // Move to default state
-                    '>' -> cleanUp(index + 1, score, nest, garbageCnt, State.DEFAULT)
-                // Move over garbage character.
-                    else -> cleanUp(index + 1, score, nest, garbageCnt + 1, state)
-                }
-            // Cancel character and move back to garbage
-                State.CANCEL -> cleanUp(index + 1, score, nest, garbageCnt, State.GARBAGE)
-            }
-        }
         return cleanUp(0, 0, 0, 0, State.DEFAULT)
     }
 

@@ -2,10 +2,8 @@ package nl.jstege.adventofcode.aoccommon.days
 
 
 import nl.jstege.adventofcode.aoccommon.utils.Resource
-import java.sql.Time
 import java.util.concurrent.CompletableFuture
 import kotlin.system.measureNanoTime
-import kotlin.system.measureTimeMillis
 
 /**
  * Abstract implementation of a "Day" to be used for every Advent of Code assignment.
