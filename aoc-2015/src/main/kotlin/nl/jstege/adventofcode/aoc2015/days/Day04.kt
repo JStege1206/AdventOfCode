@@ -21,11 +21,13 @@ class Day04 : Day() {
     override fun second(input: Sequence<String>): Any = input.head
             .bruteforce(SECOND_ZEROES)
 
-    private fun String.bruteforce(zeroes: Int): Int {
-        val md5 = MessageDigest.getInstance("MD5")
+    private fun String.bruteforce(zeroes: Int): Int = MessageDigest.getInstance("MD5")
+            .let { md5 ->
+                (0 until Int.MAX_VALUE)
+                        .asSequence()
+                        .map { md5.digest("$this$it".toByteArray()) }
+                        .withIndex()
+                        .first { (_, d) -> d.prefixedWithZeroes(zeroes) }.index
+            }
 
-        return (0 until Int.MAX_VALUE).asSequence()
-                .map { md5.digest("$this$it".toByteArray()) to it }
-                .first { it.first.prefixedWithZeroes(zeroes) }.second
-    }
 }

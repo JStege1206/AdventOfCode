@@ -4,6 +4,7 @@ import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.Point
 import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 import nl.jstege.adventofcode.aoccommon.utils.extensions.isEven
+import nl.jstege.adventofcode.aoccommon.utils.extensions.scan
 
 /**
  *
@@ -19,20 +20,18 @@ class Day03 : Day() {
         )
     }
 
-    override fun first(input: Sequence<String>): Any = input.head
-            .fold(listOf(Point.ZERO_ZERO)) { visited, c ->
-                visited + DIRECTION_MODIFIERS[c]!!(visited.last())
-            }
-            .toSet().size
+    override fun first(input: Sequence<String>): Any = input.head.asSequence()
+            .scan(Point.ZERO_ZERO) { visited, c -> DIRECTION_MODIFIERS[c]!!(visited) }
+            .toSet()
+            .size
 
-    override fun second(input: Sequence<String>): Any = input.first()
-            .foldIndexed(listOf(Point.ZERO_ZERO) to listOf(Point.ZERO_ZERO)) { i, (s, r), c ->
-                if (i.isEven()) {
-                    (s + DIRECTION_MODIFIERS[c]!!(s.last())) to r
-                } else {
-                    s to (r + DIRECTION_MODIFIERS[c]!!(r.last()))
-                }
+    override fun second(input: Sequence<String>): Any = input.head.asSequence()
+            .withIndex()
+            .scan(Point.ZERO_ZERO to Point.ZERO_ZERO) { (s, r), (i, c) ->
+                if (i.isEven()) DIRECTION_MODIFIERS[c]!!(s) to r
+                else s to DIRECTION_MODIFIERS[c]!!(r)
             }
-            .let { (first, second) -> first + second }
-            .toSet().size
+            .flatMap { (s, r) -> sequenceOf(s, r) }
+            .toSet()
+            .size
 }

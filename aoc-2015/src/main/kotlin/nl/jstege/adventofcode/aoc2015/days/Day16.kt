@@ -66,16 +66,17 @@ class Day16 : Day() {
                     "goldfish"
             )
 
-            fun parse(input: String): Aunt {
-                val parts = input.split(": ", limit = 2)
-                return Aunt(parts[0].substring(4).toInt(), parts[1]
-                        .split(", ")
-                        .map {
-                            val (k, v) = it.split(": ")
-                            k to v.toInt()
-                        }.toMap()
-                )
-            }
+            fun parse(input: String): Aunt = input
+                    .split(": ", limit = 2)
+                    .let {
+                        Aunt(it[0].substring(4).toInt(),
+                                it[1].split(", ")
+                                        .asSequence()
+                                        .map { i -> i.split(": ") }
+                                        .map { (k, v) -> k to v.toInt() }
+                                        .toMap())
+                    }
+
         }
     }
 }

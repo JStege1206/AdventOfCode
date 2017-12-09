@@ -41,12 +41,10 @@ class Day25 : Day() {
     }
 
 
-    private fun Sequence<String>.parse(): Pair<Int, Int> {
-        val i = this.head
-                .replace("[^0-9]".toRegex(), " ")
-                .replace("\\s+".toRegex(), " ")
-                .trim()
-        val (row, column) = i.split(" ")
-        return row.toInt() to column.toInt()
-    }
+    private fun Sequence<String>.parse(): Pair<Int, Int> = this.head
+            .replace("[^0-9]".toRegex(), " ")
+            .replace("\\s+".toRegex(), " ")
+            .trim().split(" ")
+            .let { (row, column) -> row.toInt() to column.toInt() }
+
 }

@@ -20,10 +20,7 @@ class Day07 : Day() {
     override fun second(input: Sequence<String>): Any = input.compute(SECOND_INIT)
 
     private fun Sequence<String>.compute(vararg init: Pair<String, Wire>): Int = this
-            .map {
-                INPUT_REGEX.matchEntire(it)?.groupValues
-                        ?: throw IllegalArgumentException("Invalid input $it")
-            }
+            .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
             .fold(mutableMapOf(*init)) { wires, (_, opNot, w1, opR, w2, wo) ->
                 val op = when {
                     opNot.isNotEmpty() -> Operator.NOT

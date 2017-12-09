@@ -31,7 +31,7 @@ class Day08 : Day() {
         }
 
     private val String.escapedLength: Int
-        get() = this.fold(2, { length, c ->
+        get() = this.fold(2) { length, c ->
             length + (if (c == '"' || c == '\\') 2 else 1)
-        })
+        }
 }

@@ -19,7 +19,7 @@ class Day02 : Day() {
     override fun second(input: Sequence<String>): Any = input
             .map { it.split('x').map { it.toInt() } }
             .sumBy { (length, width, height) ->
-                2 * min(length, width, height) +
-                        2 * mid(length, width, height) + length * width * height
+                2 * (min(length, width, height) + mid(length, width, height)) +
+                        length * width * height
             }
 }

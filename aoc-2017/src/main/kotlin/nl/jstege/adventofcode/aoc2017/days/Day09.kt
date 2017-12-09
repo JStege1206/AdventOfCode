@@ -17,23 +17,23 @@ class Day09 : Day() {
     }
 
     private fun String.cleanUp(): Pair<Int, Int> {
-        tailrec fun cleanUp(index: Int, score: Int, nest: Int, garbageCnt: Int,
+        tailrec fun cleanUp(index: Int, score: Int, nest: Int, garbageCount: Int,
                             state: State): Pair<Int, Int> =
                 if (index >= this.length)
-                    score to garbageCnt
+                    score to garbageCount
                 else when (state) {
                     State.DEFAULT -> when (this[index]) {
-                        '<' -> cleanUp(index + 1, score, nest, garbageCnt, State.GARBAGE)
-                        '{' -> cleanUp(index + 1, score, nest + 1, garbageCnt, state)
-                        '}' -> cleanUp(index + 1, score + nest, nest - 1, garbageCnt, state)
-                        else -> cleanUp(index + 1, score, nest, garbageCnt, state)
+                        '<' -> cleanUp(index + 1, score, nest, garbageCount, State.GARBAGE)
+                        '{' -> cleanUp(index + 1, score, nest + 1, garbageCount, state)
+                        '}' -> cleanUp(index + 1, score + nest, nest - 1, garbageCount, state)
+                        else -> cleanUp(index + 1, score, nest, garbageCount, state)
                     }
                     State.GARBAGE -> when (this[index]) {
-                        '!' -> cleanUp(index + 1, score, nest, garbageCnt, State.CANCEL)
-                        '>' -> cleanUp(index + 1, score, nest, garbageCnt, State.DEFAULT)
-                        else -> cleanUp(index + 1, score, nest, garbageCnt + 1, state)
+                        '!' -> cleanUp(index + 1, score, nest, garbageCount, State.CANCEL)
+                        '>' -> cleanUp(index + 1, score, nest, garbageCount, State.DEFAULT)
+                        else -> cleanUp(index + 1, score, nest, garbageCount + 1, state)
                     }
-                    State.CANCEL -> cleanUp(index + 1, score, nest, garbageCnt, State.GARBAGE)
+                    State.CANCEL -> cleanUp(index + 1, score, nest, garbageCount, State.GARBAGE)
                 }
         return cleanUp(0, 0, 0, 0, State.DEFAULT)
     }

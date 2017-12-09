@@ -15,9 +15,7 @@ class Day14 : Day() {
     }
 
     override fun first(input: Sequence<String>) = input.parse()
-            .map {
-                it.travel(TRAVEL_TIME).distanceTravelled
-            }
+            .map { it.travel(TRAVEL_TIME).distanceTravelled }
             .max()!!
 
     override fun second(input: Sequence<String>) =
@@ -35,10 +33,7 @@ class Day14 : Day() {
 
 
     private fun Sequence<String>.parse() = this
-            .map {
-                INPUT_REGEX.matchEntire(it)?.groupValues
-                        ?: throw IllegalArgumentException("Invalid input")
-            }
+            .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
             .map { (_, speed, travelTime, restTime) ->
                 Reindeer(speed.toInt(), travelTime.toInt(), restTime.toInt())
             }
