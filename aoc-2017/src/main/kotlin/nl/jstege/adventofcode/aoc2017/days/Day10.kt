@@ -10,7 +10,7 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.*
 class Day10 : Day() {
     private companion object Configuration {
         private const val FIRST_ELEMENTS_TO_MULTIPLY = 2
-        private val SECOND_APPENDIX = listOf(17, 31, 73, 47, 23)
+        private val SECOND_APPENDIX = sequenceOf(17, 31, 73, 47, 23)
         private const val SECOND_STRETCH_ITERATIONS = 64
         private const val SECOND_BLOCK_SIZE = 16
     }
@@ -28,8 +28,8 @@ class Day10 : Day() {
     override fun second(input: Sequence<String>): Any {
         return input.head
                 .map { it.toInt() and 0xFF }
-                .plus(SECOND_APPENDIX)
                 .asSequence()
+                .plus(SECOND_APPENDIX)
                 .times(SECOND_STRETCH_ITERATIONS)
                 .toSparseHash()
                 .chunked(SECOND_BLOCK_SIZE)
