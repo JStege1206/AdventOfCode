@@ -1,10 +1,7 @@
 package nl.jstege.adventofcode.aoc2017.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
-import nl.jstege.adventofcode.aoccommon.utils.extensions.head
-import nl.jstege.adventofcode.aoccommon.utils.extensions.times
-import nl.jstege.adventofcode.aoccommon.utils.extensions.toHexString
-import nl.jstege.adventofcode.aoccommon.utils.extensions.zipWithReverse
+import nl.jstege.adventofcode.aoccommon.utils.extensions.*
 
 /**
  *
@@ -22,6 +19,7 @@ class Day10 : Day() {
         return input.head
                 .split(",")
                 .map { it.toInt() }
+                .asSequence()
                 .toSparseHash()
                 .take(FIRST_ELEMENTS_TO_MULTIPLY)
                 .reduce(Int::times)
@@ -31,6 +29,7 @@ class Day10 : Day() {
         return input.head
                 .map { it.toInt() and 0xFF }
                 .plus(SECOND_APPENDIX)
+                .asSequence()
                 .times(SECOND_STRETCH_ITERATIONS)
                 .toSparseHash()
                 .chunked(SECOND_BLOCK_SIZE)
@@ -38,7 +37,7 @@ class Day10 : Day() {
                 .toHexString()
     }
 
-    private fun List<Int>.toSparseHash() = this
+    private fun Sequence<Int>.toSparseHash() = this
             .foldIndexed((0..255).toList() to 0) { skipSize, (list, currentPos), length ->
                 list.reverse(currentPos, length) to (currentPos + length + skipSize) % list.size
             }.first
@@ -47,8 +46,10 @@ class Day10 : Day() {
             (start until start + length)
                     .map { it % this.size }
                     .zipWithReverse()
+                    .asSequence()
+                    .take(length / 2)
                     .fold(this.toMutableList()) { list, (f, s) ->
-                        list[f] = this[s]
+                        list.swap(f, s)
                         list
                     }
 }

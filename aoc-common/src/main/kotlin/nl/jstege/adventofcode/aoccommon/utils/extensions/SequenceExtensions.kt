@@ -22,6 +22,13 @@ inline fun <T, R> Sequence<T>.scan(
     this@scan.fold(initial) { a, el -> operation(a, el).also { yield(it) } }
 }
 
+operator fun <T> Sequence<T>.times(n: Int) = when (n) {
+    0 -> emptySequence()
+    else -> buildSequence {
+        (0 until n).forEach { yieldAll(this@times) }
+    }
+}
+
 /**
  * Converts the first element in the sequence to a [JsonNode].
  *
