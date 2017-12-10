@@ -108,3 +108,21 @@ fun <E> MutableList<E>.swap(i: Int, j: Int) {
     this[i] = this[j]
     this[j] = t
 }
+
+operator fun <E> List<E>.times(n: Int): List<E> = (0 until n).fold(listOf()) { r, _ -> (r + this) }
+
+
+/**
+ * Converts (part of) a byte array to a hexadecimal string representation.
+ *
+ * @receiver The [ByteArray] to convert.
+ * @param n The amount of bytes to convert, defaults to the size of the array.
+ * @return The string representation of the given ByteArray in hexadecimal format.
+ */
+fun List<Byte>.toHexString(n: Int = this.size): String =
+        CharArray(Math.min(this.size, n) * 2) {
+            if (it.isEven()) (this[it / 2].toUnsignedInt() ushr 4).toHexChar()
+            else (this[it / 2].toUnsignedInt() and 0x0F).toHexChar()
+        }.let { String(it) }
+
+fun <E> List<E>.zipWithReverse() = this.zip(this.asReversed())
