@@ -1,5 +1,7 @@
 package nl.jstege.adventofcode.aoccommon.utils.extensions
 
+import kotlin.experimental.and
+
 /**
  * Extension methods for ByteArrays.
  * @author Jelle Stege
@@ -13,16 +15,21 @@ package nl.jstege.adventofcode.aoccommon.utils.extensions
  * @param amount The amount of zeroes the given ByteArray should start with.
  * @return True if the given array starts with the given amount of zeroes, false if otherwise.
  */
-fun ByteArray.prefixedWithZeroes(amount: Int): Boolean {
-    val checks = amount / 2
-    val zero = 0.toByte()
-    if (this.size < checks) return false
-    (0 until checks)
-            .filter { this[it] != zero }
-            .ifPresent { return false }
-    return amount.isEven() || (this.size >= checks + 1 && this[checks].toInt() and 0xF0 == 0)
+fun ByteArray.prefixedWithZeroes(amount: Int) = when {
+    amount > this.size * 2 -> false
+    else -> this.asSequence()
+            .take(amount / 2 + if (amount.isOdd()) 1 else 0)
+            .flatMap { sequenceOf(it.toInt() ushr 4, it.toInt() and 0x0F) }
+            .withIndex()
+            .all { (i, it) -> i == amount || it == 0 }
 }
 
+
+//fun main(args: Array<String>) {
+//    println(byteArrayOf(0, 0, 5).prefixedWithWordZeroes(5))
+//    println(byteArrayOf(0, 0, 17).prefixedWithWordZeroes(5))
+//    println(byteArrayOf(0, 0, 15).prefixedWithWordZeroes(4))
+//}
 /**
  * Converts (part of) a byte array to a hexadecimal string representation.
  *
@@ -30,13 +37,8 @@ fun ByteArray.prefixedWithZeroes(amount: Int): Boolean {
  * @param n The amount of bytes to convert, defaults to the size of the array.
  * @return The string representation of the given ByteArray in hexadecimal format.
  */
-fun ByteArray.toHexString(n: Int = this.size): String {
-    val ca = CharArray(Math.min(this.size, n) * 2)
-    var i = 0
-    while (i < Math.min(this.size, n)) {
-        ca[i * 2] = (this[i].toUnsignedInt() ushr 4).toHexChar()
-        ca[i * 2 + 1] = (this[i].toUnsignedInt() and 0x0F).toHexChar()
-        i++
-    }
-    return String(ca)
-}
+fun ByteArray.toHexString(n: Int = this.size): String =
+        CharArray(Math.min(this.size, n) * 2) {
+            if (it.isEven()) (this[it / 2].toUnsignedInt() ushr 4).toHexChar()
+            else (this[it / 2].toUnsignedInt() and 0x0F).toHexChar()
+        }.let { String(it) }
