@@ -25,7 +25,7 @@ class Day11 : Day() {
                 }
     }
 
-    override fun second(input: Sequence<String>): Any {//TODO: implement
+    override fun second(input: Sequence<String>): Any {
         return input.head.toUpperCase()
                 .split(",")
                 .asSequence()
