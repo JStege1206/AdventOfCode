@@ -1,5 +1,7 @@
 package nl.jstege.adventofcode.aoccommon.utils.extensions
 
+import com.fasterxml.jackson.databind.ObjectMapper
+
 /**
  *
  * @author Jelle Stege
@@ -27,3 +29,5 @@ fun String.replace(vararg replacements: Pair<Char, Char>): String = replacements
  */
 fun String.isCastableToInt(): Boolean = this.all { it.isDigit() }
         || this[0] == '-' || this[0] == '+'
+
+fun String.toJson() = ObjectMapper().readTree(this)!!

@@ -70,9 +70,9 @@ fun <E> Collection<E>.combinations(n: Int): Sequence<List<E>> {
                 return false
             }
 
-            (i + 1 until k)
-                    .filter { this[i] >= this[it] }
-                    .ifPresent { return false }
+            if ((i + 1 until k).filter { this[i] >= this[it] }.any()) {
+                return false
+            }
         }
         return true
     }

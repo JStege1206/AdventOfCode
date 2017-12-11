@@ -2,6 +2,7 @@ package nl.jstege.adventofcode.aoc2015.days
 
 import com.fasterxml.jackson.databind.JsonNode
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 import nl.jstege.adventofcode.aoccommon.utils.extensions.toJson
 
 /**
@@ -9,9 +10,9 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.toJson
  * @author Jelle Stege
  */
 class Day12 : Day() {
-    override fun first(input: Sequence<String>): Any = input.toJson().sum()
+    override fun first(input: Sequence<String>): Any = input.head.toJson().sum()
 
-    override fun second(input: Sequence<String>): Any = input.toJson().sumWithoutRed()
+    override fun second(input: Sequence<String>): Any = input.head.toJson().sumWithoutRed()
 
     private fun JsonNode.sum(): Int {
         if (this.isInt) return this.asInt()

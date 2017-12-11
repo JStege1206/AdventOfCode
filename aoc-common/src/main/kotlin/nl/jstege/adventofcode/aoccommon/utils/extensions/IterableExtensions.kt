@@ -40,7 +40,7 @@ inline fun <T, R> Iterable<T>.scan(initial: R, operation: (R, T) -> R): List<R> 
  * @param action The action to execute if there is at least one element in the iterable.
  */
 inline fun <E> Iterable<E>.ifPresent(action: () -> Unit) {
-    if (this.any()) {
+    if (iterator().hasNext()) {
         action()
     }
 }

@@ -30,15 +30,15 @@ class Day24 : Day() {
         val start = this
                 .asSequence()
                 .sortedDescending()
-                .scan(0) { sum, i -> sum + i}
+                .scan(0, Int::plus)
                 .takeWhile { it < groupSize }
                 .count()
         return (start until this.size)
                 .asSequence()
                 .map { this.combinations(it).filter { it.sum() == groupSize } }
-                .filter { it.any() }
-                .orElse { listOf(listOf(Int.MAX_VALUE)).asSequence() }
-                .map { it.map { it.toLong() } }
+                .filter(Sequence<List<Int>>::any)
+                .orElse { sequenceOf(listOf(Int.MAX_VALUE)) }
+                .map { it.map(Int::toLong) }
                 .map { it.reduce(Long::times) }
                 .min()!!
     }
