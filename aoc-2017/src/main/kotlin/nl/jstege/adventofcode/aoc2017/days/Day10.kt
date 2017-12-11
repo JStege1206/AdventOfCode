@@ -18,8 +18,8 @@ class Day10 : Day() {
     override fun first(input: Sequence<String>): Any {
         return input.head
                 .split(",")
-                .map { it.toInt() }
                 .asSequence()
+                .map { it.toInt() }
                 .toSparseHash()
                 .take(FIRST_ELEMENTS_TO_MULTIPLY)
                 .reduce(Int::times)
@@ -27,8 +27,8 @@ class Day10 : Day() {
 
     override fun second(input: Sequence<String>): Any {
         return input.head
-                .map { it.toInt() and 0xFF }
                 .asSequence()
+                .map { it.toInt() and 0xFF }
                 .plus(SECOND_APPENDIX)
                 .times(SECOND_STRETCH_ITERATIONS)
                 .toSparseHash()

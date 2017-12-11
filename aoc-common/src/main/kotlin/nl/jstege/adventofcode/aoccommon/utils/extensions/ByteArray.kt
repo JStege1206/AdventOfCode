@@ -24,12 +24,6 @@ fun ByteArray.prefixedWithZeroes(amount: Int) = when {
             .all { (i, it) -> i == amount || it == 0 }
 }
 
-
-//fun main(args: Array<String>) {
-//    println(byteArrayOf(0, 0, 5).prefixedWithWordZeroes(5))
-//    println(byteArrayOf(0, 0, 17).prefixedWithWordZeroes(5))
-//    println(byteArrayOf(0, 0, 15).prefixedWithWordZeroes(4))
-//}
 /**
  * Converts (part of) a byte array to a hexadecimal string representation.
  *

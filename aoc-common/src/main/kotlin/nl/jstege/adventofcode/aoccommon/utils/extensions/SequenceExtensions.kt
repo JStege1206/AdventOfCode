@@ -24,9 +24,7 @@ inline fun <T, R> Sequence<T>.scan(
 
 operator fun <T> Sequence<T>.times(n: Int) = when (n) {
     0 -> emptySequence()
-    else -> buildSequence {
-        (0 until n).forEach { yieldAll(this@times) }
-    }
+    else -> generateSequence { this }.take(n).flatten()
 }
 
 /**

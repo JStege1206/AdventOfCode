@@ -62,12 +62,10 @@ fun <E : Comparable<E>> List<E>.quickSelect(index: Int): E {
 
         val pivotIndex = this@select.partition(left, right, RANDOM.nextInt(left, right))
 
-        if (k == pivotIndex) {
-            return this[k]
-        } else if (k < pivotIndex) {
-            return this.select(k, left, pivotIndex - 1)
-        } else {
-            return this.select(k, pivotIndex + 1, right)
+        return when {
+            k == pivotIndex -> this[k]
+            k < pivotIndex -> this.select(k, left, pivotIndex - 1)
+            else -> this.select(k, pivotIndex + 1, right)
         }
     }
     return this.toMutableList().select(index, 0, this.size - 1)
