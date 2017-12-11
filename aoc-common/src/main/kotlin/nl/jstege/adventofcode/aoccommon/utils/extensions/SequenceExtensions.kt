@@ -2,7 +2,6 @@ package nl.jstege.adventofcode.aoccommon.utils.extensions
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import kotlin.coroutines.experimental.buildSequence
 
 /**
  *
@@ -16,10 +15,27 @@ import kotlin.coroutines.experimental.buildSequence
  * @param operation The operation to invoke with the previously calculated value and the new value.
  * @return A new sequence with values calculated by the operation function.
  */
-inline fun <T, R> Sequence<T>.scan(
-        initial: R, crossinline operation: (acc: R, T) -> R): Sequence<R> = buildSequence {
-    yield(initial)
-    this@scan.fold(initial) { a, el -> operation(a, el).also { yield(it) } }
+fun <T, R> Sequence<T>.scan(initial: R, operation: (acc: R, T) -> R): Sequence<R> {
+    return ScanningSequence(this, initial, operation)
+}
+
+internal class ScanningSequence<out T, R> constructor(
+        private val sequence: Sequence<T>,
+        private val initial: R,
+        private val operation: (acc: R, T) -> R) : Sequence<R> {
+
+    override fun iterator(): Iterator<R> = object : Iterator<R> {
+        val iterator = sequence.iterator()
+        var previous = initial
+        override fun next(): R {
+            return previous.also { previous = operation(previous, iterator.next()) }
+        }
+
+        override fun hasNext(): Boolean {
+            return iterator.hasNext()
+        }
+
+    }
 }
 
 operator fun <T> Sequence<T>.times(n: Int) = when (n) {
@@ -46,25 +62,6 @@ fun Sequence<String>.toJson(): JsonNode = ObjectMapper().readTree(this.first())!
  */
 inline val <E> Sequence<E>.head get() = this.first()
 
-/**
- * Returns the last element of the Sequence
- *
- * @receiver The sequence to get the last element of.
- * @return The last element of the Sequence.
- */
-inline val <E> Sequence<E>.tail get() = this.drop(1)
-
-/**
- * Runs the supplied action if there is at least one element in the Sequence.
- *
- * @receiver The Sequence.
- * @param action The action to execute if there is at least one element in the Sequence.
- */
-inline fun <E> Sequence<E>.ifPresent(action: () -> Unit) {
-    if (this.firstOrNull() != null) {
-        action()
-    }
-}
 
 /**
  * Executes the given block in case there is no element in the given sequence.
@@ -73,11 +70,3 @@ inline fun <E> Sequence<E>.ifPresent(action: () -> Unit) {
  * @return The result of the block function.
  */
 inline fun <E> Sequence<E>.orElse(block: () -> E) = this.firstOrNull() ?: block()
-
-/**
- * Returns the first element in the Sequence that causes the given predicate to evaluate to true
- */
-inline fun <E> Sequence<E>.firstOrElse(predicate: (E) -> Boolean, block: () -> E): E {
-    for (element in this) if (predicate(element)) return element
-    return block()
-}

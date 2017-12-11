@@ -14,7 +14,8 @@ import kotlin.math.sign
  */
 class Day11 : Day() {
     override fun first(input: Sequence<String>): Any {
-        return input.head.toUpperCase()
+        return input.head
+                .toUpperCase()
                 .split(",")
                 .asSequence()
                 .map { Direction.valueOf(it).direction }
@@ -26,7 +27,8 @@ class Day11 : Day() {
     }
 
     override fun second(input: Sequence<String>): Any {
-        return input.head.toUpperCase()
+        return input.head
+                .toUpperCase()
                 .split(",")
                 .asSequence()
                 .map { Direction.valueOf(it).direction }

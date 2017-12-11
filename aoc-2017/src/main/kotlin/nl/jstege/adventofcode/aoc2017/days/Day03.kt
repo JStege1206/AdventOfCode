@@ -30,7 +30,7 @@ class Day03 : Day() {
         return (2 until Int.MAX_VALUE).asSequence()
                 .map { it.spiralIndexToPoint() }
                 .scan(INITIAL_VALUE) { (_, values), point ->
-                    val sum = point.adjecentWithDiagonals
+                    val sum = point.neighbors8
                             .map { values[it] ?: 0 }
                             .sum()
                     sum to (values + (point to sum))

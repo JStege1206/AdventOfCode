@@ -42,12 +42,12 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
          */
         fun of(p: Pair<Int, Int>) = Point(p.first, p.second)
 
-        private val ADJECENT_WITH_DIAGONALS = setOf(
+        private val NEIGHBORS8 = setOf(
                 Point.of(-1, -1), Point.of(0, -1), Point.of(1, -1),
                 Point.of(-1, 0), Point.of(1, 0),
                 Point.of(-1, 1), Point.of(0, 1), Point.of(1, 1)
         )
-        private val ADJECENT_WITHOUT_DIAGONALS = setOf(
+        private val NEIGHBORS4 = setOf(
                 Point.of(0, -1), Point.of(-1, 0), Point.of(1, 0), Point.of(0, 1)
         )
     }
@@ -55,18 +55,12 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
     /**
      * All adjecent [Point]s, includes the 4 orthogonal and 4 diagonal directions.
      */
-    val adjecentWithDiagonals: Set<Point>
-        get() = ADJECENT_WITH_DIAGONALS
-                .map { this + it }
-                .toSet()
+    val neighbors8: Set<Point> by lazy { NEIGHBORS8.map { this + it }.toSet() }
 
     /**
      * All adjecent [Point]s without diagonals, thus only the 4 orthogonal directions.
      */
-    val adjecentWithoutDiagonals: Set<Point>
-        get() = ADJECENT_WITHOUT_DIAGONALS
-                .map { this + it }
-                .toSet()
+    val neighbors4: Set<Point> by lazy { NEIGHBORS4.map { this + it }.toSet() }
 
     /**
      * Adds some values to the x and y values of this point.
@@ -174,24 +168,14 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
      * @return 0 if the points are equal, < 0 if this point is smaller than the other and > 0 if
      * this point is bigger than the other.
      */
-    override fun compareTo(other: Point): Int {
-        if (this === other) {
-            return 0
-        }
-
-        val cX = x.compareTo(other.x)
-        return if (cX != 0) {
-            cX
-        } else {
-            y.compareTo(other.y)
-        }
+    override fun compareTo(other: Point): Int = when {
+        this === other -> 0
+        else -> x.compareTo(other.x).let { if (it != 0) it else y.compareTo(other.y) }
     }
 
     /**
      * Converts this point to a String representation.
      * @return The String representation for this point, which is of the type (x, y)
      */
-    override fun toString(): String {
-        return "($x,$y)"
-    }
+    override fun toString(): String = "($x,$y)"
 }
