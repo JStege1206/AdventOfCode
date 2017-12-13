@@ -98,10 +98,10 @@ abstract class Day {
         return StringBuilder().append("${this::class.java.simpleName}\n")
                 .appendln("First:")
                 .appendln("    Output: $firstOutput")
-                .appendln("    Time taken: ${firstTime / 1000000F}ms")
+                .appendln("    Time taken: %.2fms".format(firstTime / 1000000F))
                 .appendln("Second:")
                 .appendln("    Output: $secondOutput")
-                .appendln("    Time taken: ${secondTime / 1000000F}ms")
+                .appendln("    Time taken: %.2fms".format(secondTime / 1000000F))
                 .toString()
     }
 }

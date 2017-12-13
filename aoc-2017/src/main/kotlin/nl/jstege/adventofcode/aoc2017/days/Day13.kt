@@ -2,16 +2,17 @@ package nl.jstege.adventofcode.aoc2017.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
 
-/**
- *
- * @author Jelle Stege
- */
 class Day13 : Day() {
-    override fun first(input: Sequence<String>): Any {//TODO: implement
-        return ""
+    override fun first(input: Sequence<String>): Any {
+        return input.parse().sumBy { (d, r) -> if (d % (2 * r - 2) == 0) d * r else 0 }
     }
 
-    override fun second(input: Sequence<String>): Any {//TODO: implement
-        return ""
+    override fun second(input: Sequence<String>): Any {
+        return input.parse().toList()
+                .let { s ->
+                    (0..Int.MAX_VALUE).first { s.none { (d, r) -> (d + it) % (2 * r - 2) == 0 } }
+                }
     }
+
+    private fun Sequence<String>.parse() = this.map { it.split(": ").map { it.toInt() } }
 }
