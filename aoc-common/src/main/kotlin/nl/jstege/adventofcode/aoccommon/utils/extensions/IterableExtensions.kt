@@ -1,5 +1,9 @@
 package nl.jstege.adventofcode.aoccommon.utils.extensions
 
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
+
 /**
  * Extention methods for iterables.
  * @author Jelle Stege
@@ -43,4 +47,10 @@ inline fun <E> Iterable<E>.ifPresent(action: () -> Unit) {
     if (iterator().hasNext()) {
         action()
     }
+}
+
+fun IntRange.zipWithReverse() = this.zip(this.reversed())
+
+fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> = runBlocking {
+    map { async(CommonPool) { f(it) } }.map { it.await() }
 }

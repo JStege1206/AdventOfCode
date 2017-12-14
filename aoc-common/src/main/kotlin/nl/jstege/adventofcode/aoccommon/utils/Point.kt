@@ -34,6 +34,15 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
         fun of(x: Int, y: Int) = Point(x, y)
 
         /**
+         * Creates a [List] of [Point]s for the given ranges.
+         *
+         * @param xs The x values to use.
+         * @param ys The y values to use.
+         * @return A [List] of [Point]s for the given ranges.
+         */
+        fun of(xs: IntRange, ys: IntRange) = xs.flatMap { x -> ys.map { y -> Point.of(x, y) } }
+
+        /**
          * Creates a [Point] of the given [Pair], using the first value
          * as x and the second value as y.
          *
