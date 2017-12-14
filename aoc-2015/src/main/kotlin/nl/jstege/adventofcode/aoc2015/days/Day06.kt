@@ -55,7 +55,7 @@ class Day06 : Day() {
             }
 
     private operator fun BooleanArray.get(x: Int, y: Int): Boolean = this[y * GRID_COLS + x]
-    
+
     private operator fun IntArray.get(x: Int, y: Int): Int = this[y * GRID_COLS + x]
 
     private operator fun BooleanArray.set(x: Int, y: Int, v: Boolean) {
