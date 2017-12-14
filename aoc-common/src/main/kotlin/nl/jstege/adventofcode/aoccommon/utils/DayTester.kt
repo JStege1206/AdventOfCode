@@ -1,5 +1,6 @@
 package nl.jstege.adventofcode.aoccommon.utils
 
+import kotlinx.coroutines.experimental.runBlocking
 import nl.jstege.adventofcode.aoccommon.days.Day
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,7 +27,7 @@ abstract class DayTester(val day: Day) {
          * @throws AssertionError if the expected output and actual output do not match.
          */
         fun testFirst(day: Day, input: Sequence<String>, expectedOutput: String) {
-            val actualOutput = day.first(input).toString()
+            val actualOutput = runBlocking { day.first(input).toString() }
             assertEquals(expectedOutput, actualOutput)
         }
 
@@ -39,7 +40,7 @@ abstract class DayTester(val day: Day) {
          * @throws AssertionError if the expected output and actual output do not match.
          */
         fun testSecond(day: Day, input: Sequence<String>, expectedOutput: String) {
-            val actualOutput = day.second(input).toString()
+            val actualOutput = runBlocking { day.second(input).toString() }
             assertEquals(expectedOutput, actualOutput)
         }
 

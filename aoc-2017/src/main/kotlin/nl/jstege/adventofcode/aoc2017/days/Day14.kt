@@ -18,7 +18,7 @@ class Day14 : Day() {
         const val GRID_WIDTH = 128
     }
 
-    override fun first(input: Sequence<String>): Any {
+    override suspend fun first(input: Sequence<String>): Any {
         return "${input.head}-%d".let { stringInput ->
             (0 until GRID_HEIGHT).toList().parallelMap { it ->
                 stringInput
@@ -29,7 +29,7 @@ class Day14 : Day() {
         }
     }
 
-    override fun second(input: Sequence<String>): Any {
+    override suspend fun second(input: Sequence<String>): Any {
         return "${input.head}-%d"
                 .let { stringInput ->
                     val grid = (0 until GRID_HEIGHT).toList().parallelMap {

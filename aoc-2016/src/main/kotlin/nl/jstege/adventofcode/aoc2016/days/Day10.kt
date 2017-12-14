@@ -23,7 +23,7 @@ class Day10 : Day() {
         private val OUTPUTS_TO_MULTIPLY = listOf(0, 1, 2)
     }
 
-    override fun first(input: Sequence<String>): Any {
+    override suspend fun first(input: Sequence<String>): Any {
         val queue = input.toMutableList()
         val bots = mutableMapOf<Int, MutableList<Int>>()
         val outputs = mutableMapOf<Int, Int>()
@@ -38,7 +38,7 @@ class Day10 : Day() {
                 ?: throw IllegalStateException("No answer found")
     }
 
-    override fun second(input: Sequence<String>): Any {
+    override suspend fun second(input: Sequence<String>): Any {
         val queue = input.toMutableList()
         val bots = mutableMapOf<Int, MutableList<Int>>()
         val outputs = mutableMapOf<Int, Int>()

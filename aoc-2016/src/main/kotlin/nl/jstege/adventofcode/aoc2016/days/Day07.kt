@@ -12,14 +12,14 @@ class Day07 : Day() {
         private const val NOT_HYPERNET = false
     }
 
-    override fun first(input: Sequence<String>): Any = input
+    override suspend fun first(input: Sequence<String>): Any = input
             .map {
                 val segments = it.getIpv7Segments()
                 segments[HYPERNET].none { it.hasAbbaSequence() }
                         && segments[NOT_HYPERNET].any { it.hasAbbaSequence() }
             }.count { it }
 
-    override fun second(input: Sequence<String>): Any = input
+    override suspend fun second(input: Sequence<String>): Any = input
             .map {
                 val segments = it.getIpv7Segments()
                 val possibleBabs = segments[NOT_HYPERNET]

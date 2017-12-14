@@ -15,10 +15,10 @@ class Day04 : Day() {
         private const val SECOND_ZEROES = 6
     }
 
-    override fun first(input: Sequence<String>): Any = input.head
+    override suspend fun first(input: Sequence<String>): Any = input.head
             .bruteforce(FIRST_ZEROES)
 
-    override fun second(input: Sequence<String>): Any = input.head
+    override suspend fun second(input: Sequence<String>): Any = input.head
             .bruteforce(SECOND_ZEROES)
 
     private fun String.bruteforce(zeroes: Int): Int = MessageDigest.getInstance("MD5")

@@ -12,10 +12,10 @@ class Day05 : Day() {
         private val ILLEGAL_CHARACTER_PATTERNS = "ab|cd|pq|xy".toRegex()
     }
 
-    override fun first(input: Sequence<String>): Any = input
+    override suspend fun first(input: Sequence<String>): Any = input
             .count { it.hasVowels(3) && it.containsDoubleLetters() && !it.containsIllegalPattern() }
 
-    override fun second(input: Sequence<String>): Any = input
+    override suspend fun second(input: Sequence<String>): Any = input
             .count { it.pairOccursTwice() && it.charRepeatsWrap() }
 
     private fun String.hasVowels(amount: Int): Boolean = this

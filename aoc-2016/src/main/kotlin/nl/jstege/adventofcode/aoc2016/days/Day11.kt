@@ -13,11 +13,11 @@ class Day11 : Day() {
         private const val MAX_FLOOR = 3
     }
 
-    override fun first(input: Sequence<String>): Any {//TODO: implement
+    override suspend fun first(input: Sequence<String>): Any {//TODO: implement
         return 37
     }
 
-    override fun second(input: Sequence<String>): Any {//TODO: implement
+    override suspend fun second(input: Sequence<String>): Any {//TODO: implement
         return 61
     }
 

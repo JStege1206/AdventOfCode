@@ -47,12 +47,12 @@ class Day08 : Day() {
         )
     }
 
-    override fun first(input: Sequence<String>): Any = input
+    override suspend fun first(input: Sequence<String>): Any = input
             .parseAndExecute()
             .map(Long::bitCount)
             .sum()
 
-    override fun second(input: Sequence<String>): Any = input
+    override suspend fun second(input: Sequence<String>): Any = input
             .parseAndExecute()
             .ocr()
 

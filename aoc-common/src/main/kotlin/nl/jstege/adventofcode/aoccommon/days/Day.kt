@@ -1,8 +1,11 @@
 package nl.jstege.adventofcode.aoccommon.days
 
 
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
 import nl.jstege.adventofcode.aoccommon.utils.Resource
-import java.util.concurrent.CompletableFuture
 import kotlin.system.measureNanoTime
 
 /**
@@ -15,23 +18,8 @@ import kotlin.system.measureNanoTime
  * [Day.run] method.
  */
 abstract class Day {
-    /**
-     * Contains constants to be used by this [Day]
-     */
-    private companion object Constants {
-        /**
-         * The text to be returned when the results of this [Day] are requested before it's started.
-         */
-        val INCOMPLETE_TEXT = "Assignment not started"
-    }
-
-    private var futureFirst = CompletableFuture<Pair<Any, Long>>()
-    private var futureSecond = CompletableFuture<Pair<Any, Long>>()
-
-    init {
-        futureFirst.complete(INCOMPLETE_TEXT to 0)
-        futureSecond.complete(INCOMPLETE_TEXT to 0)
-    }
+    private lateinit var deferredFirst: Deferred<Pair<Any, Long>>
+    private lateinit var deferredSecond: Deferred<Pair<Any, Long>>
 
     /**
      * The implementation for the first assignment of this [Day]
@@ -39,7 +27,7 @@ abstract class Day {
      * @param input The input for this day, as a Sequence.
      * @return The result of this assignment.
      */
-    abstract fun first(input: Sequence<String>): Any
+    abstract suspend fun first(input: Sequence<String>): Any
 
     /**
      * The implementation for the first assignment of this [Day]
@@ -47,35 +35,31 @@ abstract class Day {
      * @param input The input for this day, as a Sequence.
      * @return The result of this assignment.
      */
-    abstract fun second(input: Sequence<String>): Any
+    abstract suspend fun second(input: Sequence<String>): Any
 
     /**
      * Loads the input for this assignment and asynchronously executes the sub-assignments. Only
-     * submits the sub-assignments to the ForkJoin common pool, does not check or wait for output.
+     * runs the assignments, does not check or wait for output.
      */
     fun run() {
         val input = loadInput()
-        futureFirst = CompletableFuture.supplyAsync(supplier(this::first, input))
-        futureSecond = CompletableFuture.supplyAsync(supplier(this::second, input))
+        deferredFirst = runBlocking { async(CommonPool) { supplier({ first(input) }) } }
+        deferredSecond = runBlocking { async(CommonPool) { supplier({ second(input) }) } }
     }
 
     /**
-     * Supplier method to be executed in the ForkJoin Common pool.
-     * Measures the time taken to execute the given action with the given input.
-     * @param action The action to execute
-     * @param input The input for the action to execute
+     * Supplier method to be executed asynchronous. Measures the time taken to execute the given
+     * action with the given input.
      *
+     * @param action The action to execute
      * @return Supplier to be completed by a task running in the fork join common pool.
      */
-    private inline fun supplier(
-            crossinline action: (i: Sequence<String>) -> Any,
-            input: Sequence<String>
-    ) = {
+    private suspend fun supplier(action: suspend () -> Any): Pair<Any, Long> {
         var output: Any = object {}
         val timeTaken = measureNanoTime {
-            output = action(input)
+            output = action()
         }
-        Pair(output, timeTaken)
+        return Pair(output, timeTaken)
     }
 
     /**
@@ -93,8 +77,8 @@ abstract class Day {
      * @return The output, formatted.
      */
     override fun toString(): String {
-        val (firstOutput, firstTime) = futureFirst.join()
-        val (secondOutput, secondTime) = futureSecond.join()
+        val (firstOutput, firstTime) = runBlocking { deferredFirst.await() }
+        val (secondOutput, secondTime) = runBlocking { deferredSecond.await() }
         return StringBuilder().append("${this::class.java.simpleName}\n")
                 .appendln("First:")
                 .appendln("    Output: $firstOutput")

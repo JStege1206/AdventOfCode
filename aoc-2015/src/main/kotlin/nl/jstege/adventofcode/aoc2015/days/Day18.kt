@@ -13,16 +13,16 @@ class Day18 : Day() {
         private const val ITERATIONS = 100
     }
 
-    override fun first(input: Sequence<String>) = (0 until ITERATIONS)
+    override suspend fun first(input: Sequence<String>) = (0 until ITERATIONS)
             .fold(Grid.parse(input.toList())) { g, _ ->
                 g.getTogglePoints()
                         .fold(g) { _, (x, y) ->
-                            g[x, y] = !g[x, y];
+                            g[x, y] = !g[x, y]
                             g
                         }
             }.cardinality()
 
-    override fun second(input: Sequence<String>) = (0 until ITERATIONS)
+    override suspend fun second(input: Sequence<String>) = (0 until ITERATIONS)
             .fold(Grid.parse(input.toList())) { g, _ ->
                 g.getTogglePoints().asSequence()
                         .filterNot { (x, y) ->

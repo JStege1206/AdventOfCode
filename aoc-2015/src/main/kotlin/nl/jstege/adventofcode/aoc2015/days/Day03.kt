@@ -20,12 +20,12 @@ class Day03 : Day() {
         )
     }
 
-    override fun first(input: Sequence<String>): Any = input.head.asSequence()
+    override suspend fun first(input: Sequence<String>): Any = input.head.asSequence()
             .scan(Point.ZERO_ZERO) { visited, c -> DIRECTION_MODIFIERS[c]!!(visited) }
             .toSet()
             .size
 
-    override fun second(input: Sequence<String>): Any = input.head.asSequence()
+    override suspend fun second(input: Sequence<String>): Any = input.head.asSequence()
             .withIndex()
             .scan(Point.ZERO_ZERO to Point.ZERO_ZERO) { (s, r), (i, c) ->
                 if (i.isEven()) DIRECTION_MODIFIERS[c]!!(s) to r

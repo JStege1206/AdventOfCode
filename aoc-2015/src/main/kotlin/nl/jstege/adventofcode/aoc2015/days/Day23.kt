@@ -15,9 +15,9 @@ class Day23 : Day() {
         private const val OUTPUT_REGISTER = "b"
     }
 
-    override fun first(input: Sequence<String>) = run(input.toList(), mapOf())
+    override suspend fun first(input: Sequence<String>) = run(input.toList(), mapOf())
 
-    override fun second(input: Sequence<String>) = run(input.toList(), mapOf("a" to 1))
+    override suspend fun second(input: Sequence<String>) = run(input.toList(), mapOf("a" to 1))
 
     private fun run(input: List<String>, registers: Map<String, Int>): Int {
         val machine = Machine()

@@ -37,20 +37,8 @@ inline fun <T, R> Iterable<T>.scan(initial: R, operation: (R, T) -> R): List<R> 
     return result
 }
 
-/**
- * Runs the supplied action if there is at least one element in the iterable.
- *
- * @receiver The iterable.
- * @param action The action to execute if there is at least one element in the iterable.
- */
-inline fun <E> Iterable<E>.ifPresent(action: () -> Unit) {
-    if (iterator().hasNext()) {
-        action()
-    }
-}
-
 fun IntRange.zipWithReverse() = this.zip(this.reversed())
 
 fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> = runBlocking {
-    map { async(CommonPool) { f(it) } }.map { it.await() }
+    this@parallelMap.map { async(CommonPool) { f(it) } }.map { it.await() }
 }

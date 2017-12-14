@@ -21,7 +21,7 @@ class Day25 : Day() {
         private const val STEP_SIZE = 1000
     }
 
-    override fun first(input: Sequence<String>): Any {
+    override suspend fun first(input: Sequence<String>): Any {
         val os = ByteArrayOutputStream()
         val ps = PrintStream(os)
         val machine = Machine()
@@ -48,7 +48,7 @@ class Day25 : Day() {
 
     }
 
-    override fun second(input: Sequence<String>): Any = "-"
+    override suspend fun second(input: Sequence<String>): Any = "-"
 
     private fun ByteArray.isAlternating(): Boolean = this.size < 2 || this
             .withIndex()

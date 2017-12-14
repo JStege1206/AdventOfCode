@@ -33,12 +33,12 @@ class Day02 : Day() {
         //@formatter:on
     }
 
-    override fun first(input: Sequence<String>): Any = input
+    override suspend fun first(input: Sequence<String>): Any = input
             .iterate(FIRST_KEYPAD, FIRST_STARTING_INDEX)
             .joinToString("")
 
 
-    override fun second(input: Sequence<String>): Any = input
+    override suspend fun second(input: Sequence<String>): Any = input
             .iterate(SECOND_KEYPAD, SECOND_STARTING_INDEX)
             .map { it.toHexChar().toUpperCase() }
             .joinToString("")

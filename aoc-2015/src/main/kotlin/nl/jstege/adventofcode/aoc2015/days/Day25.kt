@@ -15,7 +15,7 @@ class Day25 : Day() {
         private const val MULDIV_VALUE = MULTIPLY_VALUE % DIVIDING_VALUE
     }
 
-    override fun first(input: Sequence<String>): Any {
+    override suspend fun first(input: Sequence<String>): Any {
         val (row, column) = input.parse()
         var currentRow = 1
         var currentColumn = 1
@@ -36,7 +36,7 @@ class Day25 : Day() {
         return value
     }
 
-    override fun second(input: Sequence<String>): Any {
+    override suspend fun second(input: Sequence<String>): Any {
         return "-"
     }
 

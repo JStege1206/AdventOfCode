@@ -18,9 +18,9 @@ class Day13 : Day() {
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
-    override fun first(input: Sequence<String>) = input.parse().optimal()
+    override suspend fun first(input: Sequence<String>) = input.parse().optimal()
 
-    override fun second(input: Sequence<String>) = input.parse().addOwn().optimal()
+    override suspend fun second(input: Sequence<String>) = input.parse().addOwn().optimal()
 
     private fun Sequence<String>.parse(): Map<String, Map<String, Int>> = this
             .map {

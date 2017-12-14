@@ -14,7 +14,7 @@ class Day10 : Day() {
         private const val FIRST_ELEMENTS_TO_MULTIPLY = 2
     }
 
-    override fun first(input: Sequence<String>): Any {
+    override suspend fun first(input: Sequence<String>): Any {
         return input.head
                 .split(",")
                 .map { it.toInt() }
@@ -23,7 +23,7 @@ class Day10 : Day() {
                 .reduce(Int::times)
     }
 
-    override fun second(input: Sequence<String>): Any {
+    override suspend fun second(input: Sequence<String>): Any {
         return input.head.knotHash().toHexString()
     }
 }

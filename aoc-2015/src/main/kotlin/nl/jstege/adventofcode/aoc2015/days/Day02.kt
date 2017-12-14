@@ -9,14 +9,14 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.min
  * @author Jelle Stege
  */
 class Day02 : Day() {
-    override fun first(input: Sequence<String>): Any = input
+    override suspend fun first(input: Sequence<String>): Any = input
             .map { it.split('x').map { it.toInt() } }
             .sumBy { (length, width, height) ->
                 2 * (width * length + width * height + height * length) +
                         min(length * width, width * height, height * length)
             }
 
-    override fun second(input: Sequence<String>): Any = input
+    override suspend fun second(input: Sequence<String>): Any = input
             .map { it.split('x').map { it.toInt() } }
             .sumBy { (length, width, height) ->
                 2 * (min(length, width, height) + mid(length, width, height)) +

@@ -16,10 +16,10 @@ class Day13 : Day() {
         private val MAX_STEPS = 50
     }
 
-    override fun first(input: Sequence<String>): Any =
+    override suspend fun first(input: Sequence<String>): Any =
             findPathLength(SRC_POS, DEST_POS, input.first().toInt())
 
-    override fun second(input: Sequence<String>): Any =
+    override suspend fun second(input: Sequence<String>): Any =
             getUniqueCoords(SRC_POS, MAX_STEPS, input.first().toInt()).size
 
 

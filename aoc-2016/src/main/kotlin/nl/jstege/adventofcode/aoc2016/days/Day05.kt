@@ -17,7 +17,7 @@ class Day05 : Day() {
         private const val REQUIRE_ZEROES_PREFIX = 5
     }
 
-    override fun first(input: Sequence<String>): Any {
+    override suspend fun first(input: Sequence<String>): Any {
         val doorId = input.first()
         val md5 = MessageDigest.getInstance("MD5")
 
@@ -35,7 +35,7 @@ class Day05 : Day() {
                 .map(Int::toHexChar).joinToString("")
     }
 
-    override fun second(input: Sequence<String>): Any {
+    override suspend fun second(input: Sequence<String>): Any {
         val doorId = input.first()
         val md5 = MessageDigest.getInstance("MD5")
         val positionsFound = BooleanArray(PASSWORD_LENGTH) { false }

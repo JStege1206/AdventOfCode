@@ -14,13 +14,13 @@ class Day15 : Day() {
         private val NEEDED_CALORIES = 500
     }
 
-    override fun first(input: Sequence<String>) = input
+    override suspend fun first(input: Sequence<String>) = input
             .map(Ingredient.Parser::parse)
             .associate { it.name to it }
             .calculateMaxScore()
 
 
-    override fun second(input: Sequence<String>) = input
+    override suspend fun second(input: Sequence<String>) = input
             .map(Ingredient.Parser::parse)
             .associate { it.name to it }
             .calculateMaxScore(true)

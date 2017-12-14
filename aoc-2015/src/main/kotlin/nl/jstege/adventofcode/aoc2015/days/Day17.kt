@@ -12,12 +12,12 @@ class Day17 : Day() {
         private const val CAPACITY = 150
     }
 
-    override fun first(input: Sequence<String>) = input
+    override suspend fun first(input: Sequence<String>) = input
             .map { it.toInt() }
             .toList()
             .findCombinations(CAPACITY)
 
-    override fun second(input: Sequence<String>): Any {
+    override suspend fun second(input: Sequence<String>): Any {
         val containers = input.map { it.toInt() }.toList()
 
         val depths = mutableListOf<Int>()

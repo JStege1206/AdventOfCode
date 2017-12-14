@@ -12,11 +12,11 @@ class DayTest : DayTester(DayTestImpl()) {
         val FIRST_SLEEP_TIME = 1000L
         val SECOND_SLEEP_TIME = 1500L
 
-        override fun first(input: Sequence<String>): Any {
+        override suspend fun first(input: Sequence<String>): Any {
             Thread.sleep(FIRST_SLEEP_TIME)
             return input.first()
         }
-        override fun second(input: Sequence<String>): Any {
+        override suspend fun second(input: Sequence<String>): Any {
             Thread.sleep(SECOND_SLEEP_TIME)
             return input.drop(1).first()
         }

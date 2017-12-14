@@ -11,7 +11,7 @@ class Day11 : Day() {
         private val ILLEGAL_CHARS = setOf('i', 'o', 'l')
     }
 
-    override fun first(input: Sequence<String>): Any {
+    override suspend fun first(input: Sequence<String>): Any {
         val chars = input.first().toCharArray()
         while (!chars.isValid()) {
             chars.next()
@@ -19,7 +19,7 @@ class Day11 : Day() {
         return String(chars)
     }
 
-    override fun second(input: Sequence<String>): Any {
+    override suspend fun second(input: Sequence<String>): Any {
         val chars = input.first().toCharArray()
         var valid = 0
         while (valid < 2) {
