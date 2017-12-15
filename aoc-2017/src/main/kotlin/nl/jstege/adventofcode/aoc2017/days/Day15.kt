@@ -26,9 +26,7 @@ class Day15 : Day() {
                 .map { it.split(" ") }
                 .map { (_, _, _, _, init) -> init.toLong() }
                 .toList()
-                .let { (a, b) ->
-                    Generator(a, FACTOR_A) to Generator(b, FACTOR_B)
-                }
+                .let { (a, b) -> Generator(a, FACTOR_A) to Generator(b, FACTOR_B) }
                 .let { (a, b) ->
                     (0 until FIRST_ITERATIONS).count { a.next() and MASK == b.next() and MASK }
                 }
@@ -39,9 +37,7 @@ class Day15 : Day() {
                 .map { it.split(" ") }
                 .map { (_, _, _, _, init) -> init.toLong() }
                 .toList()
-                .let { (a, b) ->
-                    Generator(a, FACTOR_A) to Generator(b, FACTOR_B)
-                }
+                .let { (a, b) -> Generator(a, FACTOR_A) to Generator(b, FACTOR_B) }
                 .let { (a, b) ->
                     (0 until SECOND_ITERATIONS).count {
                         a.next(SECOND_MULTIPLES_A) and MASK == b.next(SECOND_MULTIPLES_B) and MASK

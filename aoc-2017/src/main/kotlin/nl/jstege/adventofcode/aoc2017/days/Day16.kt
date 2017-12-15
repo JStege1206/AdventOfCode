@@ -8,7 +8,6 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  */
 class Day16 : Day() {
     override fun first(input: Sequence<String>): Any {//TODO: implement
-        Thread.sleep(10000)
         return ""
     }
 
