@@ -29,7 +29,7 @@ class Day08 : Day() {
     }
 
 
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return input
                 .parse()
                 .fold(emptyMap<String, Int>()) { rs, instr -> rs + (instr.r1 to instr(rs)) }
@@ -38,7 +38,7 @@ class Day08 : Day() {
     }
 
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
 
         return input
                 .parse()

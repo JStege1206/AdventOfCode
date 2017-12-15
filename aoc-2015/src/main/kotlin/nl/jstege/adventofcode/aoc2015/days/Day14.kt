@@ -14,11 +14,11 @@ class Day14 : Day() {
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
-    override suspend fun first(input: Sequence<String>) = input.parse()
+    override fun first(input: Sequence<String>) = input.parse()
             .map { it.travel(TRAVEL_TIME).distanceTravelled }
             .max()!!
 
-    override suspend fun second(input: Sequence<String>) =
+    override fun second(input: Sequence<String>) =
             (1..TRAVEL_TIME)
                     .fold(input.parse().toList()) { rs, i ->
                         rs.onEach { it.travel(i) }

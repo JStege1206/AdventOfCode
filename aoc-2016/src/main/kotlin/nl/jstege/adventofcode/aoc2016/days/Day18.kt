@@ -21,9 +21,9 @@ class Day18 : Day() {
         private val SAFE = '.' to '0'
     }
 
-    override suspend fun first(input: Sequence<String>): Any = input.walk(ITERATIONS_FIRST)
+    override fun first(input: Sequence<String>): Any = input.walk(ITERATIONS_FIRST)
 
-    override suspend fun second(input: Sequence<String>): Any = input.walk(ITERATIONS_SECOND)
+    override fun second(input: Sequence<String>): Any = input.walk(ITERATIONS_SECOND)
 
     private fun Sequence<String>.walk(iterations: Int) = this.first()
             .replace(TRAP, SAFE)

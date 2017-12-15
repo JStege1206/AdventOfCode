@@ -18,7 +18,7 @@ class Day06 : Day() {
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
-    override suspend fun first(input: Sequence<String>): Any = input
+    override fun first(input: Sequence<String>): Any = input
             .parse()
             .fold(BooleanArray(GRID_ROWS * GRID_COLS)) { grid, (op, from, to) ->
                 (from.y..to.y).forEach { y ->
@@ -30,7 +30,7 @@ class Day06 : Day() {
             }
             .count { it }
 
-    override suspend fun second(input: Sequence<String>): Any = input
+    override fun second(input: Sequence<String>): Any = input
             .parse()
             .fold(IntArray(GRID_ROWS * GRID_COLS)) { grid, (op, from, to) ->
                 (from.y..to.y).forEach { y ->

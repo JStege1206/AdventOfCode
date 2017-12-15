@@ -3,11 +3,11 @@ package nl.jstege.adventofcode.aoc2017.days
 import nl.jstege.adventofcode.aoccommon.days.Day
 
 class Day13 : Day() {
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return input.parse().sumBy { (d, r) -> if (d % (2 * r - 2) == 0) d * r else 0 }
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         return input.parse().toList()
                 .let { s ->
                     (0..Int.MAX_VALUE).first { s.none { (d, r) -> (d + it) % (2 * r - 2) == 0 } }

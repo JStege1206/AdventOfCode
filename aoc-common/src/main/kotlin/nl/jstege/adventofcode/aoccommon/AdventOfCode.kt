@@ -8,6 +8,7 @@ package nl.jstege.adventofcode.aoccommon
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.scan
 import org.apache.commons.lang3.time.DurationFormatUtils
 import org.reflections.Reflections
 import java.io.FileOutputStream
@@ -63,7 +64,8 @@ abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
                 output.println(days.joinToString(", ") { it::class.java.simpleName })
                 val timeTaken = measureTimeMillis {
                     days.onEach { it.run() } // Start all days.
-                            .asSequence() // Continue as sequence to print when output present.
+                            .asSequence() // Continue as sequence to print when output present.)
+                            .onEach { println("-".repeat(80)) }
                             .forEach(output::println) //toString blocks until output present
                 }
                 output.printf("Total time taken: %ss%n",

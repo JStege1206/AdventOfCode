@@ -12,11 +12,11 @@ class Day07 : Day() {
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return input.findRoot().name
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         return input.findRoot().findWrongWeight()
     }
 

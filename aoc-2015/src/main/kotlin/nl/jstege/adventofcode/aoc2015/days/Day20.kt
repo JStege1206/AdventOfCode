@@ -15,7 +15,7 @@ class Day20 : Day() {
         private const val MAX_HOUSES_VISITED = 50
     }
 
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         val wantedPresents = input.head.toInt()
         val elves = mutableMapOf<Int, MutableList<Int>>()
         var elf = 1
@@ -39,7 +39,7 @@ class Day20 : Day() {
         return elf
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         val wantedPresents = input.head.toInt()
         val elves = mutableMapOf<Int, MutableList<Int>>()
         var elf = 1

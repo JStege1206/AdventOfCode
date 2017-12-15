@@ -10,9 +10,9 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.toJson
  * @author Jelle Stege
  */
 class Day12 : Day() {
-    override suspend fun first(input: Sequence<String>): Any = input.head.toJson().sum()
+    override fun first(input: Sequence<String>): Any = input.head.toJson().sum()
 
-    override suspend fun second(input: Sequence<String>): Any = input.head.toJson().sumWithoutRed()
+    override fun second(input: Sequence<String>): Any = input.head.toJson().sumWithoutRed()
 
     private fun JsonNode.sum(): Int {
         if (this.isInt) return this.asInt()

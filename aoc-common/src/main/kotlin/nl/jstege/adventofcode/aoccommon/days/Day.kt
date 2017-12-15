@@ -1,10 +1,7 @@
 package nl.jstege.adventofcode.aoccommon.days
 
 
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.experimental.*
 import nl.jstege.adventofcode.aoccommon.utils.Resource
 import kotlin.system.measureNanoTime
 
@@ -27,7 +24,7 @@ abstract class Day {
      * @param input The input for this day, as a Sequence.
      * @return The result of this assignment.
      */
-    abstract suspend fun first(input: Sequence<String>): Any
+    abstract fun first(input: Sequence<String>): Any
 
     /**
      * The implementation for the first assignment of this [Day]
@@ -35,7 +32,7 @@ abstract class Day {
      * @param input The input for this day, as a Sequence.
      * @return The result of this assignment.
      */
-    abstract suspend fun second(input: Sequence<String>): Any
+    abstract fun second(input: Sequence<String>): Any
 
     /**
      * Loads the input for this assignment and asynchronously executes the sub-assignments. Only
@@ -43,8 +40,8 @@ abstract class Day {
      */
     fun run() {
         val input = loadInput()
-        deferredFirst = runBlocking { async(CommonPool) { supplier({ first(input) }) } }
-        deferredSecond = runBlocking { async(CommonPool) { supplier({ second(input) }) } }
+        deferredFirst = async(CommonPool) { supplier { first(input) } }
+        deferredSecond = async(CommonPool) { supplier { second(input) } }
     }
 
     /**
@@ -54,7 +51,7 @@ abstract class Day {
      * @param action The action to execute
      * @return Supplier to be completed by a task running in the fork join common pool.
      */
-    private suspend fun supplier(action: suspend () -> Any): Pair<Any, Long> {
+    private inline fun supplier(crossinline action: () -> Any): Pair<Any, Long> {
         var output: Any = object {}
         val timeTaken = measureNanoTime {
             output = action()

@@ -13,7 +13,7 @@ class Day06 : Day() {
         private val WHITESPACE_REGEX = WHITESPACE_STRING.toRegex()
     }
 
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return input.head
                 .split(WHITESPACE_REGEX)
                 .map(String::toInt)
@@ -22,7 +22,7 @@ class Day06 : Day() {
                 .first
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         return input.head
                 .split(WHITESPACE_REGEX)
                 .map(String::toInt)

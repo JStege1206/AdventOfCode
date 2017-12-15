@@ -13,7 +13,7 @@ import kotlin.math.sign
  * @author Jelle Stege
  */
 class Day11 : Day() {
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return input.head
                 .toUpperCase()
                 .split(",")
@@ -26,7 +26,7 @@ class Day11 : Day() {
                 }
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         return input.head
                 .toUpperCase()
                 .split(",")

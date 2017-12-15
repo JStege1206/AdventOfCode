@@ -13,13 +13,13 @@ class Day24 : Day() {
         val SECOND_SHARES = 4
     }
 
-    override suspend fun first(input: Sequence<String>): Any = input
+    override fun first(input: Sequence<String>): Any = input
             .map { it.toInt() }
             .sorted()
             .toList()
             .findQuantumEntanglement(FIRST_SHARES)
 
-    override suspend fun second(input: Sequence<String>): Any = input
+    override fun second(input: Sequence<String>): Any = input
             .map { it.toInt() }
             .sorted()
             .toList()

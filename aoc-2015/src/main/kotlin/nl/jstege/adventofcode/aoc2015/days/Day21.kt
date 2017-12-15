@@ -37,12 +37,12 @@ class Day21 : Day() {
         )
     }
 
-    override suspend fun first(input: Sequence<String>) = ITEMS
+    override fun first(input: Sequence<String>) = ITEMS
             .generateBuilds(Player.of(OWN_PLAYER))
             .generateFights(Player.of(input.toList()))
             .filter { it.second }.map { it.first }.min()!!
 
-    override suspend fun second(input: Sequence<String>) = ITEMS
+    override fun second(input: Sequence<String>) = ITEMS
             .generateBuilds(Player.of(OWN_PLAYER))
             .generateFights(Player.of(input.toList()))
             .filter { !it.second }.map { it.first }.max()!!

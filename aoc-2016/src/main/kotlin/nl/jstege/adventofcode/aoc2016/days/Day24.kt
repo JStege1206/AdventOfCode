@@ -16,10 +16,10 @@ class Day24 : Day() {
         private const val DEFAULT_SIZE = 300
     }
 
-    override suspend fun first(input: Sequence<String>): Any = input.toList()
+    override fun first(input: Sequence<String>): Any = input.toList()
             .findShortestRoute { it }
 
-    override suspend fun second(input: Sequence<String>): Any = input.toList()
+    override fun second(input: Sequence<String>): Any = input.toList()
             .findShortestRoute { it + END_NODE }
 
 

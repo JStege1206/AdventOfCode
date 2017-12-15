@@ -12,10 +12,10 @@ class Day09 : Day() {
         val DECOMPRESS_RECURSIVELY_SECOND = true
     }
 
-    override suspend fun first(input: Sequence<String>): Any = input.first()
+    override fun first(input: Sequence<String>): Any = input.first()
             .calcDecompressedLength(DECOMPRESS_RECURSIVELY_FIRST)
 
-    override suspend fun second(input: Sequence<String>): Any = input.first()
+    override fun second(input: Sequence<String>): Any = input.first()
             .calcDecompressedLength(DECOMPRESS_RECURSIVELY_SECOND)
 
     private fun String.calcDecompressedLength(calcRec: Boolean): Long {

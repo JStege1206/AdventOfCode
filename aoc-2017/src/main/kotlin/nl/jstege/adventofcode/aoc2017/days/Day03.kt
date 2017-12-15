@@ -21,11 +21,11 @@ class Day03 : Day() {
         private val INITIAL_VALUE = 1 to mapOf(Point.ZERO_ZERO to 1)
     }
 
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return input.head.toInt().spiralIndexToPoint().run { abs(x) + abs(y) }
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         //Start summing at 2 -> (1, 0) since the sequence is started with index 1 -> (0,0) having 1.
         return (2 until Int.MAX_VALUE).asSequence()
                 .map { it.spiralIndexToPoint() }

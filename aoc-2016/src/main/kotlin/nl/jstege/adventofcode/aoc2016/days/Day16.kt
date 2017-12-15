@@ -14,11 +14,11 @@ class Day16 : Day() {
     }
 
 
-    override suspend fun first(input: Sequence<String>): Any = input.first()
+    override fun first(input: Sequence<String>): Any = input.first()
             .fillDisk(DISK_SIZE_FIRST)
             .generateChecksum()
 
-    override suspend fun second(input: Sequence<String>): Any = input.first()
+    override fun second(input: Sequence<String>): Any = input.first()
             .fillDisk(DISK_SIZE_SECOND)
             .generateChecksum()
 

@@ -14,12 +14,12 @@ class Day04 : Day() {
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
-    override suspend fun first(input: Sequence<String>): Any = input
+    override fun first(input: Sequence<String>): Any = input
             .getValidRooms()
             .map { it.sectorId }
             .sum()
 
-    override suspend fun second(input: Sequence<String>): Any = input
+    override fun second(input: Sequence<String>): Any = input
             .getValidRooms()
             .find { (encryptedName, sectorId, _) ->
                 SECRET_PHRASE == encryptedName.asSequence()

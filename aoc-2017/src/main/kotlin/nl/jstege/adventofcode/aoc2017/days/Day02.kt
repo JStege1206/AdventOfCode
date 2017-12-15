@@ -13,12 +13,12 @@ class Day02 : Day() {
         private val WHITESPACE_REGEX = WHITESPACE_STRING.toRegex()
     }
 
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return input.parse()
                 .sumBy { it.max()!! - it.min()!! }
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         return input.parse()
                 .map {
                     it.sortedDescending()

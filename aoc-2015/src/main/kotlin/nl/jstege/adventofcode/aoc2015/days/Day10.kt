@@ -13,12 +13,12 @@ class Day10 : Day() {
         private const val SECOND_ITERATIONS = 50
     }
 
-    override suspend fun first(input: Sequence<String>): Any = input.head
+    override fun first(input: Sequence<String>): Any = input.head
             .map { it - '0' }
             .iterate(FIRST_ITERATIONS)
             .size
 
-    override suspend fun second(input: Sequence<String>): Any = input.head
+    override fun second(input: Sequence<String>): Any = input.head
             .map { it - '0' }
             .iterate(SECOND_ITERATIONS)
             .size

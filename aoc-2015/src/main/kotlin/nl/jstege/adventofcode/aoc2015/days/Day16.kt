@@ -15,11 +15,11 @@ class Day16 : Day() {
         private val TARGET_AUNT = Aunt.parse(TARGET_AUNT_STRING)
     }
 
-    override suspend fun first(input: Sequence<String>) = input
+    override fun first(input: Sequence<String>) = input
             .map(Aunt.Companion::parse)
             .first { it.matches(TARGET_AUNT, false) }.nr
 
-    override suspend fun second(input: Sequence<String>) = input
+    override fun second(input: Sequence<String>) = input
             .map(Aunt.Companion::parse)
             .first { it.matches(TARGET_AUNT, true) }.nr
 

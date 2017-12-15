@@ -19,13 +19,13 @@ class Day14 : Day() {
         private const val CORRESPONDING_HASH_WITHIN_ITERATIONS = 1000
     }
 
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return input.head.bruteforce { md5, prefix, iteration ->
             md5.digest((prefix + iteration).toByteArray())
         }
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         return input.head.bruteforce { md5, prefix, iteration ->
             (0 until ADDITIONAL_STRETCHING_ITERATIONS)
                     .fold(md5.digest((prefix + iteration).toByteArray())) { previous, _ ->

@@ -19,11 +19,11 @@ class Day23 : Day() {
         private const val SECOND_INIT_REGISTER_VAL = 12
     }
 
-    override suspend fun first(input: Sequence<String>): Any = run(input.toList(), mapOf(
+    override fun first(input: Sequence<String>): Any = run(input.toList(), mapOf(
             INIT_REGISTER_KEY to FIRST_INIT_REGISTER_VAL
     ))
 
-    override suspend fun second(input: Sequence<String>): Any = run(input.toList(), mapOf(
+    override fun second(input: Sequence<String>): Any = run(input.toList(), mapOf(
             INIT_REGISTER_KEY to SECOND_INIT_REGISTER_VAL
     ))
 

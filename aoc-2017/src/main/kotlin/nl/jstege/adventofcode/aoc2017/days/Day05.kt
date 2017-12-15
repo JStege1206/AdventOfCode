@@ -7,11 +7,11 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day05 : Day() {
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return input.parse().walk { 1 }
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         return input.parse().walk { if (it >= 3) -1 else 1 }
     }
 

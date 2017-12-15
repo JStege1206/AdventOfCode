@@ -14,7 +14,7 @@ class Day03 : Day() {
         private val WHITESPACE_REGEX = WHITESPACE_PATTERN_STRING.toRegex()
     }
 
-    override suspend fun first(input: Sequence<String>): Any = input
+    override fun first(input: Sequence<String>): Any = input
             .map {
                 it.trim().split(WHITESPACE_REGEX).map(String::toInt)
             }
@@ -22,7 +22,7 @@ class Day03 : Day() {
                 isValid(it[0], it[1], it[2])
             }.toList().size
 
-    override suspend fun second(input: Sequence<String>): Any = input
+    override fun second(input: Sequence<String>): Any = input
             .map { it.trim().split(WHITESPACE_REGEX).map(String::toInt) }
             .toList()
             .transpose()

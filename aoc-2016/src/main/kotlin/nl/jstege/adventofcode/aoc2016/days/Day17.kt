@@ -34,10 +34,10 @@ class Day17 : Day() {
         )
     }
 
-    override suspend fun first(input: Sequence<String>): Any =
+    override fun first(input: Sequence<String>): Any =
             findPath(input.first(), STARTING_POINT, DESTINATION_POINT, ASSIGNMENT_MOD[FIRST]!!)
 
-    override suspend fun second(input: Sequence<String>): Any =
+    override fun second(input: Sequence<String>): Any =
             findPath(input.first(), STARTING_POINT, DESTINATION_POINT, ASSIGNMENT_MOD[SECOND]!!)
                     .length
 

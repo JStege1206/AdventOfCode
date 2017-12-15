@@ -12,11 +12,11 @@ class Day20 : Day() {
         private const val MAX_ADDRESS = (1L shl Integer.SIZE) - 1
     }
 
-    override suspend fun first(input: Sequence<String>): Any = input
+    override fun first(input: Sequence<String>): Any = input
             .map(Day20::IpRange).optimize().first
             .first().end + 1
 
-    override suspend fun second(input: Sequence<String>): Any = input
+    override fun second(input: Sequence<String>): Any = input
             .map(Day20::IpRange).optimize().second
             .sumBy { it.end + 1 - it.start }
 

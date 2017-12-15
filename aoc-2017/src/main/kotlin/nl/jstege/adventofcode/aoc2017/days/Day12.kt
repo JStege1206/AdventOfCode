@@ -7,11 +7,11 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day12 : Day() {
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return countRoutes(0, input.buildConnections(), mutableSetOf())
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         val visited = mutableSetOf<Int>()
         val pipes = input.buildConnections()
 

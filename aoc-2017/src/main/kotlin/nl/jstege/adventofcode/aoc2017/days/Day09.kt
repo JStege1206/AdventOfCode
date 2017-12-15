@@ -8,11 +8,11 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.head
  * @author Jelle Stege
  */
 class Day09 : Day() {
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return input.head.cleanUp().first
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         return input.head.cleanUp().second
     }
 

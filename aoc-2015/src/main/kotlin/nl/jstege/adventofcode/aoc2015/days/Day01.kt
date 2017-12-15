@@ -9,12 +9,12 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.scan
  * @author Jelle Stege
  */
 class Day01 : Day() {
-    override suspend fun first(input: Sequence<String>): Any = input.head
+    override fun first(input: Sequence<String>): Any = input.head
             .asSequence()
             .map { if (it == '(') 1 else -1 }
             .sum()
 
-    override suspend fun second(input: Sequence<String>): Any = input.head
+    override fun second(input: Sequence<String>): Any = input.head
             .asSequence()
             .map { if (it == '(') 1 else -1 }
             .scan(0, Int::plus)

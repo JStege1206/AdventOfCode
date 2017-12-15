@@ -22,12 +22,12 @@ class Day22 : Day() {
         }
     }
 
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         val grid = input.parse()
         return grid.sumBy { a -> grid.count { b -> a != b && a.used != 0 && a.used <= b.avail } }
     }
 
-    override suspend fun second(input: Sequence<String>): Any {//TODO: implement
+    override fun second(input: Sequence<String>): Any {//TODO: implement
         val grid = input.parse()
         val wanted = WANTED_FUNC(grid)
 

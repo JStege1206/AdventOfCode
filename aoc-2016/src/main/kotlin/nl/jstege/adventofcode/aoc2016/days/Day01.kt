@@ -9,7 +9,7 @@ import nl.jstege.adventofcode.aoccommon.utils.Point
  * @author Jelle Stege
  */
 class Day01 : Day() {
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         var dir = Direction.NORTH
         val (x, y) = input.first().parse().fold(Point.ZERO_ZERO) { p, (turn, steps) ->
             dir = dir.turn(turn)
@@ -21,7 +21,7 @@ class Day01 : Day() {
         return Math.abs(x) + Math.abs(y)
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         var dir = Direction.NORTH
         var coords = Point.ZERO_ZERO
         val visitedPoints = mutableSetOf(coords)

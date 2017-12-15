@@ -8,7 +8,7 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.head
  * @author Jelle Stege
  */
 class Day01 : Day() {
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return (input.head + input.head.first())
                 .map { it - '0' }
                 .zipWithNext()
@@ -16,7 +16,7 @@ class Day01 : Day() {
                 .sumBy { (x, _) -> x }
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         val digits = input.head.map { it - '0' }
         return digits
                 .take(digits.size / 2) //Second half of the list is equal to the first half

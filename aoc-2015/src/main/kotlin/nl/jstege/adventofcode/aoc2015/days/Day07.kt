@@ -15,9 +15,9 @@ class Day07 : Day() {
         private val SECOND_INIT = "b" to Wire(3176)
     }
 
-    override suspend fun first(input: Sequence<String>): Any = input.compute()
+    override fun first(input: Sequence<String>): Any = input.compute()
 
-    override suspend fun second(input: Sequence<String>): Any = input.compute(SECOND_INIT)
+    override fun second(input: Sequence<String>): Any = input.compute(SECOND_INIT)
 
     private fun Sequence<String>.compute(vararg init: Pair<String, Wire>): Int = this
             .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }

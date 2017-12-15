@@ -19,13 +19,13 @@ class Day14 : Day() {
         const val GRID_WIDTH = 128
     }
 
-    override suspend fun first(input: Sequence<String>): Any {
+    override fun first(input: Sequence<String>): Any {
         return "${input.head}-%d"
                 .calculateHashes { it.sumBy { it.toUnsignedInt().bitCount() } }
                 .sum()
     }
 
-    override suspend fun second(input: Sequence<String>): Any {
+    override fun second(input: Sequence<String>): Any {
         return "${input.head}-%d"
                 .calculateHashes(ByteArray::reversedArray)
                 .map(BitSet::valueOf)
