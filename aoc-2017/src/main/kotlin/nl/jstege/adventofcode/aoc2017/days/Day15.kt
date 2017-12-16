@@ -21,7 +21,7 @@ class Day15 : Day() {
         private const val SECOND_MULTIPLES_B = 8L
     }
 
-    override fun first(input: Sequence<String>): Any {//TODO: implement
+    override fun first(input: Sequence<String>): Any {
         return input
                 .map { it.split(" ") }
                 .map { (_, _, _, _, init) -> init.toLong() }
@@ -47,6 +47,7 @@ class Day15 : Day() {
 
     private class Generator(init: Long, val factor: Long) {
         var current = init
+
         fun next(multiples: Long = 1): Long {
             do {
                 current = (current * factor % DIVISOR)

@@ -8,7 +8,6 @@ package nl.jstege.adventofcode.aoccommon
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
 import nl.jstege.adventofcode.aoccommon.days.Day
-import nl.jstege.adventofcode.aoccommon.utils.extensions.scan
 import org.apache.commons.lang3.time.DurationFormatUtils
 import org.reflections.Reflections
 import java.io.FileOutputStream
@@ -51,6 +50,7 @@ abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
     }
 
     companion object Runner {
+        private const val COLUMN_SIZE = 80
         /**
          * Runs the specified assignments
          * @param aoc The [AdventOfCode] instance to use.
@@ -60,14 +60,32 @@ abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
                 output.println(aoc)
                 output.printf("Started on %s%n",
                         SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().time))
-                output.print("Running assignments: ")
-                output.println(days.joinToString(", ") { it::class.java.simpleName })
+                output.println("Running assignments: ")
+                days.joinToString(", ") { it::class.java.simpleName }.let {
+                    val tokens = StringTokenizer(it)
+                    val result = StringBuilder()
+
+                    var currentLength = 0
+                    while (tokens.hasMoreTokens()) {
+                        val word = tokens.nextToken()
+
+                        if (currentLength + word.length > COLUMN_SIZE) {
+                            result.deleteCharAt(result.length - 1).append("\n")
+                            currentLength = 0
+                        }
+                        result.append(word).append(' ')
+                        currentLength += word.length + 1
+                    }
+                    result.deleteCharAt(result.length - 1).toString()
+                }.let(output::println)
+//                output.println(days.joinToString(", ") { it::class.java.simpleName })
                 val timeTaken = measureTimeMillis {
                     days.onEach { it.run() } // Start all days.
                             .asSequence() // Continue as sequence to print when output present.)
-                            .onEach { println("-".repeat(80)) }
+                            .onEach { output.println("-".repeat(COLUMN_SIZE)) }
                             .forEach(output::println) //toString blocks until output present
                 }
+                output.println("-".repeat(COLUMN_SIZE))
                 output.printf("Total time taken: %ss%n",
                         DurationFormatUtils.formatDurationHMS(timeTaken))
             }
