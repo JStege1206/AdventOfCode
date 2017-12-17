@@ -30,12 +30,13 @@ class Day17 : Day() {
 
     override fun second(input: Sequence<String>): Any {
         return input.head.toInt().let { steps ->
-            (1..SECOND_ITERATIONS)
-                    .asSequence()
-                    .scan(0) { current, it -> ((steps + current) % it) + 1 }
-                    .withIndex()
-                    .last { it.value == SECOND_POSITION_WANTED }
-                    .index
+            var position = 0
+            var result = 0
+            (1..SECOND_ITERATIONS).forEach {
+                position = ((position + steps) % it) + 1
+                if (position == SECOND_POSITION_WANTED) result = it
+            }
+            result
         }
     }
 
