@@ -82,7 +82,7 @@ abstract class Day {
                 .appendln("    Time taken: %.2fms".format(firstTime / 1000000F))
                 .appendln("Second:")
                 .appendln("    Output: $secondOutput")
-                .appendln("    Time taken: %.2fms".format(secondTime / 1000000F))
+                .append("    Time taken: %.2fms".format(secondTime / 1000000F))
                 .toString()
     }
 }
