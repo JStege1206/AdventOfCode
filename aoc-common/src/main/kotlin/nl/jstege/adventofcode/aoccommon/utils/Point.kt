@@ -1,5 +1,7 @@
 package nl.jstege.adventofcode.aoccommon.utils
 
+import nl.jstege.adventofcode.aoccommon.utils.Direction.*
+
 /**
  * Represents a point with a x and an y value. This class is immutable. Any
  * addition or subtraction will result in a new [Point] object.
@@ -70,6 +72,31 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
      * All adjecent [Point]s without diagonals, thus only the 4 orthogonal directions.
      */
     val neighbors4: Set<Point> by lazy { NEIGHBORS4.map { this + it }.toSet() }
+
+    /**
+     * Returns the [Point] north of this [Point].
+     */
+    val north by lazy { this.moveDirection(NORTH) }
+
+    /**
+     * Returns the [Point] east of this [Point].
+     */
+    val east by lazy { this.moveDirection(EAST) }
+
+    /**
+     * Returns the [Point] south of this [Point].
+     */
+    val south by lazy { this.moveDirection(SOUTH) }
+
+    /**
+     * Returns the [Point] west of this [Point].
+     */
+    val west by lazy { this.moveDirection(WEST) }
+
+    /**
+     * Returns the point based off the [Direction] given
+     */
+    fun moveDirection(direction: Direction) = this + direction.mod
 
     /**
      * Adds some values to the x and y values of this point.
