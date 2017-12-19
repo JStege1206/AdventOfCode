@@ -13,15 +13,15 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.scan
 class Day03 : Day() {
     private companion object Configuration {
         private val DIRECTION_MODIFIERS = mapOf(
-                '^' to Point::incY,
-                'v' to Point::decY,
-                '<' to Point::decX,
-                '>' to Point::incX
+                '^' to Point::north,
+                'v' to Point::south,
+                '<' to Point::west,
+                '>' to Point::east
         )
     }
 
     override fun first(input: Sequence<String>): Any = input.head.asSequence()
-            .scan(Point.ZERO_ZERO) { visited, c -> DIRECTION_MODIFIERS[c]!!(visited) }
+            .scan(Point.ZERO_ZERO) { location, c -> DIRECTION_MODIFIERS[c]!!(location) }
             .toSet()
             .size
 
