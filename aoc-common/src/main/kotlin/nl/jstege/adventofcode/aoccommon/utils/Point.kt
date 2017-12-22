@@ -1,6 +1,7 @@
 package nl.jstege.adventofcode.aoccommon.utils
 
 import nl.jstege.adventofcode.aoccommon.utils.Direction.*
+import kotlin.math.abs
 
 /**
  * Represents a point with a x and an y value. This class is immutable. Any
@@ -97,6 +98,8 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
      * Returns the point based off the [Direction] given
      */
     fun moveDirection(direction: Direction) = this + direction.mod
+
+    fun manhattan(other: Point) = abs(x - other.x) + abs(y - other.y)
 
     /**
      * Adds some values to the x and y values of this point.
