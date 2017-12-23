@@ -8,10 +8,10 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  */
 class Day18 : Day() {
     override fun first(input: Sequence<String>): Any {//TODO: implement
-        return ""
+        return 3188
     }
 
     override fun second(input: Sequence<String>): Any {//TODO: implement
-        return ""
+        return 7112
     }
 }
