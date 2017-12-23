@@ -21,6 +21,8 @@ class Day18 : Day() {
         private val SAFE = '.' to '0'
     }
 
+    override val title: String = "Like a Rogue"
+
     override fun first(input: Sequence<String>): Any = input.walk(ITERATIONS_FIRST)
 
     override fun second(input: Sequence<String>): Any = input.walk(ITERATIONS_SECOND)

@@ -9,6 +9,8 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.scan
  * @author Jelle Stege
  */
 class Day17 : Day() {
+    override val title: String = "Spinlock"
+
     private companion object Configuration {
         private const val FIRST_ITERATIONS = 2017
         private const val SECOND_ITERATIONS = 50_000_000

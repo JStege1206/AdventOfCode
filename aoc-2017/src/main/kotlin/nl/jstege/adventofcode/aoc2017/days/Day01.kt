@@ -8,6 +8,8 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.head
  * @author Jelle Stege
  */
 class Day01 : Day() {
+    override val title: String = "Inverse Capcha"
+
     override fun first(input: Sequence<String>): Any {
         return (input.head + input.head.first())
                 .map { it - '0' }

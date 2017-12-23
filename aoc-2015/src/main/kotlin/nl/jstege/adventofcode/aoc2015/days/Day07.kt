@@ -15,6 +15,8 @@ class Day07 : Day() {
         private val SECOND_INIT = "b" to Wire(3176)
     }
 
+    override val title: String = "Some Assembly Required"
+
     override fun first(input: Sequence<String>): Any = input.compute()
 
     override fun second(input: Sequence<String>): Any = input.compute(SECOND_INIT)

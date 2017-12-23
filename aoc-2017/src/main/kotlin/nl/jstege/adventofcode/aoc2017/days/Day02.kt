@@ -13,6 +13,8 @@ class Day02 : Day() {
         private val WHITESPACE_REGEX = WHITESPACE_STRING.toRegex()
     }
 
+    override val title: String = "Corruption Checksum"
+
     override fun first(input: Sequence<String>): Any {
         return input.parse()
                 .sumBy { it.max()!! - it.min()!! }

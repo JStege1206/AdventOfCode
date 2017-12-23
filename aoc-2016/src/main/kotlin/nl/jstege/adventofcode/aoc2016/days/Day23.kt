@@ -19,6 +19,8 @@ class Day23 : Day() {
         private const val SECOND_INIT_REGISTER_VAL = 12
     }
 
+    override val title: String = "Safe Cracking"
+
     override fun first(input: Sequence<String>): Any = run(input.toList(), mapOf(
             INIT_REGISTER_KEY to FIRST_INIT_REGISTER_VAL
     ))

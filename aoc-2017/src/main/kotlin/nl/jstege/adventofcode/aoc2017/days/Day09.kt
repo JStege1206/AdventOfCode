@@ -8,6 +8,8 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.head
  * @author Jelle Stege
  */
 class Day09 : Day() {
+    override val title: String = "Stream Processing"
+
     override fun first(input: Sequence<String>): Any {
         return input.head.cleanUp().first
     }

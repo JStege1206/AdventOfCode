@@ -13,6 +13,8 @@ class Day09 : Day() {
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
+    override val title: String = "All in a Single Night"
+
     override fun first(input: Sequence<String>): Any = input
             .parse().determineCosts().min()!!
 

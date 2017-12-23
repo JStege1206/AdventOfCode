@@ -10,6 +10,8 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.head
  * @author Jelle Stege
  */
 class Day19 : Day() {
+    override val title: String = "A Series of Tubes"
+
     private companion object Configuration {
         private const val EMPTY = ' '
         private const val CORNER = '+'

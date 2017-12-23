@@ -9,6 +9,8 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.transpose
  * @author Jelle Stege
  */
 class Day03 : Day() {
+    override val title: String = "Squares With Three Sides"
+
     private companion object Configuration {
         private const val WHITESPACE_PATTERN_STRING = """\s+"""
         private val WHITESPACE_REGEX = WHITESPACE_PATTERN_STRING.toRegex()

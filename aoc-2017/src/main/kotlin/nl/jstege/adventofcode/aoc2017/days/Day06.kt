@@ -13,6 +13,8 @@ class Day06 : Day() {
         private val WHITESPACE_REGEX = WHITESPACE_STRING.toRegex()
     }
 
+    override val title: String = "Memory Reallocation"
+
     override fun first(input: Sequence<String>): Any {
         return input.head
                 .split(WHITESPACE_REGEX)

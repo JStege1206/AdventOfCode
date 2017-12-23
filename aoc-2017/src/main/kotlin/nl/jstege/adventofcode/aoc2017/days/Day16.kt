@@ -9,6 +9,8 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.swap
  * @author Jelle Stege
  */
 class Day16 : Day() {
+    override val title: String = "Permutation Promenade"
+
     private companion object Configuration {
         private const val SECOND_ITERATIONS = 1_000_000_000
     }

@@ -12,12 +12,13 @@ import java.security.MessageDigest
  */
 class Day14 : Day() {
     private companion object Configuration {
-        private const val INVALID_CHAR = (-1).toChar()
         private const val KEYS_REQUIRED = 64
-
         private const val ADDITIONAL_STRETCHING_ITERATIONS = 2016
+
         private const val CORRESPONDING_HASH_WITHIN_ITERATIONS = 1000
     }
+
+    override val title: String = "One-Time Pad"
 
     override fun first(input: Sequence<String>): Any {
         return input.head.bruteforce { md5, prefix, iteration ->

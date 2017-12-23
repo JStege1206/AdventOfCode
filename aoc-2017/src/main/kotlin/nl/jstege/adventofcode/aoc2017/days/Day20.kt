@@ -1,5 +1,6 @@
 package nl.jstege.adventofcode.aoc2017.days
 
+import com.google.common.net.HttpHeaders.ORIGIN
 import javafx.geometry.Point3D
 import nl.jstege.adventofcode.aoccommon.days.Day
 import kotlin.math.abs
@@ -16,6 +17,8 @@ class Day20 : Day() {
         private val TIME_LIMIT = 100000L
         private val ORIGIN = Point3D(0, 0, 0)
     }
+
+    override val title: String = "Particle Swarm"
 
     override fun first(input: Sequence<String>): Any {//TODO: implement
         return input.parse()

@@ -13,6 +13,7 @@ class Day16 : Day() {
         private const val DISK_SIZE_SECOND = 35651584
     }
 
+    override val title: String = "Dragon Checksum"
 
     override fun first(input: Sequence<String>): Any = input.first()
             .fillDisk(DISK_SIZE_FIRST)

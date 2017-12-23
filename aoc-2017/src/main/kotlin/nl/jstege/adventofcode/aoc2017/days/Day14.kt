@@ -19,6 +19,8 @@ class Day14 : Day() {
         const val GRID_WIDTH = 128
     }
 
+    override val title: String = "Disk Defragmentation"
+
     override fun first(input: Sequence<String>): Any {
         return "${input.head}-%d"
                 .calculateHashes { it.sumBy { it.toUnsignedInt().bitCount() } }

@@ -7,6 +7,8 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day05 : Day() {
+    override val title: String = "A Maze of Twisty Trampolines, All Alike"
+
     override fun first(input: Sequence<String>): Any {
         return input.parse().walk { 1 }
     }

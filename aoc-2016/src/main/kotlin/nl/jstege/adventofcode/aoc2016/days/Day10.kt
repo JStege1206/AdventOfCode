@@ -13,15 +13,16 @@ class Day10 : Day() {
         private const val DEST1_INDEX = 6
         private const val DEST2_SELECTOR_INDEX = 10
         private const val DEST2_INDEX = 11
-
         private const val INIT_VAL_INDEX = 1
+
         private const val INIT_BOT_INDEX = 5
-
         private const val REQUIRED_LOW_CHIP = 17
-        private const val REQUIRED_HIGH_CHIP = 61
 
+        private const val REQUIRED_HIGH_CHIP = 61
         private val OUTPUTS_TO_MULTIPLY = listOf(0, 1, 2)
     }
+
+    override val title: String = "Balance Bots"
 
     override fun first(input: Sequence<String>): Any {
         val queue = input.toMutableList()

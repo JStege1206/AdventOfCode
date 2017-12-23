@@ -12,7 +12,6 @@ class Day08 : Day() {
         private const val INPUT_PATTERN_STRING =
                 """(\w+) (inc|dec) ([-\d]+) if (\w+) ([=!><]+) ([-\d]+)"""
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
-
         private val OPERATIONS = mapOf<String, (Int, Int) -> Int>(
                 "inc" to Int::plus,
                 "dec" to Int::minus
@@ -26,7 +25,10 @@ class Day08 : Day() {
                 ">=" to Comparable<Int>::greaterThanEquals,
                 "<=" to Comparable<Int>::lessThanEquals
         )
+
     }
+
+    override val title: String = "I Heard You Like Registers"
 
 
     override fun first(input: Sequence<String>): Any {

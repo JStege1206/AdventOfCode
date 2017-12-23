@@ -20,6 +20,8 @@ class Day03 : Day() {
         )
     }
 
+    override val title: String = "Perfectly Spherical Houses in a Vacuum"
+    
     override fun first(input: Sequence<String>): Any = input.head.asSequence()
             .scan(Point.ZERO_ZERO) { location, c -> DIRECTION_MODIFIERS[c]!!(location) }
             .toSet()

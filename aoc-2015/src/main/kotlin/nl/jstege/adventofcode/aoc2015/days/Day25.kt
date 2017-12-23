@@ -15,6 +15,8 @@ class Day25 : Day() {
         private const val MULDIV_VALUE = MULTIPLY_VALUE % DIVIDING_VALUE
     }
 
+    override val title: String = "Let It Snow"
+
     override fun first(input: Sequence<String>): Any {
         val (row, column) = input.parse()
         var currentRow = 1

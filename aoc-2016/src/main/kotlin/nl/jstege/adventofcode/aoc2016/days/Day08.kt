@@ -47,6 +47,8 @@ class Day08 : Day() {
         )
     }
 
+    override val title: String = "Two-Factor Authentication"
+
     override fun first(input: Sequence<String>): Any = input
             .parseAndExecute()
             .map(Long::bitCount)

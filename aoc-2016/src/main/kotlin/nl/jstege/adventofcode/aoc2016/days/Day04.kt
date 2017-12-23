@@ -14,6 +14,8 @@ class Day04 : Day() {
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
+    override val title: String = "Security Through Obscurity"
+
     override fun first(input: Sequence<String>): Any = input
             .getValidRooms()
             .map { it.sectorId }
@@ -23,10 +25,7 @@ class Day04 : Day() {
             .getValidRooms()
             .find { (encryptedName, sectorId, _) ->
                 SECRET_PHRASE == encryptedName.asSequence()
-                        .map {
-                            if (it != '-') 'a' + ((it - 'a' + (sectorId % 26)) % 26)
-                            else ' '
-                        }
+                        .map { if (it != '-') 'a' + ((it - 'a' + (sectorId % 26)) % 26) else ' ' }
                         .fold(StringBuilder(), StringBuilder::append)
                         .trim()
                         .toString()
@@ -34,28 +33,21 @@ class Day04 : Day() {
 
     private fun Sequence<String>.getValidRooms(): Sequence<Room> {
         return this
-                .map {
-                    INPUT_REGEX.matchEntire(it)?.groupValues
-                            ?: throw IllegalStateException("Invalid input")
-                }
-                .map { (_, name, id, checksum) ->
-                    Room(name, id.toInt(), checksum)
-                }
+                .map { INPUT_REGEX.matchEntire(it)!!.groupValues }
+                .map { (_, name, id, checksum) -> Room(name, id.toInt(), checksum) }
                 .filter {
                     it.checksum == it.encryptedName
                             .filter { it != '-' }
                             .groupBy { it }
                             .asIterable()
                             .sortedWith(Comparator { (k, v), (ok, ov) ->
-                                if (v.size > ov.size || (v.size == ov.size && k < ok)) -1
-                                else 1
+                                if (v.size > ov.size || (v.size == ov.size && k < ok)) -1 else 1
                             })
                             .take(CHECKSUM_LENGTH)
                             .map { it.key }
                             .fold(StringBuilder(), StringBuilder::append)
                             .trim()
                             .toString()
-
                 }
     }
 

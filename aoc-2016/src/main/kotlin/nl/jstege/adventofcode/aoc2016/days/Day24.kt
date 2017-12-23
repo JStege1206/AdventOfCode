@@ -16,6 +16,8 @@ class Day24 : Day() {
         private const val DEFAULT_SIZE = 300
     }
 
+    override val title: String = "Air Duct Spelunking"
+
     override fun first(input: Sequence<String>): Any = input.toList()
             .findShortestRoute { it }
 

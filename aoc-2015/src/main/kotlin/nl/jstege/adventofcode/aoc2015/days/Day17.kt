@@ -12,6 +12,8 @@ class Day17 : Day() {
         private const val CAPACITY = 150
     }
 
+    override val title: String = "No Such Thing as Too Much"
+
     override fun first(input: Sequence<String>) = input
             .map { it.toInt() }
             .toList()

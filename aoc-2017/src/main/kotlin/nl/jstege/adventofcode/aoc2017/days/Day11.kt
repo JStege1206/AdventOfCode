@@ -13,6 +13,8 @@ import kotlin.math.sign
  * @author Jelle Stege
  */
 class Day11 : Day() {
+    override val title: String = "Hex Ed"
+
     override fun first(input: Sequence<String>): Any {
         return input.head
                 .toUpperCase()

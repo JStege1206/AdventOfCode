@@ -3,6 +3,8 @@ package nl.jstege.adventofcode.aoc2017.days
 import nl.jstege.adventofcode.aoccommon.days.Day
 
 class Day13 : Day() {
+    override val title: String = "Packet Scanners"
+
     override fun first(input: Sequence<String>): Any {
         return input.parse().sumBy { (d, r) -> if (d % (2 * r - 2) == 0) d * r else 0 }
     }

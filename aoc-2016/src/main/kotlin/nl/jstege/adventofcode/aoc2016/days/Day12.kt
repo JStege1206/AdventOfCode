@@ -17,6 +17,8 @@ class Day12 : Day() {
         private const val SECOND_INIT_REGISTER_VAL = 1
     }
 
+    override val title: String = "Leonardo's Monorail"
+
     override fun first(input: Sequence<String>): Any = run(input.toList(), mapOf())
 
     override fun second(input: Sequence<String>): Any = run(input.toList(), mapOf(

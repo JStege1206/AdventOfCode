@@ -18,6 +18,8 @@ class Day06 : Day() {
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
+    override val title: String = "Probably a Fire Hazard"
+
     override fun first(input: Sequence<String>): Any = input
             .parse()
             .fold(BooleanArray(GRID_ROWS * GRID_COLS)) { grid, (op, from, to) ->

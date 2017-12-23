@@ -12,6 +12,8 @@ class Day05 : Day() {
         private val ILLEGAL_CHARACTER_PATTERNS = "ab|cd|pq|xy".toRegex()
     }
 
+    override val title: String = "Doesn't He Have Intern-Elves For This?"
+    
     override fun first(input: Sequence<String>): Any = input
             .count { it.hasVowels(3) && it.containsDoubleLetters() && !it.containsIllegalPattern() }
 

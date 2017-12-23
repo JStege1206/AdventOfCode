@@ -7,6 +7,8 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day22 : Day() {
+    override val title: String = "Wizard Simulator 20XX"
+
     override fun first(input: Sequence<String>): Any {//TODO: implement
         return 953
     }

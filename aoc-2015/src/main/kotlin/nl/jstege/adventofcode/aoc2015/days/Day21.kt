@@ -37,6 +37,8 @@ class Day21 : Day() {
         )
     }
 
+    override val title: String = "RPG Simulator 20XX"
+
     override fun first(input: Sequence<String>) = ITEMS
             .generateBuilds(Player.of(OWN_PLAYER))
             .generateFights(Player.of(input.toList()))

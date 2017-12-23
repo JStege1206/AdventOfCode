@@ -10,6 +10,7 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.toHexChar
  */
 class Day02 : Day() {
     private companion object Configuration {
+
         private const val INVALID = -1
         private val FIRST_STARTING_INDEX = Point.of(2, 2)
         private val SECOND_STARTING_INDEX = Point.of(1, 3)
@@ -32,6 +33,8 @@ class Day02 : Day() {
         )
         //@formatter:on
     }
+
+    override val title: String = "Bathroom Security"
 
     override fun first(input: Sequence<String>): Any = input
             .iterate(FIRST_KEYPAD, FIRST_STARTING_INDEX)

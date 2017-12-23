@@ -12,6 +12,8 @@ class Day07 : Day() {
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
+    override val title: String = "Recursive Circus"
+
     override fun first(input: Sequence<String>): Any {
         return input.findRoot().name
     }

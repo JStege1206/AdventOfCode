@@ -15,6 +15,8 @@ class Day20 : Day() {
         private const val MAX_HOUSES_VISITED = 50
     }
 
+    override val title: String = "Infinite Elves and Infinite Houses"
+
     override fun first(input: Sequence<String>): Any {
         val wantedPresents = input.head.toInt()
         val elves = mutableMapOf<Int, MutableList<Int>>()
@@ -29,10 +31,7 @@ class Day20 : Day() {
                 break
             }
 
-            elfList
-                    .filter {
-                        elf + it <= wantedPresents / 10
-                    }
+            elfList.filter { elf + it <= wantedPresents / 10 }
                     .forEach { elves.getOrPut(elf + it, { mutableListOf() }) += it }
             elf++
         }
@@ -57,11 +56,9 @@ class Day20 : Day() {
                 break
             }
 
-            elfList
-                    .filter {
-                        (elf + it < wantedPresents / 10) && (elf + it <= it * MAX_HOUSES_VISITED)
-                    }
-                    .forEach { elves.getOrPut(elf + it, { mutableListOf() }) += it }
+            elfList.filter {
+                (elf + it < wantedPresents / 10) && (elf + it <= it * MAX_HOUSES_VISITED)
+            }.forEach { elves.getOrPut(elf + it, { mutableListOf() }) += it }
             elf++
         }
         return elf

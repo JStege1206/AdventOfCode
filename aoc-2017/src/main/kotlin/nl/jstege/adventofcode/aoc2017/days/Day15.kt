@@ -10,16 +10,18 @@ class Day15 : Day() {
     private companion object Configuration {
         private const val MASK = 0xFFFFL
         private const val DIVISOR = 2147483647
-
         private const val FACTOR_A = 16807L
+
         private const val FACTOR_B = 48271L
-
         private const val FIRST_ITERATIONS = 40_000_000
-        private const val SECOND_ITERATIONS = 5_000_000
 
+        private const val SECOND_ITERATIONS = 5_000_000
         private const val SECOND_MULTIPLES_A = 4L
+
         private const val SECOND_MULTIPLES_B = 8L
     }
+
+    override val title: String = "Dueling Generators"
 
     override fun first(input: Sequence<String>): Any {
         return input

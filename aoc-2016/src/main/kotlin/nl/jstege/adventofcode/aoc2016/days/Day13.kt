@@ -15,6 +15,8 @@ class Day13 : Day() {
         private val DEST_POS = Point.of(31, 39)
         private val MAX_STEPS = 50
     }
+    
+    override val title: String = "A Maze of Twisty Little Cubicles"
 
     override fun first(input: Sequence<String>): Any =
             findPathLength(SRC_POS, DEST_POS, input.first().toInt())

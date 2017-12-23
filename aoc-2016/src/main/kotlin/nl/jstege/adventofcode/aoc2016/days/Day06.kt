@@ -8,6 +8,8 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.transpose
  * @author Jelle Stege
  */
 class Day06 : Day() {
+    override val title: String = "Signals and Noise"
+
     override fun first(input: Sequence<String>): Any = input.toList()
             .map(String::toList)
             .transpose()

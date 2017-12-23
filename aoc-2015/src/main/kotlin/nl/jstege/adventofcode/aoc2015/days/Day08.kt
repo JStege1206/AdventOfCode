@@ -7,6 +7,8 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day08 : Day() {
+    override val title: String = "Matchsticks"
+
     override fun first(input: Sequence<String>): Any = input
             .sumBy { it.length - it.unescapedLength }
 

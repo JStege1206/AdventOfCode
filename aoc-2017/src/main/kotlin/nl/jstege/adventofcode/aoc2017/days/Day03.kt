@@ -15,11 +15,14 @@ import kotlin.math.sqrt
  */
 class Day03 : Day() {
     private companion object Configuration {
+
         /**
          * Initial value for second assignment's scan operation.
          */
         private val INITIAL_VALUE = 1 to mapOf(Point.ZERO_ZERO to 1)
     }
+
+    override val title: String = "Spiral Memory"
 
     override fun first(input: Sequence<String>): Any {
         return input.head.toInt().spiralIndexToPoint().run { abs(x) + abs(y) }

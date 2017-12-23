@@ -12,6 +12,8 @@ class Day09 : Day() {
         val DECOMPRESS_RECURSIVELY_SECOND = true
     }
 
+    override val title: String = "Explosives in Cyperspace"
+
     override fun first(input: Sequence<String>): Any = input.first()
             .calcDecompressedLength(DECOMPRESS_RECURSIVELY_FIRST)
 

@@ -15,6 +15,10 @@ import kotlin.system.measureNanoTime
  * [Day.run] method.
  */
 abstract class Day {
+    /**
+     * The title for this day.
+     */
+    abstract val title: String
     private lateinit var deferredFirst: Deferred<Pair<Any, Long>>
     private lateinit var deferredSecond: Deferred<Pair<Any, Long>>
 
@@ -76,11 +80,13 @@ abstract class Day {
     override fun toString(): String {
         val (firstOutput, firstTime) = runBlocking { deferredFirst.await() }
         val (secondOutput, secondTime) = runBlocking { deferredSecond.await() }
-        return StringBuilder().append("${this::class.java.simpleName}\n")
-                .appendln("First:")
+        return StringBuilder()
+                .append("${this::class.java.simpleName}: ")
+                .appendln(title)
+                .appendln("Part One:")
                 .appendln("    Output: $firstOutput")
                 .appendln("    Time taken: %.2fms".format(firstTime / 1000000F))
-                .appendln("Second:")
+                .appendln("Part Two:")
                 .appendln("    Output: $secondOutput")
                 .append("    Time taken: %.2fms".format(secondTime / 1000000F))
                 .toString()

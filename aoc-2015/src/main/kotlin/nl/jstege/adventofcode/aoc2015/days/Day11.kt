@@ -11,6 +11,8 @@ class Day11 : Day() {
         private val ILLEGAL_CHARS = setOf('i', 'o', 'l')
     }
 
+    override val title: String = "Corporate Policy"
+
     override fun first(input: Sequence<String>): Any {
         val chars = input.first().toCharArray()
         while (!chars.isValid()) {

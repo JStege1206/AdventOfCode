@@ -13,9 +13,10 @@ class Day15 : Day() {
                 """Disc #(\d+) has (\d+) positions; at time=0, it is at position (\d+)\."""
         private const val SECOND_EXTRA_DISC =
                 "Disc #7 has 11 positions; at time=0, it is at position 0."
-
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
+
+    override val title: String = "Timing is Everything"
 
     override fun first(input: Sequence<String>): Any = input
             .parse().calculateCrt()

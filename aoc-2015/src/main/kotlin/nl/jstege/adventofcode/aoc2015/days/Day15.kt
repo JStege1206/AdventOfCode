@@ -14,6 +14,8 @@ class Day15 : Day() {
         private val NEEDED_CALORIES = 500
     }
 
+    override val title: String = "Science for Hungry People"
+    
     override fun first(input: Sequence<String>) = input
             .map(Ingredient.Parser::parse)
             .associate { it.name to it }

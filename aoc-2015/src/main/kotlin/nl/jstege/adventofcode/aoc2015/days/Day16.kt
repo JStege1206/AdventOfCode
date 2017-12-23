@@ -15,6 +15,8 @@ class Day16 : Day() {
         private val TARGET_AUNT = Aunt.parse(TARGET_AUNT_STRING)
     }
 
+    override val title: String = "Aunt Sue"
+    
     override fun first(input: Sequence<String>) = input
             .map(Aunt.Companion::parse)
             .first { it.matches(TARGET_AUNT, false) }.nr

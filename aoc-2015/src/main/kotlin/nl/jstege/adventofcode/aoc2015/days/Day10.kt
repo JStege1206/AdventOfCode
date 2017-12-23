@@ -13,6 +13,8 @@ class Day10 : Day() {
         private const val SECOND_ITERATIONS = 50
     }
 
+    override val title: String = "Elves Look, Elves Say"
+
     override fun first(input: Sequence<String>): Any = input.head
             .map { it - '0' }
             .iterate(FIRST_ITERATIONS)

@@ -13,6 +13,8 @@ class Day18 : Day() {
         private const val ITERATIONS = 100
     }
 
+    override val title: String = "Like a GIF For Your Yard"
+    
     override fun first(input: Sequence<String>) = (0 until ITERATIONS)
             .fold(Grid.parse(input.toList())) { g, _ ->
                 g.getTogglePoints()

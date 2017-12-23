@@ -15,6 +15,8 @@ class Day23 : Day() {
         private const val OUTPUT_REGISTER = "b"
     }
 
+    override val title: String = "Opening the Turing Lock"
+
     override fun first(input: Sequence<String>) = run(input.toList(), mapOf())
 
     override fun second(input: Sequence<String>) = run(input.toList(), mapOf("a" to 1))

@@ -15,6 +15,8 @@ class Day04 : Day() {
         private const val SECOND_ZEROES = 6
     }
 
+    override val title: String = "The Ideal Stucking Stuffer"
+
     override fun first(input: Sequence<String>): Any = input.head
             .bruteforce(FIRST_ZEROES)
 

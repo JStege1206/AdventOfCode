@@ -9,6 +9,8 @@ import nl.jstege.adventofcode.aoccommon.utils.Point
  * @author Jelle Stege
  */
 class Day01 : Day() {
+    override val title: String = "No Time for a Taxicab"
+
     override fun first(input: Sequence<String>): Any {
         var dir = Direction.NORTH
         val (x, y) = input.first().parse().fold(Point.ZERO_ZERO) { p, (turn, steps) ->

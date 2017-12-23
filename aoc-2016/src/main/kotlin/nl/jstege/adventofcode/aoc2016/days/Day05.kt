@@ -17,22 +17,19 @@ class Day05 : Day() {
         private const val REQUIRE_ZEROES_PREFIX = 5
     }
 
+    override val title: String = "How About a Nice Game of Chess?"
+
     override fun first(input: Sequence<String>): Any {
         val doorId = input.first()
         val md5 = MessageDigest.getInstance("MD5")
 
         return (0 until Int.MAX_VALUE).asSequence()
-                .map {
-                    md5.digest((doorId + it).toByteArray())
-                }
-                .filter {
-                    it.prefixedWithZeroes(REQUIRE_ZEROES_PREFIX)
-                }
-                .map {
-                    getPos(it, REQUIRE_ZEROES_PREFIX)
-                }
+                .map { md5.digest((doorId + it).toByteArray()) }
+                .filter { it.prefixedWithZeroes(REQUIRE_ZEROES_PREFIX) }
+                .map { getPos(it, REQUIRE_ZEROES_PREFIX) }
                 .take(PASSWORD_LENGTH)
-                .map(Int::toHexChar).joinToString("")
+                .map(Int::toHexChar)
+                .joinToString("")
     }
 
     override fun second(input: Sequence<String>): Any {
@@ -41,26 +38,15 @@ class Day05 : Day() {
         val positionsFound = BooleanArray(PASSWORD_LENGTH) { false }
 
         return (0 until Int.MAX_VALUE).asSequence()
-                .map {
-                    md5.digest((doorId + it).toByteArray())
-                }
-                .filter {
-                    it.prefixedWithZeroes(REQUIRE_ZEROES_PREFIX)
-                }
-                .map {
-                    getPos(it, REQUIRE_ZEROES_PREFIX) to it
-                }
-                .filter { (i, _) ->
-                    i <= PASSWORD_LENGTH - 1 && !positionsFound[i]
-                }
-                .onEach {
-                    positionsFound[it.first] = true
-                }
+                .map { md5.digest((doorId + it).toByteArray()) }
+                .filter { it.prefixedWithZeroes(REQUIRE_ZEROES_PREFIX) }
+                .map { getPos(it, REQUIRE_ZEROES_PREFIX) to it }
+                .filter { (i, _) -> i <= PASSWORD_LENGTH - 1 && !positionsFound[i] }
+                .onEach { positionsFound[it.first] = true }
                 .take(PASSWORD_LENGTH)
                 .sortedBy { (i, _) -> i }
-                .map { (_, digest) ->
-                    getPos(digest, REQUIRE_ZEROES_PREFIX + 1).toHexChar()
-                }.joinToString("")
+                .map { (_, digest) -> getPos(digest, REQUIRE_ZEROES_PREFIX + 1).toHexChar() }
+                .joinToString("")
     }
 
     private fun getPos(ar: ByteArray, pos: Int): Int =

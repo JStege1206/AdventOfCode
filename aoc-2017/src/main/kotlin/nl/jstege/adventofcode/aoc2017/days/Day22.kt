@@ -15,9 +15,10 @@ class Day22 : Day() {
         const val INFECTED_CHAR = '#'
         const val FIRST_ITERATIONS = 10000
         const val SECOND_ITERATIONS = 10000000
-
         val INITIAL_DIRECTION = Direction.NORTH
     }
+
+    override val title: String = "Sporifica Virus"
 
     override fun first(input: Sequence<String>): Any {
         return input
@@ -70,7 +71,7 @@ class Day22 : Day() {
                     newState == Status.INFECTED
                 }
     }
-    
+
     private enum class Status(val directionMod: KProperty1<Direction, Direction>) {
         INFECTED(Direction::right),
         CLEAN(Direction::left),
@@ -106,8 +107,8 @@ class Day22 : Day() {
             val np = coordinate.incY()
             cache.getOrPut(np, { Node(np, cache) })
         }
-        
-        fun move(dir: Direction) = when(dir) {
+
+        fun move(dir: Direction) = when (dir) {
             Direction.NORTH -> up
             Direction.EAST -> right
             Direction.SOUTH -> down

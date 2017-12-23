@@ -13,6 +13,8 @@ class Day24 : Day() {
         val SECOND_SHARES = 4
     }
 
+    override val title: String = "It Hangs in the Balance"
+
     override fun first(input: Sequence<String>): Any = input
             .map { it.toInt() }
             .sorted()

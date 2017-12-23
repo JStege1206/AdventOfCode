@@ -14,6 +14,8 @@ class Day14 : Day() {
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
+    override val title: String = "Reindeer Olympics"
+    
     override fun first(input: Sequence<String>) = input.parse()
             .map { it.travel(TRAVEL_TIME).distanceTravelled }
             .max()!!

@@ -14,6 +14,8 @@ class Day10 : Day() {
         private const val FIRST_ELEMENTS_TO_MULTIPLY = 2
     }
 
+    override val title: String = "Knot Hash"
+
     override fun first(input: Sequence<String>): Any {
         return input.head
                 .split(",")

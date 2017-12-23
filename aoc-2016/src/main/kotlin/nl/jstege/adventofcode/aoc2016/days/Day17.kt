@@ -25,7 +25,7 @@ class Day17 : Day() {
 
         private val STARTING_POINT = Point.of(MIN_X_COORD, MIN_Y_COORD)
         private val DESTINATION_POINT = Point.of(MAX_X_COORD, MAX_Y_COORD)
-        
+
         private val ASSIGNMENT_MOD = mapOf(
                 FIRST to Pair(ArrayDeque<Pair<String, Point>>::add,
                         { p1: String, p2: String -> p1.isEmpty() || p1.length > p2.length }),
@@ -33,6 +33,8 @@ class Day17 : Day() {
                         { p1: String, p2: String -> p1.length < p2.length })
         )
     }
+
+    override val title: String = "Two Steps Forward"
 
     override fun first(input: Sequence<String>): Any =
             findPath(input.first(), STARTING_POINT, DESTINATION_POINT, ASSIGNMENT_MOD[FIRST]!!)

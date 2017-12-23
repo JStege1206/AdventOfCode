@@ -9,6 +9,8 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.min
  * @author Jelle Stege
  */
 class Day02 : Day() {
+    override val title: String = "I Was Told There Would Be No Math"
+    
     override fun first(input: Sequence<String>): Any = input
             .map { it.split('x').map { it.toInt() } }
             .sumBy { (length, width, height) ->

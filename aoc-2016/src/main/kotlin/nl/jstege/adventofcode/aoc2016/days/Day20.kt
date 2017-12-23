@@ -12,6 +12,8 @@ class Day20 : Day() {
         private const val MAX_ADDRESS = (1L shl Integer.SIZE) - 1
     }
 
+    override val title: String = "Firewall Rules"
+
     override fun first(input: Sequence<String>): Any = input
             .map(Day20::IpRange).optimize().first
             .first().end + 1

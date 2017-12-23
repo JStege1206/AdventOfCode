@@ -7,6 +7,8 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  * @author Jelle Stege
  */
 class Day04 : Day() {
+    override val title: String = "High-Entropy Passphrases"
+
     override fun first(input: Sequence<String>): Any = input.parse { it }
 
     override fun second(input: Sequence<String>): Any = input.parse { it.toList().sorted() }
