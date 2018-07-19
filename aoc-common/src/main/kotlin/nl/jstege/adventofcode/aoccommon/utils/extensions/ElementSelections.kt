@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom
  * @param elements The elements to find the minimum of.
  * @return The minimum in the given elements.
  */
-fun <E : Comparable<E>> min(vararg elements: E): E = elements.minBy { it }!!
+fun <E : Comparable<E>> min(vararg elements: E): E = elements.min()!!
 
 /**
  * Returns the maximum element of the given arguments.
@@ -21,7 +21,7 @@ fun <E : Comparable<E>> min(vararg elements: E): E = elements.minBy { it }!!
  * @param elements The elements to find the maximum of.
  * @return The maximum in the given elements.
  */
-fun <E : Comparable<E>> max(vararg elements: E): E = elements.maxBy { it }!!
+fun <E : Comparable<E>> max(vararg elements: E): E = elements.max()!!
 
 /**
  * Returns the median element of the given arguments.
@@ -29,8 +29,7 @@ fun <E : Comparable<E>> max(vararg elements: E): E = elements.maxBy { it }!!
  * @param elements The elements to find the median of.
  * @return The median in the given elements.
  */
-fun <E : Comparable<E>> mid(vararg elements: E) = elements.toList()
-        .quickSelect(elements.size / 2)
+fun <E : Comparable<E>> mid(vararg elements: E) = elements.toList().quickSelect(elements.size / 2)
 
 private val RANDOM = ThreadLocalRandom.current()
 /**
@@ -46,11 +45,11 @@ fun <E : Comparable<E>> List<E>.quickSelect(index: Int): E {
         this.swap(pivotIndex, right)
         var storeIndex = left
         (left until right)
-                .filter { this[it] < pivot }
-                .forEach {
-                    this.swap(storeIndex, it)
-                    storeIndex++
-                }
+            .filter { this[it] < pivot }
+            .forEach {
+                this.swap(storeIndex, it)
+                storeIndex++
+            }
         this.swap(right, storeIndex)
         return storeIndex
     }

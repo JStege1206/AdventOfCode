@@ -3,22 +3,19 @@ package nl.jstege.adventofcode.aoc2016.days
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 import nl.jstege.adventofcode.aoccommon.utils.extensions.toHexString
-import nl.jstege.adventofcode.aoccommon.utils.extensions.toUnsignedInt
 import java.security.MessageDigest
 
 /**
  *
  * @author Jelle Stege
  */
-class Day14 : Day() {
+class Day14 : Day(title = "One-Time Pad") {
     private companion object Configuration {
         private const val KEYS_REQUIRED = 64
         private const val ADDITIONAL_STRETCHING_ITERATIONS = 2016
 
         private const val CORRESPONDING_HASH_WITHIN_ITERATIONS = 1000
     }
-
-    override val title: String = "One-Time Pad"
 
     override fun first(input: Sequence<String>): Any {
         return input.head.bruteforce { md5, prefix, iteration ->
@@ -29,9 +26,9 @@ class Day14 : Day() {
     override fun second(input: Sequence<String>): Any {
         return input.head.bruteforce { md5, prefix, iteration ->
             (0 until ADDITIONAL_STRETCHING_ITERATIONS)
-                    .fold(md5.digest((prefix + iteration).toByteArray())) { previous, _ ->
-                        md5.digest(previous.toHexString().toByteArray())
-                    }
+                .fold(md5.digest((prefix + iteration).toByteArray())) { previous, _ ->
+                    md5.digest(previous.toHexString().toByteArray())
+                }
         }
     }
 
@@ -71,9 +68,10 @@ class Day14 : Day() {
         while (i < this.size - 1) {
             val c = this[i].toInt() and 0x0F
             if ((c == (this[i].toInt() and 0xF0 ushr 4)
-                    && c == (this[i + 1].toInt() and 0xF0 ushr 4))
-                    || (c == (this[i + 1].toInt() and 0xF0 ushr 4)
-                    && c == (this[i + 1].toInt() and 0x0F))) {
+                        && c == (this[i + 1].toInt() and 0xF0 ushr 4))
+                || (c == (this[i + 1].toInt() and 0xF0 ushr 4)
+                        && c == (this[i + 1].toInt() and 0x0F))
+            ) {
                 return c.toChar()
             }
             i++

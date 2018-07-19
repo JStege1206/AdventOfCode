@@ -6,9 +6,7 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  *
  * @author Jelle Stege
  */
-class Day18 : Day() {
-    override val title: String = "Duet"
-
+class Day18 : Day(title = "Duet") {
     override fun first(input: Sequence<String>): Any {//TODO: implement
         return 3188
     }

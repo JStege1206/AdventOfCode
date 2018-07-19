@@ -7,30 +7,32 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  *
  * @author Jelle Stege
  */
-class Day17 : Day() {
+class Day17 : Day(title = "No Such Thing as Too Much") {
     private companion object Configuration {
         private const val CAPACITY = 150
     }
 
-    override val title: String = "No Such Thing as Too Much"
-
     override fun first(input: Sequence<String>) = input
-            .map { it.toInt() }
-            .toList()
-            .findCombinations(CAPACITY)
+        .map { it.toInt() }
+        .toList()
+        .findCombinations(CAPACITY)
 
     override fun second(input: Sequence<String>): Any {
-        val containers = input.map { it.toInt() }.toList()
-
-        val depths = mutableListOf<Int>()
-        containers.findCombinations(CAPACITY, depths = depths)
-        val min = depths.min()
-        return depths.count { it == min }
+        return input.map { it.toInt() }.toList()
+            .let { containers ->
+                mutableListOf<Int>().let { depths ->
+                    containers.findCombinations(CAPACITY, depths = depths)
+                    depths.min().let { min -> depths.count { it == min } }
+                }
+            }
     }
 
 
-    private fun List<Int>.findCombinations(capacityLeft: Int, depth: Int = 1,
-                                           depths: MutableList<Int> = mutableListOf()): Int {
+    private fun List<Int>.findCombinations(
+        capacityLeft: Int,
+        depth: Int = 1,
+        depths: MutableList<Int> = mutableListOf()
+    ): Int {
         if (capacityLeft > 0 && this.isEmpty()) {
             return 0
         }
@@ -44,8 +46,10 @@ class Day17 : Day() {
                 depths.add(depth)
                 combinations++
             } else {
-                combinations += tContainers.findCombinations(capacityLeft - container,
-                        depth + 1, depths)
+                combinations += tContainers.findCombinations(
+                    capacityLeft - container,
+                    depth + 1, depths
+                )
             }
         }
         return combinations

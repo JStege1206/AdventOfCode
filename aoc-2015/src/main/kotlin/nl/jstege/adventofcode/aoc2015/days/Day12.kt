@@ -9,9 +9,7 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.toJson
  *
  * @author Jelle Stege
  */
-class Day12 : Day() {
-    override val title: String = "JSAbacusFramework.io"
-    
+class Day12 : Day(title = "JSAbacusFramework.io") {
     override fun first(input: Sequence<String>): Any = input.head.toJson().sum()
 
     override fun second(input: Sequence<String>): Any = input.head.toJson().sumWithoutRed()

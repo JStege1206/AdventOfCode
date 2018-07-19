@@ -9,7 +9,7 @@ import java.math.BigInteger
  *
  * @author Jelle Stege
  */
-class Day18 : Day() {
+class Day18 : Day(title = "Like a Rogue") {
     private companion object Configuration {
         private const val ROW_LENGTH = 100
         private val ROW_MASK = (BigInteger.ONE shl ROW_LENGTH) - BigInteger.ONE
@@ -21,21 +21,19 @@ class Day18 : Day() {
         private val SAFE = '.' to '0'
     }
 
-    override val title: String = "Like a Rogue"
-
     override fun first(input: Sequence<String>): Any = input.walk(ITERATIONS_FIRST)
 
     override fun second(input: Sequence<String>): Any = input.walk(ITERATIONS_SECOND)
 
     private fun Sequence<String>.walk(iterations: Int) = this.first()
-            .replace(TRAP, SAFE)
-            .toBigInteger(radix = 2)
-            .computeRule90(iterations)
+        .replace(TRAP, SAFE)
+        .toBigInteger(radix = 2)
+        .computeRule90(iterations)
 
 
     private fun BigInteger.computeRule90(iterations: Int): Int = (0 until iterations)
-            .asSequence()
-            .scan(this) { row, _ -> (row shr 1) xor ((row shl 1) and ROW_MASK) }
-            .sumBy { ROW_LENGTH - it.bitCount() }
+        .asSequence()
+        .scan(this) { row, _ -> (row shr 1) xor ((row shl 1) and ROW_MASK) }
+        .sumBy { ROW_LENGTH - it.bitCount() }
 
 }

@@ -6,19 +6,17 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  *
  * @author Jelle Stege
  */
-class Day09 : Day() {
+class Day09 : Day(title = "Explosives in Cyperspace") {
     private companion object Configuration {
-        val DECOMPRESS_RECURSIVELY_FIRST = false
-        val DECOMPRESS_RECURSIVELY_SECOND = true
+        private const val DECOMPRESS_RECURSIVELY_FIRST = false
+        private const val DECOMPRESS_RECURSIVELY_SECOND = true
     }
 
-    override val title: String = "Explosives in Cyperspace"
-
     override fun first(input: Sequence<String>): Any = input.first()
-            .calcDecompressedLength(DECOMPRESS_RECURSIVELY_FIRST)
+        .calcDecompressedLength(DECOMPRESS_RECURSIVELY_FIRST)
 
     override fun second(input: Sequence<String>): Any = input.first()
-            .calcDecompressedLength(DECOMPRESS_RECURSIVELY_SECOND)
+        .calcDecompressedLength(DECOMPRESS_RECURSIVELY_SECOND)
 
     private fun String.calcDecompressedLength(calcRec: Boolean): Long {
         if (this.indexOf('(') == -1) return this.length.toLong()

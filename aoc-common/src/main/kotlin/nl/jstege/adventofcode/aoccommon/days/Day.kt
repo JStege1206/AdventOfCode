@@ -11,14 +11,11 @@ import kotlin.system.measureNanoTime
  *
  * @author Jelle Stege
  *
+ * @property title The title of the assignment.
  * @constructor Initialises this [Day] with an incomplete text. To run the assignments, use the
  * [Day.run] method.
  */
-abstract class Day {
-    /**
-     * The title for this day.
-     */
-    abstract val title: String
+abstract class Day(private val title: String) {
     private lateinit var deferredFirst: Deferred<Pair<Any, Long>>
     private lateinit var deferredSecond: Deferred<Pair<Any, Long>>
 
@@ -55,11 +52,10 @@ abstract class Day {
      * @param action The action to execute
      * @return Supplier to be completed by a task running in the fork join common pool.
      */
-    private inline fun supplier(crossinline action: () -> Any): Pair<Any, Long> {
-        var output: Any = object {}
-        val timeTaken = measureNanoTime {
-            output = action()
-        }
+    private inline fun supplier(action: () -> Any): Pair<Any, Long> {
+        val startTime = System.nanoTime()
+        val output = action()
+        val timeTaken = System.nanoTime() - startTime
         return Pair(output, timeTaken)
     }
 
@@ -69,7 +65,7 @@ abstract class Day {
      * @return The input corresponding to the day implementation.
      */
     fun loadInput() =
-            Resource.readLinesAsSequence("input/${this::class.java.simpleName.toLowerCase()}.txt")
+        Resource.readLinesAsSequence("input/${this::class.java.simpleName.toLowerCase()}.txt")
 
     /**
      * Returns the String representation when the output is available. This function will suspend
@@ -80,15 +76,13 @@ abstract class Day {
     override fun toString(): String {
         val (firstOutput, firstTime) = runBlocking { deferredFirst.await() }
         val (secondOutput, secondTime) = runBlocking { deferredSecond.await() }
-        return StringBuilder()
-                .append("${this::class.java.simpleName}: ")
-                .appendln(title)
-                .appendln("Part One:")
-                .appendln("    Output: $firstOutput")
-                .appendln("    Time taken: %.2fms".format(firstTime / 1000000F))
-                .appendln("Part Two:")
-                .appendln("    Output: $secondOutput")
-                .append("    Time taken: %.2fms".format(secondTime / 1000000F))
-                .toString()
+        return """
+            ${this::class.java.simpleName}: $title
+            Part One:
+                Output: $firstOutput
+                Time taken: ${"%.2f".format(firstTime / 1000000F)}ms
+            Part Two:
+                Output: $secondOutput
+                Time taken: ${"%.2f".format(secondTime / 1000000F)}ms""".trimIndent()
     }
 }

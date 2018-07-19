@@ -1,85 +1,59 @@
 package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.Direction
 import nl.jstege.adventofcode.aoccommon.utils.Point
+import kotlin.reflect.KProperty1
 
 
 /**
  *
  * @author Jelle Stege
  */
-class Day01 : Day() {
-    override val title: String = "No Time for a Taxicab"
-
+class Day01 : Day(title = "No Time for a Taxicab") {
     override fun first(input: Sequence<String>): Any {
         var dir = Direction.NORTH
-        val (x, y) = input.first().parse().fold(Point.ZERO_ZERO) { p, (turn, steps) ->
-            dir = dir.turn(turn)
-            when (dir) {
-                Direction.NORTH, Direction.SOUTH -> p.addY(dir.modifier * steps)
-                else -> p.addX(dir.modifier * steps)
-            }
-        }
-        return Math.abs(x) + Math.abs(y)
+        return input.first().parse().fold(Point.ZERO_ZERO) { p, (turn, steps) ->
+            dir = dir.let(turn.directionMod)
+            p.moveDirection(dir, steps)
+        }.manhattan(Point.ZERO_ZERO)
     }
 
     override fun second(input: Sequence<String>): Any {
         var dir = Direction.NORTH
-        var coords = Point.ZERO_ZERO
-        val visitedPoints = mutableSetOf(coords)
+        var coordinate = Point.ZERO_ZERO
+        val visited = mutableSetOf(coordinate)
 
-        for ((turn, steps) in input.first().parse()) {
-            dir = dir.turn(turn)
+        input.first().parse().forEach { (turn, steps) ->
+            dir = dir.let(turn.directionMod)
 
-            var cur = if (dir.isYaxis) coords.y else coords.x
-            val dest = cur + (dir.modifier * steps)
+            val first = coordinate.moveDirection(dir)
+            val last = coordinate.moveDirection(dir, steps)
 
-            while (cur != dest) {
-                coords = if (dir.isYaxis) coords.addY(dir.modifier) else coords.addX(dir.modifier)
-
-                if (coords in visitedPoints) {
-                    return Math.abs(coords.x) + Math.abs(coords.y)
-                }
-                visitedPoints += coords
-                cur = if (dir.isYaxis) coords.y else coords.x
+            val xs = if (last.x < first.x) first.x downTo last.x else first.x..last.x
+            val ys = if (last.y < first.y) first.y downTo last.y else first.y..last.y
+            Point.of(xs, ys).forEach {
+                coordinate = it
+                if (coordinate in visited) return coordinate.manhattan(Point.ZERO_ZERO)
+                visited += coordinate
             }
         }
         throw IllegalStateException("No answer found.")
     }
 
-    private fun String.parse(): List<Instruction> = this
-            .split(", ")
-            .map {
-                Instruction(Turn.parse(it.substring(0, 1)), it.substring(1).toInt())
-            }
+    private fun String.parse(): List<Instruction> = this.split(", ").map {
+        Instruction(Turn.parse(it.substring(0, 1)), it.substring(1).toInt())
+    }
 
     private data class Instruction(val turn: Turn, val steps: Int)
 
-    private enum class Direction(val modifier: Int, val isYaxis: Boolean) {
-        NORTH(1, true) {
-            override fun turn(turn: Turn) = if (turn == Turn.LEFT) WEST else EAST
-        },
-        EAST(1, false) {
-            override fun turn(turn: Turn) = if (turn == Turn.LEFT) NORTH else SOUTH
-        },
-        SOUTH(-1, true) {
-            override fun turn(turn: Turn) = if (turn == Turn.LEFT) EAST else WEST
-        },
-        WEST(-1, false) {
-            override fun turn(turn: Turn) = if (turn == Turn.LEFT) SOUTH else NORTH
-        };
-
-        abstract fun turn(turn: Turn): Direction
-    }
-
-    private enum class Turn(val key: String) {
-        LEFT("L"), RIGHT("R");
+    private enum class Turn(val directionMod: KProperty1<Direction, Direction>) {
+        LEFT(Direction::left), RIGHT(Direction::right);
 
         companion object {
-            fun parse(v: String): Turn = when (v) {
-                LEFT.key -> LEFT
-                RIGHT.key -> RIGHT
-                else -> throw IllegalArgumentException("No constant with specified name.")
+            fun parse(v: String) = when (v) {
+                "L" -> LEFT
+                else -> RIGHT
             }
         }
     }

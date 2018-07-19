@@ -26,6 +26,7 @@ infix fun Long.floorMod(y: Long): Long = Math.floorMod(this, y)
  * @return The result of receiver ^ n, as an integer.
  */
 infix fun Int.pow(n: Int): Int = Math.pow(this.toDouble(), n.toDouble()).toInt()
+
 /**
  * Fast access to a logarithm function with a definable base. For integers.
  * @see Math.log

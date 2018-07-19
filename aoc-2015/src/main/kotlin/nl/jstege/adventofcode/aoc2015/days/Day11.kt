@@ -6,12 +6,10 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  *
  * @author Jelle Stege
  */
-class Day11 : Day() {
+class Day11 : Day(title = "Corporate Policy") {
     private companion object Configuration {
         private val ILLEGAL_CHARS = setOf('i', 'o', 'l')
     }
-
-    override val title: String = "Corporate Policy"
 
     override fun first(input: Sequence<String>): Any {
         val chars = input.first().toCharArray()
@@ -46,7 +44,7 @@ class Day11 : Day() {
     }
 
     private fun CharArray.isValid(): Boolean =
-            this.hasStraight() && !this.hasIllegalChars() && this.hasTwoPairs()
+        this.hasStraight() && !this.hasIllegalChars() && this.hasTwoPairs()
 
     private fun CharArray.hasTwoPairs(): Boolean {
         var matches = 0

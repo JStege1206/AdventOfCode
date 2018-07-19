@@ -8,13 +8,11 @@ import nl.jstege.adventofcode.aoccommon.utils.DayTester
  * @author Jelle Stege
  */
 class DayTest : DayTester(DayTestImpl()) {
-    class DayTestImpl : Day() {
+    class DayTestImpl : Day(title = "Test Implementation") {
         companion object Configuration {
-            val FIRST_SLEEP_TIME = 1000L
-            val SECOND_SLEEP_TIME = 1500L
+            const val FIRST_SLEEP_TIME = 1000L
+            const val SECOND_SLEEP_TIME = 1500L
         }
-
-        override val title: String = "Test Implementation"
 
         override fun first(input: Sequence<String>): Any {
             Thread.sleep(FIRST_SLEEP_TIME)

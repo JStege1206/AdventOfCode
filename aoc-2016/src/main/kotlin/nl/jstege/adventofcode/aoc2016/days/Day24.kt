@@ -3,53 +3,54 @@ package nl.jstege.adventofcode.aoc2016.days
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 import nl.jstege.adventofcode.aoccommon.utils.extensions.permutations
+import nl.jstege.adventofcode.aoccommon.utils.extensions.transformTo
 import java.util.*
 
 /**
  *
  * @author Jelle Stege
  */
-class Day24 : Day() {
+class Day24 : Day(title = "Air Duct Spelunking") {
     private companion object Configuration {
         private const val START_NODE = 0
         private const val END_NODE = 0
         private const val DEFAULT_SIZE = 300
     }
 
-    override val title: String = "Air Duct Spelunking"
-
     override fun first(input: Sequence<String>): Any = input.toList()
-            .findShortestRoute { it }
+        .findShortestRoute { it }
 
     override fun second(input: Sequence<String>): Any = input.toList()
-            .findShortestRoute { it + END_NODE }
+        .findShortestRoute { it + END_NODE }
 
 
-    fun List<String>.findShortestRoute(pathModifier: (List<Int>) -> List<Int>): Int {
+    private fun List<String>.findShortestRoute(pathModifier: (List<Int>) -> List<Int>): Int {
         val goals = mutableMapOf<Int, Int>()
-        val maze = Maze(this
+        val maze = Maze(
+            this
                 .asSequence()
                 .flatMap(String::asSequence)
-                .foldIndexed(BitSet(this.size * this.head.length)) { i, bs, c ->
+                .withIndex()
+                .transformTo(BitSet(this.size * this.head.length)) { bs, (i, c) ->
                     if (c != '#') {
                         if (c.isDigit()) {
                             goals[c - '0'] = i
                         }
                         bs.set(i)
                     }
-                    bs
-                }, this.head.length)
+                }, this.head.length
+        )
 
         return goals.keys
-                .filter { it != START_NODE }
-                .permutations()
-                .map { pathModifier(it) }
-                .map { it.map { goals[it]!! } }
-                .map {
-                    it.fold(0 to goals[START_NODE]!!) { (length, previousGoal), p ->
-                        (length + maze.findShortestPath(previousGoal, p)) to p
-                    }.first
-                }.min() ?: throw IllegalArgumentException("No shortest route available")
+            .filter { it != START_NODE }
+            .permutations()
+            .map { pathModifier(it) }
+            .map { it.map { goals[it]!! } }
+            .map {
+                (listOf(goals[START_NODE]!!) + it)
+                    .zipWithNext { prev, cur -> maze.findShortestPath(prev, cur) }
+                    .sum()
+            }.min() ?: throw IllegalArgumentException("No shortest route available")
     }
 
     private data class Path(val i: Int, val j: Int) {

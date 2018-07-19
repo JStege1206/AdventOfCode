@@ -21,10 +21,9 @@ fun Byte.toUnsignedInt(): Int = this.toInt() and 0xFF
  */
 fun Long.factorial(): Long = this.factorial(1)
 
-private tailrec fun Long.factorial(acc: Long = 1): Long = when (this) {
-    0L -> acc
-    else -> (this - 1).factorial(acc * this)
-}
+private tailrec fun Long.factorial(acc: Long = 1): Long =
+    if (this == 0L) acc
+    else (this - 1).factorial(acc * this)
 
 /**
  * Determines if the receiving integer is even.
@@ -42,8 +41,6 @@ fun Int.isEven(): Boolean = this % 2 == 0
  */
 fun Int.isOdd(): Boolean = this % 2 != 0
 
-fun Long.isEven(): Boolean = this % 2L == 0L
-fun Long.isOdd(): Boolean = this % 2L != 0L
 /**
  * Casts an integer x within range 0 <= x <= 15 to it's hexadecimal character.
  *
@@ -53,6 +50,7 @@ fun Long.isOdd(): Boolean = this % 2L != 0L
  * @throws ArrayIndexOutOfBoundsException if the given integer x is not within range 0 <= x <= 15
  */
 fun Int.toHexChar(): Char = hexChars[this]
+
 private val hexChars = "0123456789abcdef".toCharArray()
 
 /**

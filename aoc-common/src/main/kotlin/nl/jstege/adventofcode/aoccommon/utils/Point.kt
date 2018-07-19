@@ -1,6 +1,5 @@
 package nl.jstege.adventofcode.aoccommon.utils
 
-import nl.jstege.adventofcode.aoccommon.utils.Direction.*
 import kotlin.math.abs
 
 /**
@@ -22,6 +21,7 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
          * Represents a origin of (0,0)
          */
         val ZERO_ZERO = Point.of(0, 0)
+
         /**
          * Represents a coordinate at (1,1)
          */
@@ -43,7 +43,8 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
          * @param ys The y values to use.
          * @return A [List] of [Point]s for the given ranges.
          */
-        fun of(xs: IntRange, ys: IntRange) = xs.flatMap { x -> ys.map { y -> Point.of(x, y) } }
+        fun of(xs: IntProgression, ys: IntProgression) =
+            xs.flatMap { x -> ys.map { y -> Point.of(x, y) } }
 
         /**
          * Creates a [Point] of the given [Pair], using the first value
@@ -55,12 +56,13 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
         fun of(p: Pair<Int, Int>) = Point(p.first, p.second)
 
         private val NEIGHBORS8 = setOf(
-                Point.of(-1, -1), Point.of(0, -1), Point.of(1, -1),
-                Point.of(-1, 0), Point.of(1, 0),
-                Point.of(-1, 1), Point.of(0, 1), Point.of(1, 1)
+            Point.of(-1, -1), Point.of(0, -1), Point.of(1, -1),
+            Point.of(-1, 0), Point.of(1, 0),
+            Point.of(-1, 1), Point.of(0, 1), Point.of(1, 1)
         )
+
         private val NEIGHBORS4 = setOf(
-                Point.of(0, -1), Point.of(-1, 0), Point.of(1, 0), Point.of(0, 1)
+            Point.of(0, -1), Point.of(-1, 0), Point.of(1, 0), Point.of(0, 1)
         )
     }
 
@@ -75,30 +77,18 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
     val neighbors4: Set<Point> by lazy { NEIGHBORS4.map { this + it }.toSet() }
 
     /**
-     * Returns the [Point] north of this [Point].
-     */
-    val north by lazy { this.moveDirection(NORTH) }
-
-    /**
-     * Returns the [Point] east of this [Point].
-     */
-    val east by lazy { this.moveDirection(EAST) }
-
-    /**
-     * Returns the [Point] south of this [Point].
-     */
-    val south by lazy { this.moveDirection(SOUTH) }
-
-    /**
-     * Returns the [Point] west of this [Point].
-     */
-    val west by lazy { this.moveDirection(WEST) }
-
-    /**
      * Returns the point based off the [Direction] given
      */
     fun moveDirection(direction: Direction) = this + direction.mod
 
+    /**
+     * Returns the point based off the [Direction] given, which is the amount of steps away.
+     */
+    fun moveDirection(direction: Direction, steps: Int) = this + (direction.mod * steps)
+
+    /**
+     * Returns the manhattan distance between this [Point] and the other [Point]
+     */
     fun manhattan(other: Point) = abs(x - other.x) + abs(y - other.y)
 
     /**
@@ -202,6 +192,13 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
     operator fun minus(p: Point) = sub(p)
 
     /**
+     * Performs a scalar multiplication on this [Point]
+     * @param n The integer to multiply the point with.
+     * @return a new [Point] with the new values.
+     */
+    operator fun times(n: Int) = Point.of(x * n, y * n)
+
+    /**
      * Compares this point to another point.
      * @param other The other point.
      * @return 0 if the points are equal, < 0 if this point is smaller than the other and > 0 if
@@ -218,3 +215,8 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
      */
     override fun toString(): String = "($x,$y)"
 }
+
+fun pointOf(x: Int, y: Int) = Point.of(x, y)
+fun pointOf() = Point.ZERO_ZERO
+fun pointOf(xs: IntProgression, ys: IntProgression) = Point.of(xs, ys)
+fun pointOf(p: Pair<Int, Int>) = Point.of(p)

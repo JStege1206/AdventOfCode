@@ -9,20 +9,18 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.*
  *
  * @author Jelle Stege
  */
-class Day10 : Day() {
+class Day10 : Day(title = "Knot Hash") {
     private companion object Configuration {
         private const val FIRST_ELEMENTS_TO_MULTIPLY = 2
     }
 
-    override val title: String = "Knot Hash"
-
     override fun first(input: Sequence<String>): Any {
         return input.head
-                .split(",")
-                .map { it.toInt() }
-                .scramble()
-                .take(FIRST_ELEMENTS_TO_MULTIPLY)
-                .reduce(Int::times)
+            .split(",")
+            .map(String::toInt)
+            .scramble()
+            .take(FIRST_ELEMENTS_TO_MULTIPLY)
+            .reduce(Int::times)
     }
 
     override fun second(input: Sequence<String>): Any {

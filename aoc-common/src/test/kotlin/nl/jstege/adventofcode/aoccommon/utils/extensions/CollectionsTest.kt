@@ -76,17 +76,21 @@ class CollectionsTest {
     fun combinationsTest() {
         val l1 = listOf(1, 2, 3)
         val el2 = setOf(
-                listOf(1, 2),
-                listOf(2, 3),
-                listOf(1, 3)
+                setOf(1, 2),
+                setOf(2, 3),
+                setOf(1, 3)
         )
-        assertEquals(el2, l1.combinations(2).toSet())
+        var r = l1.combinations(2).toList()
+        assertEquals(el2.size, r.size)
+        assertEquals(el2, r.toSet())
 
         val l2 = listOf<Int>()
         assertEquals(setOf(), l2.combinations(2).toSet())
 
         val l3 = listOf(1, 2, 3, 4)
-        assertEquals(setOf(listOf(1, 2, 3, 4)), l3.combinations(4).toSet())
+        r = l3.combinations(4).toList()
+        assertEquals(1, r.size)
+        assertEquals(setOf(setOf(1, 2, 3, 4)), r.toSet())
     }
 
     @Test

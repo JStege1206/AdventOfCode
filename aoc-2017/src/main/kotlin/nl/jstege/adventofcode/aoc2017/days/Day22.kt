@@ -1,5 +1,6 @@
 package nl.jstege.adventofcode.aoc2017.days
 
+import nl.jstege.adventofcode.aoc2017.days.Day22.Status.*
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.Direction
 import nl.jstege.adventofcode.aoccommon.utils.Point
@@ -9,7 +10,7 @@ import kotlin.reflect.KProperty1
  *
  * @author Jelle Stege
  */
-class Day22 : Day() {
+class Day22 : Day(title = "Sporifica Virus") {
     private companion object Configuration {
         const val CLEAN_CHAR = '.'
         const val INFECTED_CHAR = '#'
@@ -18,58 +19,60 @@ class Day22 : Day() {
         val INITIAL_DIRECTION = Direction.NORTH
     }
 
-    override val title: String = "Sporifica Virus"
-
     override fun first(input: Sequence<String>): Any {
         return input
-                .parse()
-                .work(FIRST_ITERATIONS) {
-                    when (it) {
-                        Status.CLEAN -> Status.INFECTED
-                        Status.INFECTED -> Status.CLEAN
-                        else -> throw IllegalStateException()
-                    }
+            .parse()
+            .work(FIRST_ITERATIONS) {
+                when (it) {
+                    CLEAN -> INFECTED
+                    INFECTED -> CLEAN
+                    else -> throw IllegalStateException()
                 }
+            }
     }
 
     override fun second(input: Sequence<String>): Any {
         return input
-                .parse()
-                .work(SECOND_ITERATIONS) {
-                    when (it) {
-                        Status.INFECTED -> Status.FLAGGED
-                        Status.CLEAN -> Status.WEAKENED
-                        Status.WEAKENED -> Status.INFECTED
-                        Status.FLAGGED -> Status.CLEAN
-                    }
+            .parse()
+            .work(SECOND_ITERATIONS) {
+                when (it) {
+                    INFECTED -> FLAGGED
+                    CLEAN -> WEAKENED
+                    WEAKENED -> INFECTED
+                    FLAGGED -> CLEAN
                 }
+            }
     }
 
     private fun Sequence<String>.parse() = this
-            .foldIndexed(mutableMapOf<Point, Node>()) { y, nodes, line ->
-                nodes += line
-                        .mapIndexed { x, c -> Point.of(x, y) to c }
-                        .map { (p, c) -> p to Node(p, nodes, Status.of(c)) }
-                        .toMap()
-                nodes
+        .foldIndexed(mutableMapOf<Point, Node>()) { y, nodes, line ->
+            nodes.apply {
+                this += line
+                    .mapIndexed { x, c -> Point.of(x, y) to c }
+                    .map { (p, c) -> p to Node(p, nodes, Status.of(c)) }
+                    .toMap()
             }
-            .toMutableMap()
+        }
+        .toMutableMap()
 
-    private fun MutableMap<Point, Node>.work(bursts: Int, stateMod: (Status) -> Status): Int {
+    private fun MutableMap<Point, Node>.work(bursts: Int, stateModifier: (Status) -> Status): Int {
         val currentLocation = Point.of(
-                this.keys.map { it.x }.max()!! / 2,
-                this.keys.map { it.y }.max()!! / 2)
+            this.keys.map { it.x }.max()!! / 2,
+            this.keys.map { it.y }.max()!! / 2
+        )
         var node = this.getOrPut(currentLocation) { Node(currentLocation, this) }
         var direction = INITIAL_DIRECTION
 
         return (0 until bursts)
-                .count {
-                    direction = node.status.directionMod.get(direction)
-                    val newState = stateMod(node.status)
-                    node.status = newState
+            .asSequence()
+            .map {
+                direction = direction.let(node.status.directionMod)
+                stateModifier(node.status).apply {
+                    node.status = this
                     node = node.move(direction)
-                    newState == Status.INFECTED
                 }
+            }
+            .count { it == INFECTED }
     }
 
     private enum class Status(val directionMod: KProperty1<Direction, Direction>) {
@@ -88,27 +91,18 @@ class Day22 : Day() {
     }
 
     private class Node(
-            val coordinate: Point,
-            val cache: MutableMap<Point, Node>,
-            var status: Status = Status.CLEAN) {
-        val left by lazy {
-            val np = coordinate.decX()
-            cache.getOrPut(np, { Node(np, cache) })
-        }
-        val right by lazy {
-            val np = coordinate.incX()
-            cache.getOrPut(np, { Node(np, cache) })
-        }
-        val up by lazy {
-            val np = coordinate.decY()
-            cache.getOrPut(np, { Node(np, cache) })
-        }
-        val down by lazy {
-            val np = coordinate.incY()
-            cache.getOrPut(np, { Node(np, cache) })
-        }
+        val coordinate: Point,
+        val cache: MutableMap<Point, Node>,
+        var status: Status = CLEAN
+    ) {
+        val left by lazy { coordinate.decX().let(::createNode) }
+        val right by lazy { coordinate.incX().let(::createNode) }
+        val up by lazy { coordinate.decY().let(::createNode) }
+        val down by lazy { coordinate.incY().let(::createNode) }
 
-        fun move(dir: Direction) = when (dir) {
+        private fun createNode(it: Point): Node = cache.getOrPut(it) { Node(it, cache) }
+
+        fun move(dir: Direction): Node = when (dir) {
             Direction.NORTH -> up
             Direction.EAST -> right
             Direction.SOUTH -> down

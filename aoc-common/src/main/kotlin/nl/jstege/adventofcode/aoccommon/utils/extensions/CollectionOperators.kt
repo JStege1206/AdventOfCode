@@ -1,5 +1,8 @@
 package nl.jstege.adventofcode.aoccommon.utils.extensions
 
+import java.util.*
+import kotlin.system.measureTimeMillis
+
 /**
  * Extension methods on collections.
  * @author Jelle Stege
@@ -28,7 +31,9 @@ operator fun <K, L, V> Map<K, Map<L, V>>.get(k1: K, k2: L) = this[k1]?.get(k2)
  *  value.
  */
 operator fun <K, L, V> MutableMap<K, MutableMap<L, V>>.set(k1: K, k2: L, v: V): V? = this
-        .getOrPut(k1, { mutableMapOf() }).put(k2, v)
+    .getOrPut(k1, { mutableMapOf() }).put(k2, v)
+
+operator fun <E> List<E>.times(n: Int): List<E> = (0 until n).flatMap { this }
 
 /**
  * Returns the 5th element of the given list.

@@ -7,42 +7,42 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.*
  *
  * @author Jelle Stege
  */
-class Day24 : Day() {
+class Day24 : Day(title = "It Hangs in the Balance") {
     private companion object Configuration {
-        val FIRST_SHARES = 3
-        val SECOND_SHARES = 4
+        const val FIRST_SHARES = 3
+        const val SECOND_SHARES = 4
     }
 
-    override val title: String = "It Hangs in the Balance"
-
     override fun first(input: Sequence<String>): Any = input
-            .map { it.toInt() }
-            .sorted()
-            .toList()
-            .findQuantumEntanglement(FIRST_SHARES)
+        .map { it.toInt() }
+        .sorted()
+        .toList()
+        .findQuantumEntanglement(FIRST_SHARES)
 
     override fun second(input: Sequence<String>): Any = input
-            .map { it.toInt() }
-            .sorted()
-            .toList()
-            .findQuantumEntanglement(SECOND_SHARES)
+        .map { it.toInt() }
+        .sorted()
+        .toList()
+        .findQuantumEntanglement(SECOND_SHARES)
 
-    private fun List<Int>.findQuantumEntanglement(groups: Int): Long {
-        val groupSize = this.sum() / groups
-        val start = this
+    private fun List<Int>.findQuantumEntanglement(groups: Int): Long = (this.sum() / groups)
+        .let { groupSize ->
+            this
                 .asSequence()
                 .sortedDescending()
                 .scan(0, Int::plus)
                 .takeWhile { it < groupSize }
                 .count()
-        return (start until this.size)
-                .asSequence()
-                .map { this.combinations(it).filter { it.sum() == groupSize } }
-                .filter(Sequence<List<Int>>::any)
-                .orElse { sequenceOf(listOf(Int.MAX_VALUE)) }
-                .map { it.map(Int::toLong) }
-                .map { it.reduce(Long::times) }
-                .min()!!
-    }
-
+                .let { start ->
+                    (start until this.size)
+                        .asSequence()
+                        .map { this.combinations(it).filter { it.sum() == groupSize } }
+                        .filter { it.any() }
+                        .filter(Sequence<Set<Int>>::any)
+                        .first()
+                        .map { it.map(Int::toLong) }
+                        .map { it.reduce(Long::times) }
+                        .min()!!
+                }
+        }
 }

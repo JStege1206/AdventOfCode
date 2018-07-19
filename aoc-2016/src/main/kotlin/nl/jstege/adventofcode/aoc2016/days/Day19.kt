@@ -10,9 +10,8 @@ import kotlin.math.max
  *
  * @author Jelle Stege
  */
-class Day19 : Day() {
-    override val title: String = "An Elephant Named Joseph"
-    
+class Day19 : Day(title = "An Elephant Named Joseph") {
+
     override fun first(input: Sequence<String>): Any {
         return input.first().toInt().let {
             2 * (it - it.highestOneBit()) + 1

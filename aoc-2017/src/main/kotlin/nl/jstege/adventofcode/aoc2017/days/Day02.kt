@@ -7,30 +7,28 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.combinations
  *
  * @author Jelle Stege
  */
-class Day02 : Day() {
+class Day02 : Day(title = "Corruption Checksum") {
     private companion object Configuration {
         private const val WHITESPACE_STRING = """\s+"""
         private val WHITESPACE_REGEX = WHITESPACE_STRING.toRegex()
     }
 
-    override val title: String = "Corruption Checksum"
-
     override fun first(input: Sequence<String>): Any {
-        return input.parse()
-                .sumBy { it.max()!! - it.min()!! }
+        return input.parse().sumBy { it.max()!! - it.min()!! }
     }
 
     override fun second(input: Sequence<String>): Any {
         return input.parse()
-                .map {
-                    it.sortedDescending()
-                            .combinations(2)
-                            .first { (a, n) -> a % n == 0 }
-                }
-                .sumBy { (a, n) -> a / n }
+            .map {
+                it.sortedDescending()
+                    .combinations(2)
+                    .map { it.toList() }
+                    .first { (a, n) -> a % n == 0 }
+            }
+            .sumBy { (a, n) -> a / n }
     }
 
     private fun Sequence<String>.parse() = this
-            .map { it.split(WHITESPACE_REGEX) }
-            .map { it.map(String::toInt) }
+        .map { it.split(WHITESPACE_REGEX) }
+        .map { it.map(String::toInt) }
 }

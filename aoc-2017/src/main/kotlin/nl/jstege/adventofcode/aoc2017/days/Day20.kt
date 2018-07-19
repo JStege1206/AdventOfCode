@@ -1,7 +1,5 @@
 package nl.jstege.adventofcode.aoc2017.days
 
-import com.google.common.net.HttpHeaders.ORIGIN
-import javafx.geometry.Point3D
 import nl.jstege.adventofcode.aoccommon.days.Day
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -10,21 +8,19 @@ import kotlin.math.sqrt
  *
  * @author Jelle Stege
  */
-class Day20 : Day() {
+class Day20 : Day(title = "Particle Swarm") {
     private companion object Configuration {
+        private const val TIME_LIMIT = 100000L
         private const val INPUT_PATTERN_STRING = """[a-z]=<(-?\d+),(-?\d+),(-?\d+)>"""
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
-        private val TIME_LIMIT = 100000L
         private val ORIGIN = Point3D(0, 0, 0)
     }
 
-    override val title: String = "Particle Swarm"
-
-    override fun first(input: Sequence<String>): Any {//TODO: implement
+    override fun first(input: Sequence<String>): Any {
         return input.parse()
-                .withIndex()
-                .minBy { (_, it) -> it.positionAtTime(TIME_LIMIT).manhattan(ORIGIN) }!!
-                .index
+            .withIndex()
+            .minBy { (_, it) -> it.positionAtTime(TIME_LIMIT).manhattan(ORIGIN) }!!
+            .index
     }
 
     override fun second(input: Sequence<String>): Any {
@@ -43,22 +39,22 @@ class Day20 : Day() {
     }
 
     private fun Sequence<String>.parse() = this
-            .map { it.split(", ") }
-            .map { (rp, rv, ra) ->
-                val p = INPUT_REGEX.matchEntire(rp)!!.groupValues
-                        .drop(1) //Drop the first match, the whole string
-                        .map { it.toLong() } //All remaining elements are numbers
-                        .let { (x, y, z) -> Point3D(x, y, z) }
-                val v = INPUT_REGEX.matchEntire(rv)!!.groupValues
-                        .drop(1) //Drop the first match, the whole string
-                        .map { it.toLong() } //All remaining elements are numbers
-                        .let { (x, y, z) -> Point3D(x, y, z) }
-                val a = INPUT_REGEX.matchEntire(ra)!!.groupValues
-                        .drop(1) //Drop the first match, the whole string
-                        .map { it.toLong() } //All remaining elements are numbers
-                        .let { (x, y, z) -> Point3D(x, y, z) }
-                Particle(p, v, a)
-            }
+        .map { it.split(", ") }
+        .map { (rp, rv, ra) ->
+            val p = INPUT_REGEX.matchEntire(rp)!!.groupValues
+                .drop(1) //Drop the first match, the whole string
+                .map { it.toLong() } //All remaining elements are numbers
+                .let { (x, y, z) -> Point3D(x, y, z) }
+            val v = INPUT_REGEX.matchEntire(rv)!!.groupValues
+                .drop(1) //Drop the first match, the whole string
+                .map { it.toLong() } //All remaining elements are numbers
+                .let { (x, y, z) -> Point3D(x, y, z) }
+            val a = INPUT_REGEX.matchEntire(ra)!!.groupValues
+                .drop(1) //Drop the first match, the whole string
+                .map { it.toLong() } //All remaining elements are numbers
+                .let { (x, y, z) -> Point3D(x, y, z) }
+            Particle(p, v, a)
+        }
 
     private data class Point3D(val x: Long, val y: Long, val z: Long) {
         fun manhattan(other: Point3D) = abs(x - other.x) + abs(y - other.y) + abs(z - other.z)
@@ -68,7 +64,11 @@ class Day20 : Day() {
     }
 
     private data class Particle(
-            val p: Point3D, val v: Point3D, val a: Point3D, var removed: Boolean = false) {
+        val p: Point3D,
+        val v: Point3D,
+        val a: Point3D,
+        var removed: Boolean = false
+    ) {
         fun positionAtTime(t: Long): Point3D = a * (t * (t + 1) / 2) + v * t + p
 
         /**
@@ -154,8 +154,8 @@ class Day20 : Day() {
             // We have only checked the x values of the particle, calculating the 3D position of
             // all candidates give us our real collisions. We need the first, so find that one.
             return candidates
-                    .filter { this.positionAtTime(it) == other.positionAtTime(it) }
-                    .min()
+                .filter { this.positionAtTime(it) == other.positionAtTime(it) }
+                .min()
         }
     }
 }

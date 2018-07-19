@@ -4,8 +4,10 @@ package nl.jstege.adventofcode.aoccommon.utils.machine
  * Represents a Program, which is an iterable list of Instructions belonging to a machine.
  * @author Jelle Stege
  */
-class Program(var instructions: MutableList<Instruction>,
-              val machine: Machine) : Iterable<Instruction> {
+class Program(
+    var instructions: MutableList<Instruction>,
+    val machine: Machine
+) : Iterable<Instruction> {
     init {
         machine.program = this
     }
@@ -67,14 +69,17 @@ class Program(var instructions: MutableList<Instruction>,
          * @param optimizer The optimizer to use.
          * @return A [Program] corresponding to the given list of [Instruction] representations
          */
-        @JvmStatic fun assemble(rawInstructions: List<String>, machine: Machine,
-                                instructionParser: (List<String>) -> List<Instruction>,
-                                optimizer: (MutableList<Instruction>) ->
-                               MutableList<Instruction> = { it }) =
-                Program(optimizer(instructionParser(rawInstructions)
-                        .onEach { it.machine = machine }
-                        .toMutableList()
-                ), machine)
+        @JvmStatic
+        fun assemble(
+            rawInstructions: List<String>, machine: Machine,
+            instructionParser: (List<String>) -> List<Instruction>,
+            optimizer: (MutableList<Instruction>) ->
+            MutableList<Instruction> = { it }
+        ) =
+            Program(optimizer(instructionParser(rawInstructions)
+                .onEach { it.machine = machine }
+                .toMutableList()
+            ), machine)
 
     }
 }

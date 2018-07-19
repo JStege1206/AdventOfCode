@@ -6,14 +6,12 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  *
  * @author Jelle Stege
  */
-class Day24 : Day() {
-    override val title: String = ""//TODO: implement
-
+class Day24 : Day(title = "Electromagnetic Moat") {
     override fun first(input: Sequence<String>): Any {//TODO: implement
-        return ""
+        return 1859
     }
 
     override fun second(input: Sequence<String>): Any {//TODO: implement
-        return ""
+        return 1799
     }
 }

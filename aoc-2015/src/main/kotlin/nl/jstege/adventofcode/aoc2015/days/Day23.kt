@@ -10,12 +10,10 @@ import nl.jstege.adventofcode.aoccommon.utils.machine.Simulator
  *
  * @author Jelle Stege
  */
-class Day23 : Day() {
+class Day23 : Day(title = "Opening the Turing Lock") {
     private companion object Configuration {
         private const val OUTPUT_REGISTER = "b"
     }
-
-    override val title: String = "Opening the Turing Lock"
 
     override fun first(input: Sequence<String>) = run(input.toList(), mapOf())
 
@@ -25,9 +23,12 @@ class Day23 : Day() {
         val machine = Machine()
         machine.registers.putAll(registers)
 
-        Simulator(Program.Assembler
-                .assemble(input, machine, { SimpleInstructionSet.assemble(it, machine) }),
-                machine
+        Simulator(
+            Program.assemble(
+                input,
+                machine,
+                { SimpleInstructionSet.assemble(it, machine) }),
+            machine
         ).run()
         return machine.registers[OUTPUT_REGISTER]
     }

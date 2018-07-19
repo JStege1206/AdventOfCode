@@ -10,30 +10,30 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.scan
  *
  * @author Jelle Stege
  */
-class Day03 : Day() {
+class Day03 : Day(title = "Perfectly Spherical Houses in a Vacuum") {
     private companion object Configuration {
         private val DIRECTION_MODIFIERS = mapOf(
-                '^' to Point::north,
-                'v' to Point::south,
-                '<' to Point::west,
-                '>' to Point::east
+            '^' to Point::incY,
+            'v' to Point::decY,
+            '<' to Point::decX,
+            '>' to Point::incX
         )
     }
 
-    override val title: String = "Perfectly Spherical Houses in a Vacuum"
-    
     override fun first(input: Sequence<String>): Any = input.head.asSequence()
-            .scan(Point.ZERO_ZERO) { location, c -> DIRECTION_MODIFIERS[c]!!(location) }
-            .toSet()
-            .size
+        .scan(Point.ZERO_ZERO) { location, c -> DIRECTION_MODIFIERS[c]!!(location) }
+        .toSet()
+        .size
 
-    override fun second(input: Sequence<String>): Any = input.head.asSequence()
-            .withIndex()
-            .scan(Point.ZERO_ZERO to Point.ZERO_ZERO) { (s, r), (i, c) ->
-                if (i.isEven()) DIRECTION_MODIFIERS[c]!!(s) to r
-                else s to DIRECTION_MODIFIERS[c]!!(r)
-            }
-            .flatMap { (s, r) -> sequenceOf(s, r) }
-            .toSet()
-            .size
+    override fun second(input: Sequence<String>): Any = input.head
+        .asSequence()
+        .withIndex()
+        .scan(Point.ZERO_ZERO to Point.ZERO_ZERO) { (s, r), (i, c) ->
+            if (i.isEven()) Pair(DIRECTION_MODIFIERS[c]!!(s), r)
+            else Pair(s, DIRECTION_MODIFIERS[c]!!(r))
+        }
+        .flatMap { (s, r) -> sequenceOf(s, r) }
+        .toSet()
+        .size
+    
 }

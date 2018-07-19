@@ -4,31 +4,30 @@ import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.Point
 import nl.jstege.adventofcode.aoccommon.utils.extensions.bitCount
 import nl.jstege.adventofcode.aoccommon.utils.extensions.isOdd
+import java.util.*
 
 /**
  *
  * @author Jelle Stege
  */
-class Day13 : Day() {
+class Day13 : Day(title = "A Maze of Twisty Little Cubicles") {
     private companion object Configuration {
         private val SRC_POS = Point.ONE_ONE
         private val DEST_POS = Point.of(31, 39)
-        private val MAX_STEPS = 50
+        private const val MAX_STEPS = 50
     }
-    
-    override val title: String = "A Maze of Twisty Little Cubicles"
 
     override fun first(input: Sequence<String>): Any =
-            findPathLength(SRC_POS, DEST_POS, input.first().toInt())
+        findPathLength(SRC_POS, DEST_POS, input.first().toInt())
 
     override fun second(input: Sequence<String>): Any =
-            getUniqueCoords(SRC_POS, MAX_STEPS, input.first().toInt()).size
+        getUniqueCoords(SRC_POS, MAX_STEPS, input.first().toInt()).size
 
 
     private fun isWall(p: Point, add: Int): Boolean = isWall(p.x, p.y, add)
 
     private fun isWall(x: Int, y: Int, add: Int): Boolean =
-            ((x * x + 3 * x + 2 * x * y + y + y * y) + add).bitCount().isOdd()
+        ((x * x + 3 * x + 2 * x * y + y + y * y) + add).bitCount().isOdd()
 
     private fun findPathLength(start: Point, dest: Point, wallModifier: Int): Int {
         val toVisit = hashSetOf(start)
@@ -42,7 +41,11 @@ class Day13 : Day() {
         return pathLength
     }
 
-    private fun getUniqueCoords(start: Point, maxSteps: Int, wallModifier: Int): Set<Point> {
+    private fun getUniqueCoords(
+        start: Point, 
+        maxSteps: Int, 
+        wallModifier: Int
+    ): Set<Point> {
         val toVisit = hashSetOf(start)
         val visited = hashSetOf<Point>()
 
@@ -58,9 +61,7 @@ class Day13 : Day() {
         visited += queue
         queue += queue.flatMap {
             it.neighbors4
-                    .filter {
-                        it.y >= 0 && it.x >= 0 && !isWall(it, wallModifier) && it !in visited
-                    }
+                .filter { it.y >= 0 && it.x >= 0 && !isWall(it, wallModifier) && it !in visited }
         }
         queue.removeAll(visited)
     }

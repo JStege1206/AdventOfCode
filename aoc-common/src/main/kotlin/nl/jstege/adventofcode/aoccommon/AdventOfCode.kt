@@ -29,14 +29,14 @@ import kotlin.system.measureTimeMillis
  */
 abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
     val output by parser.storing(
-            help = "The file to print output to. " +
-                    "If not present, will print to standard out.") {
+        help = "The file to print output to. If not present, will print to standard out."
+    ) {
         PrintStream(FileOutputStream(this, true))
     }.default(System.out!!)
 
     val days by parser.storing(
-            help = "The day assignments to execute. " +
-                    "If not present, will execute all 25 Days.") {
+        help = "The day assignments to execute. If not present, will execute all 25 Days."
+    ) {
         getAssignments<Day>(assignmentLocation, this.split(',').map { it.toInt() })
     }.default(getAssignments<Day>(assignmentLocation, (1..25).toList()))
 
@@ -46,7 +46,7 @@ abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
      */
     override fun toString(): String {
         return this::class.java.simpleName
-                .replace("([A-Z0-9]+)".toRegex(), " $1").trim()
+            .replace("([A-Z0-9]+)".toRegex(), " $1").trim()
     }
 
     companion object Runner {
@@ -58,8 +58,10 @@ abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
         fun run(aoc: AdventOfCode) {
             aoc.run {
                 output.println(aoc)
-                output.printf("Started on %s%n",
-                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().time))
+                output.printf(
+                    "Started on %s%n",
+                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().time)
+                )
                 output.println("Running assignments: ")
                 days.joinToString(", ") { it::class.java.simpleName }.let {
                     val tokens = StringTokenizer(it)
@@ -81,13 +83,15 @@ abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
 //                output.println(days.joinToString(", ") { it::class.java.simpleName })
                 val timeTaken = measureTimeMillis {
                     days.onEach { it.run() } // Start all days.
-                            .asSequence() // Continue as sequence to print when output present.)
-                            .onEach { output.println("-".repeat(COLUMN_SIZE)) }
-                            .forEach(output::println) //toString blocks until output present
+                        .asSequence() // Continue as sequence to print when output present.)
+                        .onEach { output.println("-".repeat(COLUMN_SIZE)) }
+                        .forEach(output::println) //toString blocks until output present
                 }
                 output.println("-".repeat(COLUMN_SIZE))
-                output.printf("Total time taken: %ss%n",
-                        DurationFormatUtils.formatDurationHMS(timeTaken))
+                output.printf(
+                    "Total time taken: %ss%n",
+                    DurationFormatUtils.formatDurationHMS(timeTaken)
+                )
             }
         }
 
@@ -98,16 +102,18 @@ abstract class AdventOfCode(parser: ArgParser, assignmentLocation: String) {
          * @param assignmentIds The ids of the assignments to select.
          * @return A list of all instances of [Day], or an empty list if none can be found.
          */
-        private inline fun <reified E> getAssignments(location: String,
-                                                      assignmentIds: List<Int>): List<E> {
+        private inline fun <reified E> getAssignments(
+            location: String,
+            assignmentIds: List<Int>
+        ): List<E> {
             val assignments = assignmentIds.map { String.format("Day%02d", it) }
             return Reflections(location)
-                    .getSubTypesOf(E::class.java)
-                    .filterNotNull()
-                    .filter { it.simpleName in assignments }
-                    .sortedBy { it.simpleName }
-                    .map { it.newInstance() }
-                    .toList()
+                .getSubTypesOf(E::class.java)
+                .filterNotNull()
+                .filter { it.simpleName in assignments }
+                .sortedBy { it.simpleName }
+                .map { it.newInstance() }
+                .toList()
         }
     }
 }

@@ -6,7 +6,7 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  *
  * @author Jelle Stege
  */
-class Day15 : Day() {
+class Day15 : Day(title = "Dueling Generators") {
     private companion object Configuration {
         private const val MASK = 0xFFFFL
         private const val DIVISOR = 2147483647
@@ -21,30 +21,28 @@ class Day15 : Day() {
         private const val SECOND_MULTIPLES_B = 8L
     }
 
-    override val title: String = "Dueling Generators"
-
     override fun first(input: Sequence<String>): Any {
         return input
-                .map { it.split(" ") }
-                .map { (_, _, _, _, init) -> init.toLong() }
-                .toList()
-                .let { (a, b) -> Generator(a, FACTOR_A) to Generator(b, FACTOR_B) }
-                .let { (a, b) ->
-                    (0 until FIRST_ITERATIONS).count { a.next() and MASK == b.next() and MASK }
-                }
+            .map { it.split(" ") }
+            .map { (_, _, _, _, init) -> init.toLong() }
+            .toList()
+            .let { (a, b) -> Generator(a, FACTOR_A) to Generator(b, FACTOR_B) }
+            .let { (a, b) ->
+                (0 until FIRST_ITERATIONS).count { a.next() and MASK == b.next() and MASK }
+            }
     }
 
     override fun second(input: Sequence<String>): Any {
         return input
-                .map { it.split(" ") }
-                .map { (_, _, _, _, init) -> init.toLong() }
-                .toList()
-                .let { (a, b) -> Generator(a, FACTOR_A) to Generator(b, FACTOR_B) }
-                .let { (a, b) ->
-                    (0 until SECOND_ITERATIONS).count {
-                        a.next(SECOND_MULTIPLES_A) and MASK == b.next(SECOND_MULTIPLES_B) and MASK
-                    }
+            .map { it.split(" ") }
+            .map { (_, _, _, _, init) -> init.toLong() }
+            .toList()
+            .let { (a, b) -> Generator(a, FACTOR_A) to Generator(b, FACTOR_B) }
+            .let { (a, b) ->
+                (0 until SECOND_ITERATIONS).count {
+                    a.next(SECOND_MULTIPLES_A) and MASK == b.next(SECOND_MULTIPLES_B) and MASK
                 }
+            }
     }
 
     private class Generator(init: Long, val factor: Long) {

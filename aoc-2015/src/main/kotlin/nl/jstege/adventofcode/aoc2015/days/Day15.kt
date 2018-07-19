@@ -3,84 +3,77 @@ package nl.jstege.adventofcode.aoc2015.days
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
 import nl.jstege.adventofcode.aoccommon.utils.extensions.component7
+import kotlin.math.max
+import kotlin.reflect.KProperty1
 
 /**
  *
  * @author Jelle Stege
  */
-class Day15 : Day() {
+class Day15 : Day(title = "Science for Hungry People") {
     private companion object Configuration {
-        private val TEA_SPOONS_AMOUNT = 100
-        private val NEEDED_CALORIES = 500
+        private const val TEA_SPOONS_AMOUNT = 100
+        private const val NEEDED_CALORIES = 500
+        private const val SPRINKLES = "Sprinkles"
+        private const val BUTTERSCOTCH = "Butterscotch"
+        private const val CHOCOLATE = "Chocolate"
+        private const val CANDY = "Candy"
     }
 
-    override val title: String = "Science for Hungry People"
-    
     override fun first(input: Sequence<String>) = input
-            .map(Ingredient.Parser::parse)
-            .associate { it.name to it }
-            .calculateMaxScore()
+        .map(Ingredient.Parser::parse)
+        .associate { it.name to it }
+        .calculateMaxScore()
 
 
     override fun second(input: Sequence<String>) = input
-            .map(Ingredient.Parser::parse)
-            .associate { it.name to it }
-            .calculateMaxScore(true)
+        .map(Ingredient.Parser::parse)
+        .associate { it.name to it }
+        .calculateMaxScore(true)
 
     private fun Map<String, Ingredient>.calculateMaxScore(useCalories: Boolean = false): Int {
         var score = 0
-        var sprinkle = 0
-        while (sprinkle < TEA_SPOONS_AMOUNT) {
-            var butterscotch = 0
-            while (butterscotch < TEA_SPOONS_AMOUNT - butterscotch) {
-                var chocolate = 0
-                while (chocolate < TEA_SPOONS_AMOUNT - butterscotch - sprinkle) {
+        (0 until TEA_SPOONS_AMOUNT).forEach { sprinkle ->
+            (0 until TEA_SPOONS_AMOUNT - sprinkle).forEach { butterscotch ->
+                (0 until TEA_SPOONS_AMOUNT - butterscotch - sprinkle).forEach { chocolate ->
                     val candy = TEA_SPOONS_AMOUNT - chocolate - butterscotch - sprinkle
-                    val tScore = this.calculateScore(sprinkle, butterscotch, chocolate, candy,
-                            useCalories)
-
-                    if (tScore > score) {
-                        score = tScore
-                    }
-                    chocolate++
+                    score = max(
+                        score,
+                        calculateScore(
+                            sprinkle to this[SPRINKLES]!!,
+                            butterscotch to this[BUTTERSCOTCH]!!,
+                            chocolate to this[CHOCOLATE]!!,
+                            candy to this[CANDY]!!,
+                            useCalories = useCalories
+                        )
+                    )
                 }
-                butterscotch++
             }
-            sprinkle++
         }
         return score
     }
 
-    private fun Map<String, Ingredient>.calculateScore(
-            sprinkle: Int, butterscotch: Int, chocolate: Int, candy: Int,
-            useCalories: Boolean): Int {
-        val sprinkles = this["Sprinkles"]!!
-        val butterscotches = this["Butterscotch"]!!
-        val chocolates = this["Chocolate"]!!
-        val candies = this["Candy"]!!
+    private fun calculateScore(vararg recipe: Pair<Int, Ingredient>, useCalories: Boolean): Int {
+        fun calculateScore(
+            recipe: Array<out Pair<Int, Ingredient>>,
+            property: KProperty1<Ingredient, Int>
+        ) = recipe.fold(0) { score, (amt, ing) -> score + amt * ing.let(property) }
 
-        val capScore = sprinkle * sprinkles.capacity + butterscotch * butterscotches.capacity +
-                chocolate * chocolates.capacity + candy * candies.capacity
-        val durScore = sprinkle * sprinkles.durability + butterscotch * butterscotches.durability +
-                chocolate * chocolates.durability + candy * candies.durability
-        val flaScore = sprinkle * sprinkles.flavor + butterscotch * butterscotches.flavor +
-                chocolate * chocolates.flavor + candy * candies.flavor
-        val texScore = sprinkle * sprinkles.texture + butterscotch * butterscotches.texture +
-                chocolate * chocolates.texture + candy * candies.texture
-        val calories = sprinkle * sprinkles.calories + butterscotch * butterscotches.calories +
-                chocolate * chocolates.calories + candy * candies.calories
-        if (useCalories && calories != NEEDED_CALORIES) {
-            return 0
-        }
-
-        return Math.max(capScore, 0) *
-                Math.max(durScore, 0) *
-                Math.max(flaScore, 0) *
-                Math.max(texScore, 0)
+        return if (useCalories && calculateScore(recipe, Ingredient::calories) != NEEDED_CALORIES) 0
+        else Math.max(calculateScore(recipe, Ingredient::capacity), 0) *
+                Math.max(calculateScore(recipe, Ingredient::durability), 0) *
+                Math.max(calculateScore(recipe, Ingredient::flavor), 0) *
+                Math.max(calculateScore(recipe, Ingredient::texture), 0)
     }
 
-    private data class Ingredient(val name: String, val capacity: Int, val durability: Int,
-                                  val flavor: Int, val texture: Int, val calories: Int) {
+    private data class Ingredient(
+        val name: String,
+        val capacity: Int,
+        val durability: Int,
+        val flavor: Int,
+        val texture: Int,
+        val calories: Int
+    ) {
         companion object Parser {
             private val INPUT_REGEX = ("(\\w+): " +
                     "capacity (-?\\d+), " +
@@ -88,12 +81,19 @@ class Day15 : Day() {
                     "texture (-?\\d+), " +
                     "calories (-?\\d+)").toRegex()
 
+            @JvmStatic
             fun parse(input: String): Ingredient {
-                val (_, name, capacity, durability, flavor, texture, calories) = INPUT_REGEX
-                        .matchEntire(input)?.groupValues
-                        ?: throw IllegalArgumentException("Invalid input")
-                return Ingredient(name, capacity.toInt(), durability.toInt(),
-                        flavor.toInt(), texture.toInt(), calories.toInt())
+                return INPUT_REGEX.matchEntire(input)?.groupValues
+                    ?.let { (_, name, capacity, durability, flavor, texture, calories) ->
+                        Ingredient(
+                            name,
+                            capacity.toInt(),
+                            durability.toInt(),
+                            flavor.toInt(),
+                            texture.toInt(),
+                            calories.toInt()
+                        )
+                    } ?: throw IllegalArgumentException("Invalid input")
             }
         }
     }

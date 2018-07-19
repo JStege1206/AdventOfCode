@@ -14,10 +14,10 @@ class Resource {
          *         or an empty list if it does not exist.
          */
         fun readLines(filename: String): List<String> =
-                this::class.java.classLoader.getResourceAsStream(filename)
-                        ?.bufferedReader()
-                        ?.readLines()
-                        ?: emptyList()
+            this::class.java.classLoader.getResourceAsStream(filename)
+                ?.bufferedReader()
+                ?.readLines()
+                    ?: emptyList()
 
         /**
          * Returns the contents of the file as a sequence of lines.
@@ -27,9 +27,9 @@ class Resource {
          * or an empty sequence if it does not exist.
          */
         fun readLinesAsSequence(filename: String): Sequence<String> =
-                this::class.java.classLoader.getResourceAsStream(filename)
-                        ?.bufferedReader()
-                        ?.readLines()?.asSequence()
-                        ?: emptySequence()
+            this::class.java.classLoader.getResourceAsStream(filename)
+                ?.bufferedReader()
+                ?.readLines()?.asSequence()
+                    ?: emptySequence()
     }
 }

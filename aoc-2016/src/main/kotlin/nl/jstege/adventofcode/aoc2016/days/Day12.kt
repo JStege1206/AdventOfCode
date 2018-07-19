@@ -10,14 +10,12 @@ import nl.jstege.adventofcode.aoccommon.utils.machine.Simulator
  *
  * @author Jelle Stege
  */
-class Day12 : Day() {
+class Day12 : Day(title = "Leonardo's Monorail") {
     private companion object Configuration {
         private const val OUTPUT_REGISTER = "a"
         private const val SECOND_INIT_REGISTER_KEY = "c"
         private const val SECOND_INIT_REGISTER_VAL = 1
     }
-
-    override val title: String = "Leonardo's Monorail"
 
     override fun first(input: Sequence<String>): Any = run(input.toList(), mapOf())
 

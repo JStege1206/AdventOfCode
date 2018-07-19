@@ -7,18 +7,16 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.transpose
  *
  * @author Jelle Stege
  */
-class Day06 : Day() {
-    override val title: String = "Signals and Noise"
-
+class Day06 : Day(title = "Signals and Noise") {
     override fun first(input: Sequence<String>): Any = input.toList()
-            .map(String::toList)
-            .transpose()
-            .map { it.groupBy { it }.maxBy { it.value.size }?.key }
-            .joinToString("")
+        .map(String::toList)
+        .transpose()
+        .map { it.groupBy { it }.maxBy { it.value.size }?.key }
+        .joinToString("")
 
     override fun second(input: Sequence<String>): Any = input.toList()
-            .map(String::toList)
-            .transpose()
-            .map { it.groupBy { it }.minBy { it.value.size }?.key }
-            .joinToString("")
+        .map(String::toList)
+        .transpose()
+        .map { it.groupBy { it }.minBy { it.value.size }?.key }
+        .joinToString("")
 }

@@ -8,14 +8,12 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.head
  *
  * @author Jelle Stege
  */
-class Day20 : Day() {
+class Day20 : Day(title = "Infinite Elves and Infinite Houses") {
     private companion object Configuration {
         private const val FIRST_PRESENTS_PER_HOUSE = 10
         private const val SECOND_PRESENTS_PER_HOUSE = 11
         private const val MAX_HOUSES_VISITED = 50
     }
-
-    override val title: String = "Infinite Elves and Infinite Houses"
 
     override fun first(input: Sequence<String>): Any {
         val wantedPresents = input.head.toInt()
@@ -23,7 +21,7 @@ class Day20 : Day() {
         var elf = 1
         var presents = 0
         while (elf <= wantedPresents / 10 && presents <= wantedPresents) {
-            val elfList = elves.getOrPut(elf, { mutableListOf() })
+            val elfList = elves.getOrPut(elf) { mutableListOf() }
             elfList += elf
             presents = elfList.sum() * FIRST_PRESENTS_PER_HOUSE
 
@@ -32,7 +30,7 @@ class Day20 : Day() {
             }
 
             elfList.filter { elf + it <= wantedPresents / 10 }
-                    .forEach { elves.getOrPut(elf + it, { mutableListOf() }) += it }
+                .forEach { elves.getOrPut(elf + it) { mutableListOf() } += it }
             elf++
         }
         return elf
@@ -45,7 +43,7 @@ class Day20 : Day() {
         var presents = 0
         while (elf <= (wantedPresents / 10) && presents <= wantedPresents) {
             if (elf !in elves) {
-                elves.put(elf, mutableListOf())
+                elves[elf] = mutableListOf()
             }
             val elfList = elves.remove(elf)!!
             elfList += elf
@@ -58,7 +56,7 @@ class Day20 : Day() {
 
             elfList.filter {
                 (elf + it < wantedPresents / 10) && (elf + it <= it * MAX_HOUSES_VISITED)
-            }.forEach { elves.getOrPut(elf + it, { mutableListOf() }) += it }
+            }.forEach { elves.getOrPut(elf + it) { mutableListOf() } += it }
             elf++
         }
         return elf

@@ -13,14 +13,14 @@ class ByteArrayTest {
     @Test
     fun prefixedWithZeroesTest() {
         val ba = byteArrayOf(0, 0)
-        assertTrue(ba.prefixedWithZeroes(4))
-        assertFalse(ba.prefixedWithZeroes(5))
+        assertTrue(ba.isPrefixedWithZeroes(4))
+        assertFalse(ba.isPrefixedWithZeroes(5))
         val ba2 = byteArrayOf(0, 0, 1)
-        assertTrue(ba2.prefixedWithZeroes(5)) //The first 4 bits of the third byte are 0
-        assertFalse(ba2.prefixedWithZeroes(6))
-        assertTrue(ba2.prefixedWithZeroes(1))
-        assertFalse(byteArrayOf().prefixedWithZeroes(1))
-        assertTrue(byteArrayOf().prefixedWithZeroes(0))
+        assertTrue(ba2.isPrefixedWithZeroes(5)) //The first 4 bits of the third byte are 0
+        assertFalse(ba2.isPrefixedWithZeroes(6))
+        assertTrue(ba2.isPrefixedWithZeroes(1))
+        assertFalse(byteArrayOf().isPrefixedWithZeroes(1))
+        assertTrue(byteArrayOf().isPrefixedWithZeroes(0))
     }
 
     @Test

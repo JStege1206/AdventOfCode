@@ -9,22 +9,23 @@ enum class Direction constructor(val mod: Point) {
 
     constructor(x: Int, y: Int) : this(Point.of(x, y))
 
-    val opposite
-        get() = when (this) {
+    val opposite by lazy {
+        when (this) {
             NORTH -> SOUTH
             EAST -> WEST
             SOUTH -> NORTH
             WEST -> EAST
         }
+    }
 
     val forward by lazy { this }
 
     val right by lazy {
         when (this) {
-            Direction.NORTH -> EAST
-            Direction.EAST -> SOUTH
-            Direction.SOUTH -> WEST
-            Direction.WEST -> NORTH
+            NORTH -> EAST
+            EAST -> SOUTH
+            SOUTH -> WEST
+            WEST -> NORTH
         }
     }
 
@@ -32,10 +33,10 @@ enum class Direction constructor(val mod: Point) {
 
     val left by lazy {
         when (this) {
-            Direction.NORTH -> WEST
-            Direction.EAST -> NORTH
-            Direction.SOUTH -> EAST
-            Direction.WEST -> SOUTH
+            NORTH -> WEST
+            EAST -> NORTH
+            SOUTH -> EAST
+            WEST -> SOUTH
         }
     }
 }

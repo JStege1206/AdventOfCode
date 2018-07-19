@@ -51,9 +51,9 @@ abstract class DayTester(val day: Day) {
          * @return A list with each element having a solution to an assignment for this [day].
          */
         private fun loadOutput(c: Class<out Day>): List<String> = this::class.java.classLoader
-                .getResourceAsStream("output/${c.simpleName.toLowerCase()}.txt")
-                ?.bufferedReader()
-                ?.readLines() ?: throw IllegalStateException("No answers present")
+            .getResourceAsStream("output/${c.simpleName.toLowerCase()}.txt")
+            ?.bufferedReader()
+            ?.readLines() ?: throw IllegalStateException("No answers present")
     }
 
     /**

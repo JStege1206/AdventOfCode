@@ -7,15 +7,13 @@ import nl.jstege.adventofcode.aoccommon.utils.Point
  *
  * @author Jelle Stege
  */
-class Day22 : Day() {
+class Day22 : Day(title = "Grid Computing") {
     private companion object Configuration {
         private const val INPUT_PATTERN_STRING =
-                """^/dev/grid/node-x(\d+)-y(\d+)\s+(\d+)T\s+(\d+)T.*$"""
+            """^/dev/grid/node-x(\d+)-y(\d+)\s+(\d+)T\s+(\d+)T.*$"""
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
         private val DESTINATION_POINT = Point.ZERO_ZERO
     }
-
-    override val title: String = "Grid Computing"
 
     override fun first(input: Sequence<String>): Any {
         return input.parse().let { grid ->
@@ -28,11 +26,11 @@ class Day22 : Day() {
     }
 
     private fun Sequence<String>.parse(): List<Node> = this.drop(2)
-            .map { INPUT_REGEX.matchEntire(it)!!.groupValues }
-            .map { (_, x, y, size, used) ->
-                Node(Point.of(x.toInt(), y.toInt()), size.toInt(), used.toInt())
-            }
-            .toList()
+        .map { INPUT_REGEX.matchEntire(it)!!.groupValues }
+        .map { (_, x, y, size, used) ->
+            Node(Point.of(x.toInt(), y.toInt()), size.toInt(), used.toInt())
+        }
+        .toList()
 
     private data class Node(val coords: Point, val size: Int, val used: Int) {
         val avail: Int

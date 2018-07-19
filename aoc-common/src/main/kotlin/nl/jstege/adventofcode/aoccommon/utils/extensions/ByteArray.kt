@@ -1,7 +1,5 @@
 package nl.jstege.adventofcode.aoccommon.utils.extensions
 
-import kotlin.experimental.and
-
 /**
  * Extension methods for ByteArrays.
  * @author Jelle Stege
@@ -15,13 +13,13 @@ import kotlin.experimental.and
  * @param amount The amount of zeroes the given ByteArray should start with.
  * @return True if the given array starts with the given amount of zeroes, false if otherwise.
  */
-fun ByteArray.prefixedWithZeroes(amount: Int) = when {
+fun ByteArray.isPrefixedWithZeroes(amount: Int) = when {
     amount > this.size * 2 -> false
     else -> this.asSequence()
-            .take(amount / 2 + if (amount.isOdd()) 1 else 0)
-            .flatMap { sequenceOf(it.toInt() ushr 4, it.toInt() and 0x0F) }
-            .withIndex()
-            .all { (i, it) -> i == amount || it == 0 }
+        .take(amount / 2 + if (amount.isOdd()) 1 else 0)
+        .flatMap { sequenceOf(it.toInt() ushr 4, it.toInt() and 0x0F) }
+        .withIndex()
+        .all { (i, it) -> i == amount || it == 0 }
 }
 
 /**
@@ -32,7 +30,7 @@ fun ByteArray.prefixedWithZeroes(amount: Int) = when {
  * @return The string representation of the given ByteArray in hexadecimal format.
  */
 fun ByteArray.toHexString(n: Int = this.size): String =
-        CharArray(Math.min(this.size, n) * 2) {
-            if (it.isEven()) (this[it / 2].toUnsignedInt() ushr 4).toHexChar()
-            else (this[it / 2].toUnsignedInt() and 0x0F).toHexChar()
-        }.let { String(it) }
+    CharArray(Math.min(this.size, n) * 2) {
+        if (it.isEven()) (this[it / 2].toUnsignedInt() ushr 4).toHexChar()
+        else (this[it / 2].toUnsignedInt() and 0x0F).toHexChar()
+    }.let { String(it) }

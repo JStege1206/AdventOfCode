@@ -10,7 +10,7 @@ import nl.jstege.adventofcode.aoccommon.utils.machine.Simulator
  *
  * @author Jelle Stege
  */
-class Day23 : Day() {
+class Day23 : Day( title = "Safe Cracking") {
     private companion object {
         private const val INIT_REGISTER_KEY = "a"
         private const val OUTPUT_REGISTER = "a"
@@ -19,23 +19,26 @@ class Day23 : Day() {
         private const val SECOND_INIT_REGISTER_VAL = 12
     }
 
-    override val title: String = "Safe Cracking"
-
-    override fun first(input: Sequence<String>): Any = run(input.toList(), mapOf(
+    override fun first(input: Sequence<String>): Any = run(
+        input.toList(), mapOf(
             INIT_REGISTER_KEY to FIRST_INIT_REGISTER_VAL
-    ))
+        )
+    )
 
-    override fun second(input: Sequence<String>): Any = run(input.toList(), mapOf(
+    override fun second(input: Sequence<String>): Any = run(
+        input.toList(), mapOf(
             INIT_REGISTER_KEY to SECOND_INIT_REGISTER_VAL
-    ))
+        )
+    )
 
     private fun run(input: List<String>, registers: Map<String, Int>): Int {
         val machine = Machine()
         machine.registers.putAll(registers)
 
         Simulator(Program.assemble(input, machine,
-                { Assembunny.assemble(it, machine) },
-                { Assembunny.optimize(it) }), machine).run()
+            { Assembunny.assemble(it, machine) },
+            { Assembunny.optimize(it) }), machine
+        ).run()
 
         return machine.registers[OUTPUT_REGISTER]
     }

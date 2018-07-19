@@ -60,8 +60,8 @@ fun <E> Collection<E>.permutations(): Sequence<List<E>> = buildSequence {
  * @param n The size of the combinations.
  * @return A sequence of all combinations.
  */
-fun <E> Collection<E>.combinations(n: Int): Sequence<List<E>> {
-    fun IntArray.validCombination(@Suppress("NAME_SHADOWING") n: Int, k: Int): Boolean {
+fun <E> Collection<E>.combinations(n: Int): Sequence<Set<E>> {
+    fun IntArray.valid(@Suppress("NAME_SHADOWING") n: Int, k: Int): Boolean {
         if (this.size != k) {
             return false
         }
@@ -79,21 +79,27 @@ fun <E> Collection<E>.combinations(n: Int): Sequence<List<E>> {
 
     return buildSequence {
         val dataSet = this@combinations.toList()
-        val combination = IntArray(n) { it }
-        while (combination.validCombination(dataSet.size, n)) {
-            yield(combination.map { dataSet[it] })
+        val indices = IntArray(n) { it }
+        while (indices.valid(dataSet.size, n)) {
+            yield(indices.map { dataSet[it] }.toSet())
             var i = n - 1
-            while (i > 0 && combination[i] == dataSet.size - n + i) {
+            while (i > 0 && indices[i] == dataSet.size - n + i) {
                 i--
             }
-            combination[i]++
+            indices[i]++
 
             while (i < n - 1) {
-                combination[i + 1] = combination[i] + 1
+                indices[i + 1] = indices[i] + 1
                 i++
             }
         }
     }
+}
+
+
+fun <E : Any> List<E>.cycle(): Sequence<E> {
+    var i = 0
+    return generateSequence { this[i++ % this.size] }
 }
 
 /**
@@ -109,8 +115,6 @@ fun <E> MutableList<E>.swap(i: Int, j: Int) {
     this[j] = t
 }
 
-operator fun <E> List<E>.times(n: Int): List<E> = (0 until n).flatMap { this }
-
 fun <E> List<E>.reverse(start: Int, length: Int): List<E> =
         (start until start + length)
                 .zipWithReverse()
@@ -120,4 +124,3 @@ fun <E> List<E>.reverse(start: Int, length: Int): List<E> =
                     list.swap(f % this.size, s % this.size)
                     list
                 }
-

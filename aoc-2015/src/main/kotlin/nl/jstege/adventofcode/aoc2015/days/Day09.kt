@@ -7,28 +7,29 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.*
  *
  * @author Jelle Stege
  */
-class Day09 : Day() {
+class Day09 : Day(title = "All in a Single Night") {
     private companion object Configuration {
         private const val INPUT_PATTERN_STRING = """(\w+) to (\w+) = (\d+)"""
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
     }
 
-    override val title: String = "All in a Single Night"
-
     override fun first(input: Sequence<String>): Any = input
-            .parse().determineCosts().min()!!
+        .parse()
+        .determineCosts()
+        .min()!!
 
 
     override fun second(input: Sequence<String>): Any = input
-            .parse().determineCosts().max()!!
+        .parse()
+        .determineCosts()
+        .max()!!
 
 
     private fun Sequence<String>.parse(): RouteMap = this
-            .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
-            .fold(RouteMap()) { routes, (_, from, to, cost) ->
-                routes[from, to] = cost.toInt()
-                routes
-            }
+        .map { it.extractValues(INPUT_REGEX, 1, 2, 3) }
+        .transformTo(RouteMap()) { routes, (from, to, cost) -> 
+            routes[from, to] = cost.toInt()
+        }
 
     private class RouteMap {
         private val routes = mutableMapOf<String, MutableMap<String, Int>>()
@@ -40,12 +41,9 @@ class Day09 : Day() {
             routes[k2, k1] = v
         }
 
-        fun determineCosts(): Sequence<Int> = this.routes.keys.toList()
+        fun determineCosts(): Sequence<Int> =
+            this.routes.keys.toList()
                 .permutations()
-                .map {
-                    it.tail.fold(0 to it.head) { (cost, prev), current ->
-                        (cost + this[prev, current]!!) to current
-                    }.first
-                }
+                .map { it.zipWithNext { prev, current -> this[prev, current]!! }.sum() }
     }
 }

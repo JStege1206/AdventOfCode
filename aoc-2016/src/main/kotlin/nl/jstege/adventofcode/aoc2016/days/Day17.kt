@@ -5,13 +5,12 @@ import nl.jstege.adventofcode.aoccommon.utils.Point
 import nl.jstege.adventofcode.aoccommon.utils.extensions.toUnsignedInt
 import java.security.MessageDigest
 import java.util.*
-import kotlin.reflect.KFunction2
 
 /**
  *
  * @author Jelle Stege
  */
-class Day17 : Day() {
+class Day17 : Day(title = "Two Steps Forward") {
     private companion object Configuration {
         private const val FIRST = true
         private const val SECOND = !FIRST
@@ -27,27 +26,27 @@ class Day17 : Day() {
         private val DESTINATION_POINT = Point.of(MAX_X_COORD, MAX_Y_COORD)
 
         private val ASSIGNMENT_MOD = mapOf(
-                FIRST to Pair(ArrayDeque<Pair<String, Point>>::add,
-                        { p1: String, p2: String -> p1.isEmpty() || p1.length > p2.length }),
-                SECOND to Pair(ArrayDeque<Pair<String, Point>>::addFirst,
-                        { p1: String, p2: String -> p1.length < p2.length })
+            FIRST to Pair(ArrayDeque<Pair<String, Point>>::add,
+                { p1: String, p2: String -> p1.isEmpty() || p1.length > p2.length }),
+            SECOND to Pair(ArrayDeque<Pair<String, Point>>::addFirst,
+                { p1: String, p2: String -> p1.length < p2.length })
         )
     }
 
-    override val title: String = "Two Steps Forward"
-
     override fun first(input: Sequence<String>): Any =
-            findPath(input.first(), STARTING_POINT, DESTINATION_POINT, ASSIGNMENT_MOD[FIRST]!!)
+        findPath(input.first(), STARTING_POINT, DESTINATION_POINT, ASSIGNMENT_MOD[FIRST]!!)
 
     override fun second(input: Sequence<String>): Any =
-            findPath(input.first(), STARTING_POINT, DESTINATION_POINT, ASSIGNMENT_MOD[SECOND]!!)
-                    .length
+        findPath(input.first(), STARTING_POINT, DESTINATION_POINT, ASSIGNMENT_MOD[SECOND]!!)
+            .length
 
-
-    private fun findPath(input: String, source: Point, destination: Point,
-                         modifier: Pair<KFunction2<ArrayDeque<Pair<String, Point>>,
-                                 @ParameterName(name = "element") Pair<String, Point>, Any>,
-                                 (String, String) -> Boolean>): String {
+    private fun findPath(
+        input: String,
+        source: Point,
+        destination: Point,
+        modifier: Pair<ArrayDeque<Pair<String, Point>>.(Pair<String, Point>) -> Any,
+                    (String, String) -> Boolean>
+    ): String {
         val (adder, neededCondition) = modifier
         val md = MessageDigest.getInstance("MD5")
         val deque = ArrayDeque<Pair<String, Point>>(MIN_CAPACITY)

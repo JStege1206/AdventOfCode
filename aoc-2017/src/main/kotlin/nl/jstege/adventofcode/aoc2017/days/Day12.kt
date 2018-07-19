@@ -6,9 +6,7 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  *
  * @author Jelle Stege
  */
-class Day12 : Day() {
-    override val title: String = "Digital Plumber"
-
+class Day12 : Day(title = "Digital Plumber") {
     override fun first(input: Sequence<String>): Any {
         return countRoutes(0, input.buildConnections(), mutableSetOf())
     }
@@ -30,13 +28,13 @@ class Day12 : Day() {
         if (pipe in visited) return 0
         visited += pipe
         return 1 + pipes[pipe]!!
-                .asSequence()
-                .filter { it !in visited }
-                .sumBy { countRoutes(it, pipes, visited) }
+            .asSequence()
+            .filter { it !in visited }
+            .sumBy { countRoutes(it, pipes, visited) }
     }
 
     private fun Sequence<String>.buildConnections(): Map<Int, Set<Int>> = this
-            .map { it.split(" <-> ") }
-            .map { it.first().toInt() to it[1].split(", ").map { it.toInt() }.toSet() }
-            .toMap()
+        .map { it.split(" <-> ") }
+        .map { it.first().toInt() to it[1].split(", ").map { it.toInt() }.toSet() }
+        .toMap()
 }

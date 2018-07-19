@@ -6,30 +6,26 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  *
  * @author Jelle Stege
  */
-class Day08 : Day() {
-    override val title: String = "Matchsticks"
+class Day08 : Day(title = "Matchsticks") {
 
     override fun first(input: Sequence<String>): Any = input
-            .sumBy { it.length - it.unescapedLength }
+        .sumBy { it.length - it.strippedLength }
 
     override fun second(input: Sequence<String>): Any = input
-            .sumBy { it.escapedLength - it.length }
+        .sumBy { it.escapedLength - it.length }
 
-    private val String.unescapedLength: Int
+    private val String.strippedLength: Int
         get() {
-            var length = 0
-
-            var i = 1
-            while (i < this.length - 1) {
-                if (this[i] == '\\') {
-                    i += (if (this[i + 1] == 'x') 3 else 1)
+            tailrec fun calculateStrippedLength(index: Int, acc: Int): Int =
+                if (index >= this.length - 1) acc
+                else when (this[index]) {
+                    '\\' -> when (this[index + 1]) {
+                        'x' -> calculateStrippedLength(index + 4, acc + 1)
+                        else -> calculateStrippedLength(index + 2, acc + 1)
+                    }
+                    else -> calculateStrippedLength(index + 1, acc + 1)
                 }
-
-                length++
-                i++
-            }
-
-            return length
+            return calculateStrippedLength(1, 0)
         }
 
     private val String.escapedLength: Int
