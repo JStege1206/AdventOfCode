@@ -1,7 +1,5 @@
 package nl.jstege.adventofcode.aoccommon.utils.extensions
 
-import kotlin.coroutines.experimental.buildSequence
-
 /**
  * Extra utilities for lists.
  * @author Jelle Stege
@@ -34,7 +32,7 @@ fun <E> List<List<E>>.transpose(): List<List<E>> {
  * @receiver The collection to calculate permutations of.
  * @return A sequence of all permutations.
  */
-fun <E> Collection<E>.permutations(): Sequence<List<E>> = buildSequence {
+fun <E> Collection<E>.permutations(): Sequence<List<E>> = sequence {
     val a = this@permutations.toMutableList()
     val c = IntArray(this@permutations.size) { 0 }
     yield(a.toList())
@@ -77,7 +75,7 @@ fun <E> Collection<E>.combinations(n: Int): Sequence<Set<E>> {
         return true
     }
 
-    return buildSequence {
+    return sequence {
         val dataSet = this@combinations.toList()
         val indices = IntArray(n) { it }
         while (indices.valid(dataSet.size, n)) {

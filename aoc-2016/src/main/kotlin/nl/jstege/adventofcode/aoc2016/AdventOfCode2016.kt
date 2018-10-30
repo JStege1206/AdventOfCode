@@ -1,8 +1,5 @@
 package nl.jstege.adventofcode.aoc2016
 
-import com.xenomachina.argparser.ArgParser
-import com.xenomachina.argparser.DefaultHelpFormatter
-import com.xenomachina.argparser.mainBody
 import nl.jstege.adventofcode.aoccommon.AdventOfCode
 import nl.jstege.adventofcode.aoccommon.days.Day
 
@@ -10,8 +7,7 @@ import nl.jstege.adventofcode.aoccommon.days.Day
  *
  * @author Jelle Stege
  */
-class AdventOfCode2016(parser: ArgParser) :
-        AdventOfCode(parser, AdventOfCode2016::class.java.`package`.name + ".days")
+class AdventOfCode2016 : AdventOfCode(AdventOfCode2016::class.java.`package`.name + ".days")
 
 /**
  * Starts the application. Without an argument, this application will run
@@ -21,6 +17,4 @@ class AdventOfCode2016(parser: ArgParser) :
  * @param args The arguments to run the program with. Please use --help to get all possible options
  * or look at the documentation for [AdventOfCode].
  */
-fun main(args: Array<String>) = mainBody("Advent Of Code 2016") {
-    AdventOfCode.run(AdventOfCode2016(ArgParser(args, helpFormatter = DefaultHelpFormatter())))
-}
+fun main(args: Array<String>) = AdventOfCode2016().main(args)

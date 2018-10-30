@@ -1,9 +1,8 @@
 package nl.jstege.adventofcode.aoccommon.days
 
 
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import nl.jstege.adventofcode.aoccommon.utils.Resource
-import kotlin.system.measureNanoTime
 
 /**
  * Abstract implementation of a "Day" to be used for every Advent of Code assignment.
@@ -41,8 +40,8 @@ abstract class Day(private val title: String) {
      */
     fun run() {
         val input = loadInput()
-        deferredFirst = async(CommonPool) { supplier { first(input) } }
-        deferredSecond = async(CommonPool) { supplier { second(input) } }
+        deferredFirst = GlobalScope.async { supplier { first(input) } }
+        deferredSecond = GlobalScope.async { supplier { second(input) } }
     }
 
     /**

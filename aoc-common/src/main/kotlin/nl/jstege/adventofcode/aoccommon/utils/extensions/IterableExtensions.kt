@@ -1,8 +1,8 @@
 package nl.jstege.adventofcode.aoccommon.utils.extensions
 
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 /**
  * Extention methods for iterables.
@@ -52,7 +52,7 @@ inline fun <T, R> Iterable<T>.transformTo(destination: R, transform: (R, T) -> U
 fun IntRange.zipWithReverse() = this.zip(this.reversed())
 
 fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> = runBlocking {
-    this@parallelMap.map { async(CommonPool) { f(it) } }.map { it.await() }
+    this@parallelMap.map { GlobalScope.async { f(it) } }.map { it.await() }
 }
 
 fun <T, R> Iterator<T>.map(transform: (T) -> R): Iterator<R> = object : Iterator<R> {

@@ -1,6 +1,6 @@
 package nl.jstege.adventofcode.aoccommon.utils
 
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import nl.jstege.adventofcode.aoccommon.days.Day
 import kotlin.test.Test
 import kotlin.test.assertEquals
