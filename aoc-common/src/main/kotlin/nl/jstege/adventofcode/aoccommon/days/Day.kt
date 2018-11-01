@@ -1,8 +1,11 @@
 package nl.jstege.adventofcode.aoccommon.days
 
-
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import nl.jstege.adventofcode.aoccommon.utils.Resource
+import java.io.PrintStream
 
 /**
  * Abstract implementation of a "Day" to be used for every Advent of Code assignment.
@@ -67,21 +70,34 @@ abstract class Day(private val title: String) {
         Resource.readLinesAsSequence("input/${this::class.java.simpleName.toLowerCase()}.txt")
 
     /**
-     * Returns the String representation when the output is available. This function will suspend
-     * until the assignments are complete.
-     *
-     * @return The output, formatted.
+     * Await until both assignments are done.
      */
-    override fun toString(): String {
-        val (firstOutput, firstTime) = runBlocking { deferredFirst.await() }
-        val (secondOutput, secondTime) = runBlocking { deferredSecond.await() }
-        return """
-            ${this::class.java.simpleName}: $title
-            Part One:
-                Output: $firstOutput
-                Time taken: ${"%.2f".format(firstTime / 1000000F)}ms
-            Part Two:
-                Output: $secondOutput
-                Time taken: ${"%.2f".format(secondTime / 1000000F)}ms""".trimIndent()
+    fun await() {
+        runBlocking {
+            deferredFirst.await()
+            deferredSecond.await()
+        }
     }
+    
+    /**
+     * Writes the output, well formatted, to [ps].
+     * @param ps PrintStream The [PrintStream] to use.
+     */
+    fun printOutputToWriter(ps: PrintStream = System.out) {
+        ps.println("${this::class.java.simpleName}: $title")
+
+        val (firstOutput, firstTime) = runBlocking { deferredFirst.await() }
+        ps.println("Part One")
+        ps.println("    Output: $firstOutput")
+        ps.println("    Time taken: ${"%.2f".format(firstTime / 1000000F)}ms")
+
+        val (secondOutput, secondTime) = runBlocking { deferredSecond.await() }
+        ps.println("Part Two:")
+        ps.println("    Output: $secondOutput")
+        ps.println("    Time taken: ${"%.2f".format(secondTime / 1000000F)}ms")
+
+    }
+
+    override fun toString(): String = "${this::class.java.simpleName}: $title"
 }
+
