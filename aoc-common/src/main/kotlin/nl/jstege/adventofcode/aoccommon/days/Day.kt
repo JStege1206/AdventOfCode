@@ -43,6 +43,7 @@ abstract class Day(private val title: String) {
      */
     fun run() {
         val input = loadInput()
+
         deferredFirst = GlobalScope.async { supplier { first(input) } }
         deferredSecond = GlobalScope.async { supplier { second(input) } }
     }
@@ -67,7 +68,9 @@ abstract class Day(private val title: String) {
      * @return The input corresponding to the day implementation.
      */
     fun loadInput() =
-        Resource.readLinesAsSequence("input/${this::class.java.simpleName.toLowerCase()}.txt")
+        Resource.readLinesAsSequence(
+            "input/${this::class.java.simpleName.substringAfter("Day").toLowerCase()}/1.txt"
+        )
 
     /**
      * Await until both assignments are done.
@@ -78,7 +81,7 @@ abstract class Day(private val title: String) {
             deferredSecond.await()
         }
     }
-    
+
     /**
      * Writes the output, well formatted, to [ps].
      * @param ps PrintStream The [PrintStream] to use.
@@ -89,13 +92,12 @@ abstract class Day(private val title: String) {
         val (firstOutput, firstTime) = runBlocking { deferredFirst.await() }
         ps.println("Part One")
         ps.println("    Output: $firstOutput")
-        ps.println("    Time taken: ${"%.2f".format(firstTime / 1000000F)}ms")
+        ps.printf("    Time taken: %.2fms\n", firstTime / 1000000F)
 
         val (secondOutput, secondTime) = runBlocking { deferredSecond.await() }
         ps.println("Part Two:")
         ps.println("    Output: $secondOutput")
-        ps.println("    Time taken: ${"%.2f".format(secondTime / 1000000F)}ms")
-
+        ps.printf("    Time taken: %.2fms\n", secondTime / 1000000F)
     }
 
     override fun toString(): String = "${this::class.java.simpleName}: $title"

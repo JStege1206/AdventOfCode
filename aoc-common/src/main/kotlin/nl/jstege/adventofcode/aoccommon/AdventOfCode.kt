@@ -19,7 +19,7 @@ import kotlin.system.measureTimeMillis
  *
  * @author Jelle Stege
  */
-abstract class AdventOfCode(private val assignmentLocation: String) : CliktCommand() {
+abstract class AdventOfCode(private val assignmentLocation: String? = null) : CliktCommand() {
     val days by argument(
         help = "The day assignments to execute. If not present, will execute all 25 days."
     )
@@ -31,9 +31,10 @@ abstract class AdventOfCode(private val assignmentLocation: String) : CliktComma
         .replace("([A-Z0-9]+)".toRegex(), " $1").trim()
 
     override fun run() {
+        val location = assignmentLocation ?: this::class.java.`package`.name+".days"
         val assignments: List<Day> =
-            if (days.isNotEmpty()) getAssignments(assignmentLocation, days)
-            else getAssignments(assignmentLocation, (1..25).toList())
+            if (days.isNotEmpty()) getAssignments(location, days)
+            else getAssignments(location, (1..25).toList())
 
         println(this.toString())
         println("Started on ${dateTimeFormatter.format(LocalDateTime.now())}")
@@ -51,7 +52,6 @@ abstract class AdventOfCode(private val assignmentLocation: String) : CliktComma
                 .forEach { _ -> println("-" * COLUMN_SIZE) }
         })
 
-//        println()
         println("Total time taken: ${totalTimeTaken.format("HH:mm:ss.SSS")}")
     }
 

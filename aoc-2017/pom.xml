@@ -12,6 +12,7 @@
 
     <artifactId>aoc-2017</artifactId>
     <packaging>jar</packaging>
+    <version>1.0</version>
 
     <properties>
         <main.class>nl.jstege.adventofcode.aoc2017.AdventOfCode2017Kt</main.class>
@@ -23,7 +24,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>make-assembly</id>
