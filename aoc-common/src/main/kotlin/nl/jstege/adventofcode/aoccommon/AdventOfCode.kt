@@ -47,8 +47,7 @@ abstract class AdventOfCode(private val assignmentLocation: String? = null) : Cl
             assignments.forEach { it.run() } //Start all days
             assignments
                 .asSequence()
-                .onEach { it.await() }
-                .onEach { it.printOutputToWriter() }
+                .onEach { it.awaitAndPrintOutput() }
                 .forEach { _ -> println("-" * COLUMN_SIZE) }
         })
 

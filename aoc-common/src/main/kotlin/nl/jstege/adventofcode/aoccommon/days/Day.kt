@@ -5,6 +5,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import nl.jstege.adventofcode.aoccommon.utils.Resource
+import java.io.File
 import java.io.PrintStream
 
 /**
@@ -18,8 +19,7 @@ import java.io.PrintStream
  * [Day.run] method.
  */
 abstract class Day(private val title: String) {
-    private lateinit var deferredFirst: Deferred<Pair<Any, Long>>
-    private lateinit var deferredSecond: Deferred<Pair<Any, Long>>
+    private val inputs = mutableMapOf<String, Pair<Deferred<Solution>, Deferred<Solution>>>()
 
     /**
      * The implementation for the first assignment of this [Day]
@@ -38,14 +38,26 @@ abstract class Day(private val title: String) {
     abstract fun second(input: Sequence<String>): Any
 
     /**
-     * Loads the input for this assignment and asynchronously executes the sub-assignments. Only
+     * Loads all inputs corresponding to the current day implementation.
+     *
+     * @return The input corresponding to the day implementation.
+     */
+    fun loadInputFiles() = Resource
+        .getResourceFiles(
+            "input/${this::class.java.simpleName.substringAfter("Day").toLowerCase()}"
+        ).map { Pair(it, Resource.readLinesAsSequence(it)) }
+
+    /**
+     * Loads all inputs for this assignment and asynchronously executes the sub-assignments. Only
      * runs the assignments, does not check or wait for output.
      */
     fun run() {
-        val input = loadInput()
-
-        deferredFirst = GlobalScope.async { supplier { first(input) } }
-        deferredSecond = GlobalScope.async { supplier { second(input) } }
+        loadInputFiles().forEach { (file, input) ->
+            inputs[file] = Pair(
+                GlobalScope.async { supplier { first(input) } },
+                GlobalScope.async { supplier { second(input) } }
+            )
+        }
     }
 
     /**
@@ -55,51 +67,34 @@ abstract class Day(private val title: String) {
      * @param action The action to execute
      * @return Supplier to be completed by a task running in the fork join common pool.
      */
-    private inline fun supplier(action: () -> Any): Pair<Any, Long> {
+    private inline fun supplier(action: () -> Any): Solution {
         val startTime = System.nanoTime()
         val output = action()
         val timeTaken = System.nanoTime() - startTime
         return Pair(output, timeTaken)
     }
 
-    /**
-     * Loads the input corresponding to the current day implementation
-     *
-     * @return The input corresponding to the day implementation.
-     */
-    fun loadInput() =
-        Resource.readLinesAsSequence(
-            "input/${this::class.java.simpleName.substringAfter("Day").toLowerCase()}/1.txt"
-        )
-
-    /**
-     * Await until both assignments are done.
-     */
-    fun await() {
-        runBlocking {
-            deferredFirst.await()
-            deferredSecond.await()
-        }
-    }
 
     /**
      * Writes the output, well formatted, to [ps].
      * @param ps PrintStream The [PrintStream] to use.
      */
-    fun printOutputToWriter(ps: PrintStream = System.out) {
-        ps.println("${this::class.java.simpleName}: $title")
+    fun awaitAndPrintOutput(ps: PrintStream = System.out) {
+        ps.println(this)
 
-        val (firstOutput, firstTime) = runBlocking { deferredFirst.await() }
-        ps.println("Part One")
-        ps.println("    Output: $firstOutput")
-        ps.printf("    Time taken: %.2fms\n", firstTime / 1000000F)
+        inputs.forEach { (file, runners) ->
+            val (firstOutput, firstTime) = runBlocking { runners.first.await() }
+            ps.println("Input file: ${file.substringAfterLast(File.separator)}")
+            ps.println("    Part One")
+            ps.println("        Output: $firstOutput")
+            ps.printf("        Time taken: %.2fms\n", firstTime / 1000000F)
 
-        val (secondOutput, secondTime) = runBlocking { deferredSecond.await() }
-        ps.println("Part Two:")
-        ps.println("    Output: $secondOutput")
-        ps.printf("    Time taken: %.2fms\n", secondTime / 1000000F)
+            val (secondOutput, secondTime) = runBlocking { runners.second.await() }
+            ps.println("    Part Two:")
+            ps.println("        Output: $secondOutput")
+            ps.printf("        Time taken: %.2fms\n", secondTime / 1000000F)
+        }
     }
 
     override fun toString(): String = "${this::class.java.simpleName}: $title"
 }
-
