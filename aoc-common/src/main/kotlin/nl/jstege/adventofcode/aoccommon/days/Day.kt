@@ -45,7 +45,8 @@ abstract class Day(private val title: String) {
     fun loadInputFiles() = Resource
         .getResourceFiles(
             "input/${this::class.java.simpleName.substringAfter("Day").toLowerCase()}"
-        ).map { Pair(it, Resource.readLinesAsSequence(it)) }
+        )
+        .map { Pair(it, Resource.readLinesAsSequence(it)) }
 
     /**
      * Loads all inputs for this assignment and asynchronously executes the sub-assignments. Only

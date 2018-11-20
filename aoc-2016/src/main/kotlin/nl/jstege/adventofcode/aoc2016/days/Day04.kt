@@ -1,6 +1,8 @@
 package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.extractValue
+import nl.jstege.adventofcode.aoccommon.utils.extensions.extractValues
 
 /**
  *
@@ -12,6 +14,12 @@ class Day04 : Day(title = "Security Through Obscurity") {
         private const val SECRET_PHRASE = "northpole object storage"
         private const val INPUT_PATTERN_STRING = """^([a-z-]+)-(\d+)\[([a-z]{5})]$"""
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+
+        private const val NAME_INDEX = 1
+        private const val ID_INDEX = 2
+        private const val CHECKSUM_INDEX = 3
+
+        private val PARAM_INDICES = intArrayOf(NAME_INDEX, ID_INDEX, CHECKSUM_INDEX)
     }
 
     override fun first(input: Sequence<String>): Any = input
@@ -29,10 +37,10 @@ class Day04 : Day(title = "Security Through Obscurity") {
 
     private fun Sequence<String>.getValidRooms(): Sequence<Room> {
         return this
-            .map { INPUT_REGEX.matchEntire(it)!!.groupValues }
+            .map { it.extractValues(INPUT_REGEX, *PARAM_INDICES) }
             .map { (_, name, id, checksum) -> Room(name, id.toInt(), checksum) }
-            .filter {
-                it.checksum == it.encryptedName
+            .filter { room ->
+                room.checksum == room.encryptedName
                     .filter { it != '-' }
                     .groupBy { it }
                     .asIterable()

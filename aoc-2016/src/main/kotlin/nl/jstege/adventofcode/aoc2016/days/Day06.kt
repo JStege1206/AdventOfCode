@@ -9,14 +9,18 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.transpose
  */
 class Day06 : Day(title = "Signals and Noise") {
     override fun first(input: Sequence<String>): Any = input.toList()
-        .map(String::toList)
-        .transpose()
-        .map { it.groupBy { it }.maxBy { it.value.size }?.key }
-        .joinToString("")
+        .errorCorrect(Map<Char, List<Char>>::minBy)
 
     override fun second(input: Sequence<String>): Any = input.toList()
-        .map(String::toList)
-        .transpose()
-        .map { it.groupBy { it }.minBy { it.value.size }?.key }
-        .joinToString("")
+        .errorCorrect(Map<Char, List<Char>>::maxBy)
+
+    private fun List<String>.errorCorrect(
+        selector: Map<Char, List<Char>>.((Map.Entry<Char, List<Char>>) -> Int) ->
+        Map.Entry<Char, List<Char>>?
+    ) =
+        this
+            .map(String::toList)
+            .transpose()
+            .map { column -> column.groupBy { it }.selector { it.value.size }?.key }
 }
+

@@ -27,7 +27,7 @@ class Day13 : Day(title = "A Maze of Twisty Little Cubicles") {
     private fun isWall(p: Point, add: Int): Boolean = isWall(p.x, p.y, add)
 
     private fun isWall(x: Int, y: Int, add: Int): Boolean =
-        ((x * x + 3 * x + 2 * x * y + y + y * y) + add).bitCount().isOdd()
+        ((x * x + 3 * x + 2 * x * y + y + y * y) + add).bitCount().isOdd
 
     private fun findPathLength(start: Point, dest: Point, wallModifier: Int): Int {
         val toVisit = hashSetOf(start)
@@ -42,8 +42,8 @@ class Day13 : Day(title = "A Maze of Twisty Little Cubicles") {
     }
 
     private fun getUniqueCoords(
-        start: Point, 
-        maxSteps: Int, 
+        start: Point,
+        maxSteps: Int,
         wallModifier: Int
     ): Set<Point> {
         val toVisit = hashSetOf(start)
@@ -61,7 +61,7 @@ class Day13 : Day(title = "A Maze of Twisty Little Cubicles") {
         visited += queue
         queue += queue.flatMap {
             it.neighbors4
-                .filter { it.y >= 0 && it.x >= 0 && !isWall(it, wallModifier) && it !in visited }
+                .filter { n -> n.y >= 0 && n.x >= 0 && !isWall(n, wallModifier) && n !in visited }
         }
         queue.removeAll(visited)
     }

@@ -25,7 +25,7 @@ class Day09 : Day(title = "Stream Processing") {
             garbageCount: Int,
             state: State
         ): Pair<Int, Int> =
-            if (!hasNext()) score to garbageCount
+            if (!hasNext()) Pair(score, garbageCount)
             else when (state) {
                 DEFAULT -> when (next()) {
                     GARBAGE_OPEN -> cleanUp(score, nest, garbageCount, GARBAGE)

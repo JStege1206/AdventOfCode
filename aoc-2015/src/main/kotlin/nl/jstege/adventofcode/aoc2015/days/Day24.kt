@@ -36,7 +36,11 @@ class Day24 : Day(title = "It Hangs in the Balance") {
                 .let { start ->
                     (start until this.size)
                         .asSequence()
-                        .map { this.combinations(it).filter { it.sum() == groupSize } }
+                        .map {
+                            this.combinations(it).filter { combination ->
+                                combination.sum() == groupSize
+                            }
+                        }
                         .filter { it.any() }
                         .filter(Sequence<Set<Int>>::any)
                         .first()

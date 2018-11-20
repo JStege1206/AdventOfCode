@@ -22,7 +22,7 @@ class Day02 : Day(title = "Corruption Checksum") {
             .map {
                 it.sortedDescending()
                     .combinations(2)
-                    .map { it.toList() }
+                    .map { combination -> combination.toList() }
                     .first { (a, n) -> a % n == 0 }
             }
             .sumBy { (a, n) -> a / n }

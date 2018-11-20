@@ -45,7 +45,7 @@ class CollectionsTest {
     @Test
     fun permutationsTest() {
         val l1 = listOf<Int>()
-        assertEquals(setOf(listOf<Int>()), l1.permutations().toSet())
+        assertEquals(setOf(listOf()), l1.permutations().toSet())
 
         val l2 = listOf(1, 2, 3, 4)
         val el2 = setOf(

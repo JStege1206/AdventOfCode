@@ -27,7 +27,7 @@ class Day19 : Day(title = "A Series of Tubes") {
     private fun Sequence<String>.followPath() = this.map { it.toCharArray() }.toList()
         .let { maze ->
             var current = Point.of(maze.head.indexOf(VERTICAL), 0)
-            var direction: Direction = Direction.SOUTH
+            var direction = Direction.SOUTH
             val letters = mutableListOf<Char>()
             var pathLength = 0
             while (maze[current] != EMPTY) {
@@ -41,12 +41,10 @@ class Day19 : Day(title = "A Series of Tubes") {
                 current = current.moveDirection(direction)
             }
 
-            letters.joinToString("") to pathLength
-
+            Pair(letters.joinToString(""), pathLength)
         }
 
-    private operator fun List<CharArray>.get(p: Point) = when {
-        p.x in (0 until this.head.size) && p.y in (0 until this.size) -> this[p.y][p.x]
-        else -> EMPTY
-    }
+    private operator fun List<CharArray>.get(p: Point) =
+        if (p.x in (0 until this.head.size) && p.y in (0 until this.size)) this[p.y][p.x]
+        else EMPTY
 }

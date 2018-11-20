@@ -18,19 +18,21 @@ class Day09 : Day(title = "Explosives in Cyperspace") {
     override fun second(input: Sequence<String>): Any = input.first()
         .calcDecompressedLength(DECOMPRESS_RECURSIVELY_SECOND)
 
-    private fun String.calcDecompressedLength(calcRec: Boolean): Long {
-        if (this.indexOf('(') == -1) return this.length.toLong()
 
-        val start = this.indexOf('(')
+    private fun String.calcDecompressedLength(calcRec: Boolean): Long {
+        val start = this.indexOf('(').apply {
+            if (this == -1) return this@calcDecompressedLength.length.toLong()
+        }
+
         val end = this.indexOf(')', start + 1)
         val (charAmt, repeatAmt) = this.substring(start + 1, end).split('x').map(String::toInt)
-        return this.substring(0, start).length + (repeatAmt * (
-                if (calcRec) {
-                    this.substring(end + 1, end + 1 + charAmt).calcDecompressedLength(calcRec)
-                } else {
-                    this.substring(end + 1, end + 1 + charAmt).length.toLong()
-                })) +
-                (this.substring(end + 1 + charAmt, this.length)).calcDecompressedLength(calcRec)
 
+        val block = if (calcRec) {
+            this.substring(end + 1, end + 1 + charAmt).calcDecompressedLength(calcRec)
+        } else {
+            charAmt.toLong()
+        }
+        return start + (repeatAmt * block) +
+                this.substring(end + 1 + charAmt).calcDecompressedLength(calcRec)
     }
 }

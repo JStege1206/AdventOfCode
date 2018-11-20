@@ -26,12 +26,27 @@ class Day08 : Day(title = "I Heard You Like Registers") {
             "<=" to Comparable<Int>::lessThanEquals
         )
 
+        private const val R1_INDEX = 1
+        private const val OP_INDEX = 2
+        private const val L1_INDEX = 3
+        private const val R2_INDEX = 4
+        private const val TEST_INDEX = 5
+        private const val L2_INDEX = 6
+
+        private val PARAM_INDICES = intArrayOf(
+            R1_INDEX,
+            OP_INDEX,
+            L1_INDEX,
+            R2_INDEX,
+            TEST_INDEX,
+            L2_INDEX
+        )
     }
 
     override fun first(input: Sequence<String>): Any {
         return input
             .parse()
-            .fold(mutableMapOf<String, Int>()) { rs, instr ->
+            .transformTo(mutableMapOf<String, Int>()) { rs, instr ->
                 rs.apply { this[instr.r1] = instr(rs) }
             }
             .values
@@ -52,8 +67,8 @@ class Day08 : Day(title = "I Heard You Like Registers") {
 
 
     private fun Sequence<String>.parse() = this
-        .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
-        .map { (_, r1, op, l1, r2, test, l2) ->
+        .map { it.extractValues(INPUT_REGEX, *PARAM_INDICES) }
+        .map { (r1, op, l1, r2, test, l2) ->
             Instruction(r1, OPERATIONS[op]!!, l1.toInt(), r2, TESTS[test]!!, l2.toInt())
         }
 

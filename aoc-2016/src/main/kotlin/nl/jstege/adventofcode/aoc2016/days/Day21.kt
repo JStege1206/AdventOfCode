@@ -55,17 +55,17 @@ class Day21 : Day(title = "Scrambled Letters and Hash") {
 
 
     private fun CharArray.swap(i: Int, j: Int) {
-        val t = this[i]
-        this[i] = this[j]
-        this[j] = t
+        this[j] = this[i].also {
+            this[i] = this[j]
+        }
     }
 
     private fun CharArray.swap(x: Char, y: Char) {
         this.forEachIndexed { i, c ->
-            if (c == y) {
-                this[i] = x
-            } else if (c == x) {
-                this[i] = y
+            this[i] = when (c) {
+                y -> x
+                x -> y
+                else -> c
             }
         }
     }
@@ -73,15 +73,15 @@ class Day21 : Day(title = "Scrambled Letters and Hash") {
     private fun CharArray.rotate(steps: Int) {
         val realSteps = steps % this.size
         val result = CharArray(this.size)
-        System.arraycopy(this, 0, result, realSteps, this.size - realSteps)
-        System.arraycopy(this, this.size - realSteps, result, 0, realSteps)
-        System.arraycopy(result, 0, this, 0, result.size)
+        this.copyInto(result, realSteps, 0, this.size - realSteps)
+        this.copyInto(result, 0, this.size - realSteps, this.size)
+        result.copyInto(this, 0, 0, result.size)
     }
 
     private fun CharArray.rotate(c: Char, reverse: Boolean) {
-        val idx = this.withIndex().first { (_, t) -> t == c }.index
+        val idx = this.toList().indexOf(c)
         val shift = if (reverse) {
-            this.size - ((idx + if (idx != 0 && idx.isEven()) this.size else 0) / 2 + 1) % this.size
+            this.size - ((idx + if (idx != 0 && idx.isEven) this.size else 0) / 2 + 1) % this.size
         } else {
             1 + idx + if (idx >= 4) 1 else 0
         }

@@ -23,6 +23,6 @@ class Jie(operands: List<String>, machine: Machine) : SimpleInstructionSet(opera
         } else {
             machine.registers[operands[1]]
         }
-        machine.ir += if (check.isEven()) jmp else 1
+        machine.ir += if (check.isEven) jmp else 1
     }
 }

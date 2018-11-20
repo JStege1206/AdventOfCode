@@ -4,7 +4,6 @@ import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.Point
 import nl.jstege.adventofcode.aoccommon.utils.extensions.toHexChar
 import nl.jstege.adventofcode.aoccommon.utils.extensions.transformTo
-import nl.jstege.adventofcode.aoccommon.utils.pointOf
 
 /**
  *

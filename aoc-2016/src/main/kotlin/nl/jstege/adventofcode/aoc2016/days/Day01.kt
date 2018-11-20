@@ -3,6 +3,7 @@ package nl.jstege.adventofcode.aoc2016.days
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.Direction
 import nl.jstege.adventofcode.aoccommon.utils.Point
+import nl.jstege.adventofcode.aoccommon.utils.extensions.scan
 import kotlin.reflect.KProperty1
 
 
@@ -13,10 +14,14 @@ import kotlin.reflect.KProperty1
 class Day01 : Day(title = "No Time for a Taxicab") {
     override fun first(input: Sequence<String>): Any {
         var dir = Direction.NORTH
-        return input.first().parse().fold(Point.ZERO_ZERO) { p, (turn, steps) ->
-            dir = dir.let(turn.directionMod)
-            p.moveDirection(dir, steps)
-        }.manhattan(Point.ZERO_ZERO)
+        return input
+            .first()
+            .parse()
+            .fold(Point.ZERO_ZERO) { p, (turn, steps) ->
+                dir = dir.let(turn.directionMod)
+                p.moveDirection(dir, steps)
+            }
+            .manhattan(Point.ZERO_ZERO)
     }
 
     override fun second(input: Sequence<String>): Any {

@@ -19,16 +19,15 @@ class Day25 : Day(title = "Let It Snow") {
         val (row, column) = input.parse()
         var currentRow = 1
         var currentColumn = 1
-        var maxRow = 2
+        var maxRow = 1
         var value = STARTING_VALUE
 
         while (currentRow != row || currentColumn != column) {
             currentRow--
             currentColumn++
             if (currentRow < 1) {
-                currentRow = maxRow
+                currentRow = ++maxRow
                 currentColumn = 1
-                maxRow++
             }
             value = value % DIVIDING_VALUE * MULDIV_VALUE % DIVIDING_VALUE
         }

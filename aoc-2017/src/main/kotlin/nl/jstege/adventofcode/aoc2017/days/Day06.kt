@@ -45,7 +45,7 @@ class Day06 : Day(title = "Memory Reallocation") {
                 // Copy the list and pass it on.
                 banks.toList()
             }
-            .onEach { states.getOrPut(it, { states.size + 1 }) }
+            .onEach { states.getOrPut(it) { states.size + 1 } }
             .first { states.size != states[it]!! }
             // Since we've encountered a double, states.size
             // is not equal to the current cycle index,

@@ -31,15 +31,14 @@ private tailrec fun Long.factorial(acc: Long = 1): Long =
  * @receiver The integer to check.
  * @return True if this integer is even
  */
-fun Int.isEven(): Boolean = this % 2 == 0
-
+val Int.isEven: Boolean get() = this % 2 == 0
 /**
  * Determines if the receiving integer is odd.
  *
  * @receiver The integer to check.
  * @return True if this integer is odd
  */
-fun Int.isOdd(): Boolean = this % 2 != 0
+val Int.isOdd: Boolean get() = this % 2 != 0
 
 /**
  * Casts an integer x within range 0 <= x <= 15 to it's hexadecimal character.

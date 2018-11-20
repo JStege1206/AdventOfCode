@@ -14,5 +14,5 @@ class Day13 : Day(title = "Packet Scanners") {
             }
     }
 
-    private fun Sequence<String>.parse() = this.map { it.split(": ").map { it.toInt() } }
+    private fun Sequence<String>.parse() = this.map { line -> line.split(": ").map { it.toInt() } }
 }

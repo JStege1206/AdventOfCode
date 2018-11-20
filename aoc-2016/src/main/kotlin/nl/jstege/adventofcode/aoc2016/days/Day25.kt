@@ -51,10 +51,10 @@ class Day25 : Day(title = "Clock Signal") {
 
     private fun ByteArray.isAlternating(): Boolean = this.size < 2 || this
         .withIndex()
-        .partition { (i, _) -> i.isEven() }
-        .let { (es, os) ->
-            es.first().value != os.first().value
-                    && es.map { it.value }.toSet().size == 1
-                    && os.map { it.value }.toSet().size == 1
+        .partition { (i, _) -> i.isEven }
+        .let { (evens, odds) ->
+            evens.first().value != odds.first().value
+                    && evens.map { it.value }.toSet().size == 1
+                    && odds.map { it.value }.toSet().size == 1
         }
 }

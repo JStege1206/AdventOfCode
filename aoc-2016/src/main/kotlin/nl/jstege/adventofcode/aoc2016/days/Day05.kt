@@ -55,6 +55,6 @@ class Day05 : Day(title = "How About a Nice Game of Chess?") {
     }
 
     private fun getPos(ar: ByteArray, pos: Int): Int =
-        if (pos.isOdd()) ar[pos / 2].toUnsignedInt() and 0x0F
+        if (pos.isOdd) ar[pos / 2].toUnsignedInt() and 0x0F
         else ar[pos / 2].toUnsignedInt() ushr 4
 }

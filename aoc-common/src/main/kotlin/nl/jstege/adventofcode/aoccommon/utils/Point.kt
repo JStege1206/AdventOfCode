@@ -46,6 +46,11 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
         fun of(xs: IntProgression, ys: IntProgression) =
             xs.flatMap { x -> ys.map { y -> Point.of(x, y) } }
 
+        fun of(from: Point, to: Point) =
+            (from.x..to.x).asSequence().flatMap { x ->
+                (from.y..to.y).asSequence().map { y -> Point.of(x, y) }
+            }
+
         /**
          * Creates a [Point] of the given [Pair], using the first value
          * as x and the second value as y.

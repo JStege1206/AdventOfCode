@@ -16,8 +16,8 @@ package nl.jstege.adventofcode.aoccommon.utils.extensions
  */
 fun <E> List<List<E>>.transpose(): List<List<E>> {
     tailrec fun <E> List<List<E>>.transpose(accumulator: List<List<E>>): List<List<E>> =
-            if (this.isEmpty() || this.first().isEmpty()) accumulator
-            else this.map { it.tail }.transpose(accumulator + listOf(this.map { it.head }))
+        if (this.isEmpty() || this.first().isEmpty()) accumulator
+        else this.map { it.tail }.transpose(accumulator + listOf(this.map { it.head }))
 
     return if (this.isEmpty() || this.head.isEmpty()) {
         throw IllegalArgumentException("Empty columns or rows found. Can not transpose.")
@@ -39,7 +39,7 @@ fun <E> Collection<E>.permutations(): Sequence<List<E>> = sequence {
     var i = 0
     while (i < a.size) {
         if (c[i] < i) {
-            a.swap(if (i.isEven()) 0 else c[i], i)
+            a.swap(if (i.isEven) 0 else c[i], i)
 
             yield(a.toList())
             c[i] += 1
@@ -114,11 +114,11 @@ fun <E> MutableList<E>.swap(i: Int, j: Int) {
 }
 
 fun <E> List<E>.reverse(start: Int, length: Int): List<E> =
-        (start until start + length)
-                .zipWithReverse()
-                .asSequence()
-                .take(length / 2)
-                .fold(this.toMutableList()) { list, (f, s) ->
-                    list.swap(f % this.size, s % this.size)
-                    list
-                }
+    (start until start + length)
+        .zipWithReverse()
+        .asSequence()
+        .take(length / 2)
+        .fold(this.toMutableList()) { list, (f, s) ->
+            list.swap(f % this.size, s % this.size)
+            list
+        }

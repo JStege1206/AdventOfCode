@@ -47,10 +47,11 @@ class Day22 : Day(title = "Sporifica Virus") {
     private fun Sequence<String>.parse() = this
         .foldIndexed(mutableMapOf<Point, Node>()) { y, nodes, line ->
             nodes.apply {
-                this += line
-                    .mapIndexed { x, c -> Point.of(x, y) to c }
-                    .map { (p, c) -> p to Node(p, nodes, Status.of(c)) }
-                    .toMap()
+                this += line.withIndex().associate { (x, c) ->
+                    Point.of(x, y).let { p ->
+                        Pair(p, Node(p, nodes, Status.of(c)))
+                    }
+                }
             }
         }
         .toMutableMap()

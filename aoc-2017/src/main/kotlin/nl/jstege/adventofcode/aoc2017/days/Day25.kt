@@ -94,7 +94,7 @@ class Day25 : Day(title = "The Halting Problem") {
     ) {
         private val tape = Tape()
 
-        fun run(iterations: Int) = (0 until iterations).forEach { tick() }
+        fun run(iterations: Int) = (0 until iterations).forEach { _ -> tick() }
 
         fun tick() = state.withValue(tape.currentValue) {
             tape.currentValue = this.value
@@ -118,16 +118,16 @@ class Day25 : Day(title = "The Halting Problem") {
             }
 
         fun moveLeft() {
-            current = current.left ?: Node(right = current).also {
-                current.left = it
-                first = it
+            current = current.left ?: Node(right = current).apply {
+                current.left = this
+                first = this
             }
         }
 
         fun moveRight() {
-            current = current.right ?: Node(left = current).also {
-                current.right = it
-                last = it
+            current = current.right ?: Node(left = current).apply {
+                current.right = this
+                last = this
             }
         }
 

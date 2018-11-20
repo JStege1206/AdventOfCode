@@ -3,6 +3,7 @@ package nl.jstege.adventofcode.aoc2015.days
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
 import nl.jstege.adventofcode.aoccommon.utils.extensions.component7
+import nl.jstege.adventofcode.aoccommon.utils.extensions.extractValues
 import kotlin.math.max
 import kotlin.reflect.KProperty1
 
@@ -57,13 +58,17 @@ class Day15 : Day(title = "Science for Hungry People") {
         fun calculateScore(
             recipe: Array<out Pair<Int, Ingredient>>,
             property: KProperty1<Ingredient, Int>
-        ) = recipe.fold(0) { score, (amt, ing) -> score + amt * ing.let(property) }
+        ) = recipe.sumBy { (amount, ingredient) -> amount * ingredient.run(property) }
 
         return if (useCalories && calculateScore(recipe, Ingredient::calories) != NEEDED_CALORIES) 0
-        else Math.max(calculateScore(recipe, Ingredient::capacity), 0) *
-                Math.max(calculateScore(recipe, Ingredient::durability), 0) *
-                Math.max(calculateScore(recipe, Ingredient::flavor), 0) *
-                Math.max(calculateScore(recipe, Ingredient::texture), 0)
+        else setOf(
+            Ingredient::capacity,
+            Ingredient::durability,
+            Ingredient::flavor,
+            Ingredient::texture
+        ).let {
+            it.fold(1) { acc, property -> acc * Math.max(calculateScore(recipe, property), 0) }
+        }
     }
 
     private data class Ingredient(
@@ -81,10 +86,26 @@ class Day15 : Day(title = "Science for Hungry People") {
                     "texture (-?\\d+), " +
                     "calories (-?\\d+)").toRegex()
 
+            private const val NAME_INDEX = 1
+            private const val CAPACITY_INDEX = 2
+            private const val DURABILITY_INDEX = 3
+            private const val FLAVOR_INDEX = 4
+            private const val TEXTURE_INDEX = 5
+            private const val CALORIES_INDEX = 6
+
+            private val PARAM_INDICES = intArrayOf(
+                NAME_INDEX,
+                CAPACITY_INDEX,
+                DURABILITY_INDEX,
+                FLAVOR_INDEX,
+                TEXTURE_INDEX,
+                CALORIES_INDEX
+            )
+
             @JvmStatic
             fun parse(input: String): Ingredient {
-                return INPUT_REGEX.matchEntire(input)?.groupValues
-                    ?.let { (_, name, capacity, durability, flavor, texture, calories) ->
+                return input.extractValues(INPUT_REGEX, *PARAM_INDICES)
+                    .let { (name, capacity, durability, flavor, texture, calories) ->
                         Ingredient(
                             name,
                             capacity.toInt(),
@@ -93,7 +114,7 @@ class Day15 : Day(title = "Science for Hungry People") {
                             texture.toInt(),
                             calories.toInt()
                         )
-                    } ?: throw IllegalArgumentException("Invalid input")
+                    }
             }
         }
     }

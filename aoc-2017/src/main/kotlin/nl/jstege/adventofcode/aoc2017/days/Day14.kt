@@ -21,7 +21,7 @@ class Day14 : Day(title = "Disk Defragmentation") {
 
     override fun first(input: Sequence<String>): Any {
         return "${input.head}-%d"
-            .calculateHashes { it.sumBy { it.toUnsignedInt().bitCount() } }
+            .calculateHashes { it.sumBy { byte -> byte.toUnsignedInt().bitCount() } }
             .sum()
     }
 

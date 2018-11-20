@@ -11,6 +11,12 @@ class Day09 : Day(title = "All in a Single Night") {
     private companion object Configuration {
         private const val INPUT_PATTERN_STRING = """(\w+) to (\w+) = (\d+)"""
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+
+        private const val FROM_INDEX = 1
+        private const val TO_INDEX = 2
+        private const val COST_INDEX = 3
+
+        private val PARAM_INDICES = intArrayOf(FROM_INDEX, TO_INDEX, COST_INDEX)
     }
 
     override fun first(input: Sequence<String>): Any = input
@@ -26,8 +32,8 @@ class Day09 : Day(title = "All in a Single Night") {
 
 
     private fun Sequence<String>.parse(): RouteMap = this
-        .map { it.extractValues(INPUT_REGEX, 1, 2, 3) }
-        .transformTo(RouteMap()) { routes, (from, to, cost) -> 
+        .map { it.extractValues(INPUT_REGEX, *PARAM_INDICES) }
+        .transformTo(RouteMap()) { routes, (from, to, cost) ->
             routes[from, to] = cost.toInt()
         }
 

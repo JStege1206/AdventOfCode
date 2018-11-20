@@ -29,7 +29,7 @@ class Day03 : Day(title = "Perfectly Spherical Houses in a Vacuum") {
         .asSequence()
         .withIndex()
         .scan(Point.ZERO_ZERO to Point.ZERO_ZERO) { (s, r), (i, c) ->
-            if (i.isEven()) Pair(DIRECTION_MODIFIERS[c]!!(s), r)
+            if (i.isEven) Pair(DIRECTION_MODIFIERS[c]!!(s), r)
             else Pair(s, DIRECTION_MODIFIERS[c]!!(r))
         }
         .flatMap { (s, r) -> sequenceOf(s, r) }

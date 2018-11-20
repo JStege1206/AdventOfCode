@@ -35,6 +35,10 @@ class Day12 : Day(title = "Digital Plumber") {
 
     private fun Sequence<String>.buildConnections(): Map<Int, Set<Int>> = this
         .map { it.split(" <-> ") }
-        .map { it.first().toInt() to it[1].split(", ").map { it.toInt() }.toSet() }
-        .toMap()
+        .associate { (origin, destinations) ->
+            Pair(
+                origin.toInt(),
+                destinations.split(", ").map { it.toInt() }.toSet()
+            )
+        }
 }

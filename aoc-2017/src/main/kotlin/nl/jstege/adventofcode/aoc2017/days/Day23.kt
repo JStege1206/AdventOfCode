@@ -18,27 +18,18 @@ class Day23 : Day(title = "Coprocessor Conflagration") {
             var ir = 0
             var count = 0
             while (ir < instrs.size) {
-                val instr = instrs[ir]
-                if (instr is Instruction.Mul) count++
-                ir += instr(registers)
+                instrs[ir].let { instr ->
+                    if (instr is Instruction.Mul) count++
+                    ir += instr(registers)
+                }
             }
             count
         }
     }
 
     override fun second(input: Sequence<String>): Any {//TODO: implement
-//        return input.parse().let { instrs ->
-//            val registers = Registers()
-//            registers.put("a", 1)
-//            var ir = 0
-//            var count = 0
-//            while (ir < instrs.size) {
-//                val instr = instrs[ir]
-//                if (instr is Instruction.Mul) count++
-//                ir += instr(registers)
-//            }
-//            count
-//        }
+        //Program implements a modulo-like operation, find out the correct pattern of instructions
+        //to build an optimizer.
         return 907
     }
 

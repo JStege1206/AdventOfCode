@@ -9,9 +9,9 @@ import kotlin.test.assertTrue
  *
  * @author Jelle Stege
  */
-class ArrayDequeTest() {
+class ArrayDequeTest {
     @Test
-    fun ArrayDequeTest() {
+    fun arrayDequeTest() {
         val ad = ArrayDeque<Int>()
         assertEquals(0, ad.size)
         ad += 2

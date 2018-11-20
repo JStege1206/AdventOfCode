@@ -29,7 +29,5 @@ class Day08 : Day(title = "Matchsticks") {
         }
 
     private val String.escapedLength: Int
-        get() = this.fold(2) { length, c ->
-            length + (if (c == '"' || c == '\\') 2 else 1)
-        }
+        get() = this.sumBy { if (it == '"' || it == '\\') 2 else 1 } + 2
 }

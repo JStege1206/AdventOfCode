@@ -30,44 +30,48 @@ class Day21 : Day(title = "RPG Simulator 20XX") {
             80 to Item.Ring(3, Item.ItemType.DEFENSE)
         )
 
+        private val WEAPONS = ITEMS.filter { it.second is Item.Weapon }
+        private val ARMOR = ITEMS.filter { it.second is Item.Armor }
+        private val RINGS = ITEMS.filter { it.second is Item.Ring }
+
         private val OWN_PLAYER = listOf(
             "Hit Points: 100",
             "Damage: 0",
             "Armor: 0"
         )
-    } 
+    }
 
-    override fun first(input: Sequence<String>) = ITEMS
-        .generateBuilds(Player.of(OWN_PLAYER))
-        .generateFights(Player.of(input.toList()))
-        .filter { it.second }.map { it.first }.min()!!
+    override fun first(input: Sequence<String>) =
+        generateBuilds(Player.of(OWN_PLAYER))
+            .generateFights(Player.of(input.toList()))
+            .filter { it.second }.map { it.first }.min()!!
 
-    override fun second(input: Sequence<String>) = ITEMS
-        .generateBuilds(Player.of(OWN_PLAYER))
-        .generateFights(Player.of(input.toList()))
-        .filter { !it.second }.map { it.first }.max()!!
+    override fun second(input: Sequence<String>) =
+        generateBuilds(Player.of(OWN_PLAYER))
+            .generateFights(Player.of(input.toList()))
+            .filter { !it.second }.map { it.first }.max()!!
 
-    private fun List<Pair<Int, Item>>.generateBuilds(player: Player) =
-        this.filter { it.second is Item.Weapon }.flatMap { w ->
-            this.filter { it.second is Item.Armor }.flatMap { a ->
-                this.filter { it.second is Item.Ring }.flatMap { r1 ->
-                    this.filter { it.second is Item.Ring && it !== r1 }
-                        .map { r2 ->
-                            listOf(w, a, r1, r2)
-                        }
+    private fun generateBuilds(player: Player) =
+        WEAPONS.flatMap { weapon ->
+            ARMOR.flatMap { armor ->
+                RINGS.flatMap { ring1 ->
+                    RINGS.filter { ring -> ring !== ring1 }
+                        .map { ring2 -> listOf(weapon, armor, ring1, ring2) }
                 }
             }
-        }.asSequence().map {
-            val p = player.copy()
-            p.weapon = it[0].second as Item.Weapon
-            p.armor = it[1].second as Item.Armor
-            p.rings[0] = it[2].second as Item.Ring
-            p.rings[1] = it[3].second as Item.Ring
-            it.sumBy { it.first } to p
         }
+            .asSequence()
+            .map { build ->
+                val p = player.copy()
+                p.weapon = build[0].second as Item.Weapon
+                p.armor = build[1].second as Item.Armor
+                p.rings[0] = build[2].second as Item.Ring
+                p.rings[1] = build[3].second as Item.Ring
+                build.sumBy { it.first } to p
+            }
 
 
-    private fun Sequence<Pair<Int, Player>>.generateFights(boss: Day21.Player) =
+    private fun Sequence<Pair<Int, Player>>.generateFights(boss: Player) =
         this.map { (cost, player) -> cost to player.fight(boss.copy()) }
 
 

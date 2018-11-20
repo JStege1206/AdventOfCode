@@ -1,74 +1,72 @@
 package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import java.util.*
 
 /**
  *
  * @author Jelle Stege
  */
 class Day07 : Day(title = "Internet Protocol Version 7") {
-    private companion object Configuration {
-        private const val HYPERNET = true
-        private const val NOT_HYPERNET = false
-    }
-
-    override fun first(input: Sequence<String>): Any = input
-        .map {
-            val segments = it.getIpv7Segments()
-            segments[HYPERNET].none { it.hasAbbaSequence() }
-                    && segments[NOT_HYPERNET].any { it.hasAbbaSequence() }
+    override fun first(input: Sequence<String>): Any = input.asSequence()
+        .count { ipv7 ->
+            ipv7.getIpv7Segments().run {
+                hypernet.none { it.hasAbbaSequence() }
+                        && notHypernet.any { it.hasAbbaSequence() }
+            }
         }
-        .count { it }
 
-    override fun second(input: Sequence<String>): Any = input
-        .map {
-            val segments = it.getIpv7Segments()
-            val possibleBabs = segments[NOT_HYPERNET]
-                .flatMap { it.calculateAbas() }
-                .map { it.calculateBab() }
-            segments[HYPERNET]
-                .map { s -> possibleBabs.any { it in s } }
-                .any { it }
+    override fun second(input: Sequence<String>): Any = input.asSequence()
+        .count { ipv7 ->
+            ipv7.getIpv7Segments().run {
+                val possibleBabs = notHypernet
+                    .flatMap { it.calculateAbas() }
+                    .map { it.calculateBab() }
+                hypernet.any { s -> possibleBabs.any { it in s } }
+            }
         }
-        .count { it }
 
     private fun String.getIpv7Segments(): Ipv7Segments {
         val segments = Ipv7Segments()
+        val tokenizer = StringTokenizer(this, "[]", true)
 
-        var isHypernet = false
-        segments[isHypernet].add(
-            this.fold(StringBuilder()) { p, it ->
-                if (it == '[' || it == ']') {
-                    if (p.isNotEmpty()) {
-                        segments[isHypernet].add(p.toString())
-                        isHypernet = it == '['
+        var isHyperNet = false
+        var previous = ""
+        while (tokenizer.hasMoreTokens()) {
+            when (val token = tokenizer.nextToken()) {
+                "[", "]" -> {
+                    if (previous.isNotEmpty()) {
+                        if (isHyperNet) segments.hypernet.add(previous)
+                        else segments.notHypernet.add(previous)
                     }
-                    StringBuilder()
-                } else {
-                    p.append(it)
+                    isHyperNet = token == "["
+                    previous = ""
                 }
-            }.toString()
-        )
+                else -> previous = token
+            }
+        }
+
+        if (previous.isNotEmpty()) {
+            if (isHyperNet) segments.hypernet.add(previous)
+            else segments.notHypernet.add(previous)
+        }
         return segments
     }
 
     private fun String.hasAbbaSequence(): Boolean = (0 until this.length - 3)
         .any {
-            this[it] != this[it + 1]
-                    && this[it] == this[it + 3]
-                    && this[it + 1] == this[it + 2]
+            this[it] != this[it + 1] && this[it] == this[it + 3] && this[it + 1] == this[it + 2]
         }
 
     private fun String.calculateAbas(): Set<String> = (0 until this.length - 2)
         .filter { this[it] == this[it + 2] && this[it] != this[it + 1] }
-        .map { "${this[it]}${this[it + 1]}${this[it]}" }.toSet()
+        .map { this.substring(it, it + 2) }
+        .toSet()
 
     private fun String.calculateBab(): String = "${this[1]}${this[0]}${this[1]}"
 
     private data class Ipv7Segments(
-        var hypernet: MutableSet<String> = mutableSetOf(),
-        var notHypernet: MutableSet<String> = mutableSetOf()
-    ) {
-        operator fun get(hypernet: Boolean) = if (hypernet) this.hypernet else notHypernet
-    }
+        val hypernet: MutableSet<String> = mutableSetOf(),
+        val notHypernet: MutableSet<String> = mutableSetOf()
+    )
 }

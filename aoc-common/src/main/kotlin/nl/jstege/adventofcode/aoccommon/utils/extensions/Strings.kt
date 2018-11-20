@@ -71,6 +71,14 @@ fun String.extractValues(regex: Regex, vararg indices: Int) =
 operator fun String.times(n: Int) = this.repeat(n)
 
 /**
+ * Checks if any of the given patterns exists in the receiver.
+ * @receiver String The haystack to search in
+ * @param set Collection<String> The needles to search for
+ * @return Boolean True if any of the patterns exist in the given String.
+ */
+fun String.containsAny(set: Collection<String>) = set.any { it in this }
+
+/**
  * Wraps a string to the given [wrapLength] line width.
  * @receiver String The string to wrap.
  * @param wrapLength Int The maximum length a line may be, unless [wrapLongWords] is false, in that
@@ -168,3 +176,7 @@ private fun StringBuilder.appendln(
     stringBuilder: StringBuilder,
     lineSeparator: String = System.lineSeparator()
 ) = this.append(stringBuilder).append(lineSeparator)
+
+
+fun String.splitOnIndex(index: Int): List<String> =
+    listOf(this.substring(0, index), this.substring(index))

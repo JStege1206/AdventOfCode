@@ -29,7 +29,8 @@ class Day20 : Day(title = "Infinite Elves and Infinite Houses") {
                 break
             }
 
-            elfList.filter { elf + it <= wantedPresents / 10 }
+            elfList
+                .filter { elf + it <= wantedPresents / 10 }
                 .forEach { elves.getOrPut(elf + it) { mutableListOf() } += it }
             elf++
         }
@@ -54,9 +55,11 @@ class Day20 : Day(title = "Infinite Elves and Infinite Houses") {
                 break
             }
 
-            elfList.filter {
-                (elf + it < wantedPresents / 10) && (elf + it <= it * MAX_HOUSES_VISITED)
-            }.forEach { elves.getOrPut(elf + it) { mutableListOf() } += it }
+            elfList
+                .filter {
+                    (elf + it < wantedPresents / 10) && (elf + it <= it * MAX_HOUSES_VISITED)
+                }
+                .forEach { elves.getOrPut(elf + it) { mutableListOf() } += it }
             elf++
         }
         return elf

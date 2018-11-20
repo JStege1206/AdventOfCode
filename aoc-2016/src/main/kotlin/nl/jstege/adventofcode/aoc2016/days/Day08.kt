@@ -3,6 +3,8 @@ package nl.jstege.adventofcode.aoc2016.days
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.extensions.bitCount
 import nl.jstege.adventofcode.aoccommon.utils.extensions.component6
+import nl.jstege.adventofcode.aoccommon.utils.extensions.extractValues
+import nl.jstege.adventofcode.aoccommon.utils.extensions.transformTo
 
 /**
  *
@@ -16,6 +18,22 @@ class Day08 : Day(title = "Two-Factor Authentication") {
         private const val INPUT_PATTERN_STRING =
             """rect (\d+)x(\d+)|rotate (row|column) [xy]=(\d+) by (\d+)"""
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+
+        private const val INPUT_INDEX = 0
+        private const val X_INDEX = 1
+        private const val Y_INDEX = 2
+        private const val AXIS_INDEX = 3
+        private const val RC_INDEX = 4
+        private const val SHIFT_INDEX = 5
+
+        private val PARAM_INDICES = intArrayOf(
+            INPUT_INDEX,
+            X_INDEX,
+            Y_INDEX,
+            AXIS_INDEX,
+            RC_INDEX,
+            SHIFT_INDEX
+        )
 
         private const val ASCII_LETTER_WIDTH = 5
         private val ASCII_LETTERS = mapOf(
@@ -58,17 +76,13 @@ class Day08 : Day(title = "Two-Factor Authentication") {
         .ocr()
 
     private fun Sequence<String>.parseAndExecute(): LongArray = this
-        .map {
-            INPUT_REGEX.matchEntire(it)?.groupValues
-                    ?: throw IllegalStateException("Invalid input")
-        }
-        .fold(LongArray(SCREEN_HEIGHT)) { screen, (input, x, y, axis, rc, shift) ->
+        .map { it.extractValues(INPUT_REGEX, *PARAM_INDICES) }
+        .transformTo(LongArray(SCREEN_HEIGHT)) { screen, (input, x, y, axis, rc, shift) ->
             when {
                 input.startsWith("rect") -> screen.rect(x.toInt(), y.toInt())
                 axis == "row" -> screen.rotateRow(rc.toInt(), shift.toInt())
                 else -> screen.rotateColumn(rc.toInt(), shift.toInt())
             }
-            screen
         }
 
     private fun LongArray.rect(endX: Int, endY: Int) {
@@ -78,19 +92,19 @@ class Day08 : Day(title = "Two-Factor Authentication") {
     }
 
     private fun LongArray.rotateRow(row: Int, shift: Int) {
-        // To rotate the row, one can also swap the last n bits (the tail) with the first
-        // size - n bits (the head). In which n is the amount of bits to shift, with the screen
-        // size taken into account.
-        // The tail is then: row & (1 << shift - 1)
-        // The head is then: row ^ tail >>> shift, or simply row >>> shift
-        // The result would then be: row = (tail << (size - shift)) + (head >> shift)
-        // To make sure this result is not bigger than the screen size, the result is masked with
-        // 1 << size - 1, using an and-operation.
+        //To rotate the row, one can also swap the last n bits (the tail) with the first
+        //size - n bits (the head). In which n is the amount of bits to shift, with the screen
+        //size taken into account.
+        //The tail is then: row & (1 << shift - 1)
+        //The head is then: row ^ tail >>> shift, or simply row >>> shift
+        //The result would then be: row = (tail << (size - shift)) + (head >> shift)
+        //To make sure this result is not bigger than the screen size, the result is masked with
+        //1 << size - 1, using an and-operation.
         val rightShift = shift % SCREEN_WIDTH
         val leftShift = SCREEN_WIDTH - rightShift
         this[row] = ((this[row] shl leftShift) + (this[row] ushr rightShift)) and
                 ((1L shl SCREEN_WIDTH) - 1) //Make sure the result is not bigger than the screen
-        // width
+        //width
     }
 
     private fun LongArray.rotateColumn(col: Int, shift: Int) {

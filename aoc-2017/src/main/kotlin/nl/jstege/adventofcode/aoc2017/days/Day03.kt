@@ -5,7 +5,6 @@ import nl.jstege.adventofcode.aoccommon.utils.Point
 import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 import nl.jstege.adventofcode.aoccommon.utils.extensions.pow
 import nl.jstege.adventofcode.aoccommon.utils.extensions.scan
-import javax.swing.UIManager.put
 import kotlin.math.abs
 import kotlin.math.round
 import kotlin.math.sqrt
@@ -24,7 +23,7 @@ class Day03 : Day(title = "Spiral Memory") {
         return (2 until Int.MAX_VALUE).asSequence()
             .map { it.spiralIndexToPoint() }
             .scan(1 to mutableMapOf(Point.ZERO_ZERO to 1)) { (_, values), point ->
-                point.neighbors8.map { values[it] ?: 0 }.sum().let { sum ->
+                point.neighbors8.sumBy { values[it] ?: 0 }.let { sum ->
                     sum to values.apply { put(point, sum) }
                 }
             }
@@ -34,7 +33,7 @@ class Day03 : Day(title = "Spiral Memory") {
 
     private fun Int.spiralIndexToPoint(): Point {
         fun calculateCoordinate(k: Int, m: Int, n: Int) = (k + m * m - n - (m % 2)) / 2 * (-1 pow m)
-        
+
         val n = this - 1 //AoC spiral irritatingly starts at 1 instead of 0.
         val m = round(sqrt(n.toDouble())).toInt()
         val k = abs(m * m - n) - m

@@ -25,27 +25,26 @@ class Day16 : Day(title = "Dragon Checksum") {
     private fun String.generateChecksum(): String = generateChecksum(StringBuilder(this))
 
     private tailrec fun fillDisk(input: StringBuilder, size: Int): String =
-        when (input.length.compareTo(size)) {
-            0, 1 -> StringBuilder(input.substring(0, size)).toString()
-            else -> {
-                val copy = input.negate().reverse()
-                fillDisk(input.append('0').append(copy), size)
-            }
+        if (input.length >= size) input.substring(0, size)
+        else {
+            val copy = input.negate().reverse()
+            fillDisk(input.append('0').append(copy), size)
         }
 
 
     private tailrec fun generateChecksum(input: StringBuilder = StringBuilder()): String =
-        when (input.length.isOdd() || input.isEmpty()) {
-            true -> input.toString()
-            else -> generateChecksum(
-                (0 until input.length step 2).asSequence()
-                    .map { if (input[it] == input[it + 1]) '1' else '0' }
-                    .fold(StringBuilder(), StringBuilder::append)
-            )
-        }
+        if (input.length.isOdd || input.isEmpty()) input.toString()
+        else generateChecksum(
+            (0 until input.length step 2)
+                .asSequence()
+                .map { if (input[it] == input[it + 1]) '1' else '0' }
+                .fold(StringBuilder(), StringBuilder::append)
 
-    private fun StringBuilder.negate(): StringBuilder = (0 until this.length)
-        .map { if (this[it] == '1') '0' else '1' }
+        )
+
+    private
+
+    fun StringBuilder.negate(): StringBuilder = this
+        .map { if (it == '1') '0' else '1' }
         .fold(StringBuilder(), StringBuilder::append)
-
 }

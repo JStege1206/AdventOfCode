@@ -12,6 +12,14 @@ class Day13 : Day(title = "Knights of the Dinner Table") {
         private const val INPUT_PATTERN_STRING = "([a-zA-Z]+) would (lose|gain) (\\d+) happiness " +
                 "units by sitting next to ([a-zA-Z]+)\\."
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+
+        private const val PERSON1_INDEX = 1
+        private const val NEGATE_INDEX = 2
+        private const val AMOUNT_INDEX = 3
+        private const val PERSON2_INDEX = 4
+
+        private val PARAM_INDICES =
+            intArrayOf(PERSON1_INDEX, NEGATE_INDEX, AMOUNT_INDEX, PERSON2_INDEX)
     }
 
     override fun first(input: Sequence<String>) = input.parse().optimal()
@@ -19,9 +27,9 @@ class Day13 : Day(title = "Knights of the Dinner Table") {
     override fun second(input: Sequence<String>) = input.parse().addOwn().optimal()
 
     private fun Sequence<String>.parse(): Map<String, Map<String, Int>> = this
-        .map { INPUT_REGEX.matchEntire(it)!!.groupValues }
+        .map { it.extractValues(INPUT_REGEX, *PARAM_INDICES) }
         .transformTo(mutableMapOf<String, MutableMap<String, Int>>())
-        { relations, (_, p1, neg, amt, p2) ->
+        { relations, (p1, neg, amt, p2) ->
             relations[p1, p2] = amt.toInt() * if (neg == "lose") -1 else 1
         }
 

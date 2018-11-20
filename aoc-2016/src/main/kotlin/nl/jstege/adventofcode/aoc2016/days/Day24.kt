@@ -18,10 +18,10 @@ class Day24 : Day(title = "Air Duct Spelunking") {
     }
 
     override fun first(input: Sequence<String>): Any = input.toList()
-        .findShortestRoute { it }
+        .findShortestRoute { path -> path }
 
     override fun second(input: Sequence<String>): Any = input.toList()
-        .findShortestRoute { it + END_NODE }
+        .findShortestRoute { path -> path + END_NODE }
 
 
     private fun List<String>.findShortestRoute(pathModifier: (List<Int>) -> List<Int>): Int {
@@ -45,9 +45,9 @@ class Day24 : Day(title = "Air Duct Spelunking") {
             .filter { it != START_NODE }
             .permutations()
             .map { pathModifier(it) }
-            .map { it.map { goals[it]!! } }
-            .map {
-                (listOf(goals[START_NODE]!!) + it)
+            .map { path -> path.map { goals[it]!! } }
+            .map { path ->
+                (listOf(goals[START_NODE]!!) + path)
                     .zipWithNext { prev, cur -> maze.findShortestPath(prev, cur) }
                     .sum()
             }.min() ?: throw IllegalArgumentException("No shortest route available")

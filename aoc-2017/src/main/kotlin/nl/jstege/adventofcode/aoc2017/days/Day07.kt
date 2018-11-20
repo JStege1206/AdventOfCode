@@ -1,6 +1,7 @@
 package nl.jstege.adventofcode.aoc2017.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.extractValues
 
 /**
  *
@@ -10,6 +11,12 @@ class Day07 : Day(title = "Recursive Circus") {
     private companion object Configuration {
         private const val INPUT_PATTERN_STRING = """(\w+) \((\d+)\)( -> ([\w, ]+))?"""
         private val INPUT_REGEX = INPUT_PATTERN_STRING.toRegex()
+
+        private const val NAME_INDEX = 1
+        private const val WEIGHT_INDEX = 2
+        private const val NODES_INDEX = 4
+
+        private val PARAM_INDICES = intArrayOf(NAME_INDEX, WEIGHT_INDEX, NODES_INDEX)
     }
 
     override fun first(input: Sequence<String>): Any = input.findRoot().name
@@ -19,8 +26,8 @@ class Day07 : Day(title = "Recursive Circus") {
     private fun Sequence<String>.findRoot(): Program {
         val cache = mutableMapOf<String, Program>()
         return this
-            .map { INPUT_REGEX.matchEntire(it)?.groupValues!! }
-            .map { (_, name, weight, _, nodes) ->
+            .map { it.extractValues(INPUT_REGEX, *PARAM_INDICES) }
+            .map { (name, weight, nodes) ->
                 cache.getOrPut(name) { Program(name) }.apply {
                     this.weight = weight.toInt()
                     if (nodes.isNotBlank()) {

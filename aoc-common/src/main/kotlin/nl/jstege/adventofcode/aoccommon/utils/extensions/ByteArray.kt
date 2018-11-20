@@ -16,7 +16,7 @@ package nl.jstege.adventofcode.aoccommon.utils.extensions
 fun ByteArray.isPrefixedWithZeroes(amount: Int) = when {
     amount > this.size * 2 -> false
     else -> this.asSequence()
-        .take(amount / 2 + if (amount.isOdd()) 1 else 0)
+        .take(amount / 2 + if (amount.isOdd) 1 else 0)
         .flatMap { sequenceOf(it.toInt() ushr 4, it.toInt() and 0x0F) }
         .withIndex()
         .all { (i, it) -> i == amount || it == 0 }
@@ -30,7 +30,7 @@ fun ByteArray.isPrefixedWithZeroes(amount: Int) = when {
  * @return The string representation of the given ByteArray in hexadecimal format.
  */
 fun ByteArray.toHexString(n: Int = this.size): String =
-    CharArray(Math.min(this.size, n) * 2) {
-        if (it.isEven()) (this[it / 2].toUnsignedInt() ushr 4).toHexChar()
+    String(CharArray(Math.min(this.size, n) * 2) {
+        if (it.isEven) (this[it / 2].toUnsignedInt() ushr 4).toHexChar()
         else (this[it / 2].toUnsignedInt() and 0x0F).toHexChar()
-    }.let { String(it) }
+    })

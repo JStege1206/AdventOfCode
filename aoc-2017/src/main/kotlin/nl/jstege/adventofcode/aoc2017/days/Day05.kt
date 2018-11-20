@@ -1,6 +1,7 @@
 package nl.jstege.adventofcode.aoc2017.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import kotlin.contracts.contract
 
 /**
  *
@@ -22,9 +23,11 @@ class Day05 : Day(title = "A Maze of Twisty Trampolines, All Alike") {
         tailrec fun walkRecursive(i: Int, accumulator: Int = 0): Int =
             if (i >= this.size || i < 0) accumulator
             else walkRecursive(
-                i + this[i].apply { this@walk[i] += incrementalStep(this) }, accumulator + 1
+                i + this[i].also { this[i] += incrementalStep(it) },
+                accumulator + 1
             )
 
         return walkRecursive(0)
     }
+    
 }
