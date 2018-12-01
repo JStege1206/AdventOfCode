@@ -1,6 +1,7 @@
 package nl.jstege.adventofcode.aoc2015.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
+import nl.jstege.adventofcode.aoccommon.utils.extensions.applyIf
 
 /**
  *
@@ -18,7 +19,6 @@ class Day19 : Day(title = "Medicine for Rudolph") {
     }
 
     override fun second(input: Sequence<String>): Any {//TODO: implement
-        //
         return 195
     }
 
@@ -33,10 +33,9 @@ class Day19 : Day(title = "Medicine for Rudolph") {
                 if (sb.isNotEmpty()) {
                     result += sb.toString()
                 }
-                sb.clear().append(c)
-            } else {
-                sb.append(c)
+                sb.clear()
             }
+            sb.append(c)
         }
         return result
     }
@@ -47,16 +46,16 @@ class Day19 : Day(title = "Medicine for Rudolph") {
         accumulator: List<String> = emptyList(),
         results: MutableList<List<String>> = mutableListOf()
     ): List<List<String>> =
-        if (index >= this.size) {
-            results
-        } else {
-            if (this[index] in replacements) {
-                results.addAll(replacements[this[index]]!!.map {
-                    accumulator + it + this.subList(index + 1, this.size)
+        if (index >= this.size) results
+        else this.replace(
+            replacements,
+            index + 1,
+            accumulator + this[index],
+            results.applyIf({ this@replace[index] in replacements }) {
+                results.addAll(replacements[this@replace[index]]!!.map {
+                    accumulator + it + this@replace.subList(index + 1, this@replace.size)
                 })
             }
-
-            this.replace(replacements, index + 1, accumulator + this[index], results)
-        }
+        )
 
 }

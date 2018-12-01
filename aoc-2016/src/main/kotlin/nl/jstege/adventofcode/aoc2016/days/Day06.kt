@@ -2,6 +2,7 @@ package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.extensions.transpose
+import kotlin.reflect.KFunction1
 
 /**
  *
@@ -9,18 +10,15 @@ import nl.jstege.adventofcode.aoccommon.utils.extensions.transpose
  */
 class Day06 : Day(title = "Signals and Noise") {
     override fun first(input: Sequence<String>): Any = input.toList()
-        .errorCorrect(Map<Char, List<Char>>::minBy)
+        .map(String::toList)
+        .transpose()
+        .map { column -> column.groupBy { it }.maxBy { it.value.size }?.key }
+        .joinToString("")
 
     override fun second(input: Sequence<String>): Any = input.toList()
-        .errorCorrect(Map<Char, List<Char>>::maxBy)
+        .map(String::toList)
+        .transpose()
+        .map { column -> column.groupBy { it }.minBy { it.value.size }?.key }
+        .joinToString("")
 
-    private fun List<String>.errorCorrect(
-        selector: Map<Char, List<Char>>.((Map.Entry<Char, List<Char>>) -> Int) ->
-        Map.Entry<Char, List<Char>>?
-    ) =
-        this
-            .map(String::toList)
-            .transpose()
-            .map { column -> column.groupBy { it }.selector { it.value.size }?.key }
 }
-

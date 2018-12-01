@@ -48,7 +48,6 @@ operator fun <E> List<E>.component6() = this[5]
  * @receiver The list to use.
  * @return The 6th element of the list.
  */
-
 operator fun <E> List<E>.component7() = this[6]
 
 /**

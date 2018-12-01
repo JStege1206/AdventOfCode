@@ -26,31 +26,29 @@ fun Duration.format(pattern: String = "d:HH:mm:ss.SSS"): String {
     var patternIndex = 0
 
     while (patternIndex < pattern.length) {
-        val (segment, segmentLength) = when {
-            //Match a pattern symbol
-            pattern[patternIndex] in PATTERN_SYMBOLS -> {
+        val (segment, segmentLength) = when (val symbol = pattern[patternIndex]) {
+            in PATTERN_SYMBOLS -> {
                 val (
                         ofUnit: (Long) -> Duration,
                         toUnit: (Duration) -> Long,
                         minUnit: (Duration, Long) -> Duration
-                ) = PATTERN_SYMBOLS[pattern[patternIndex]]!!
+                ) = PATTERN_SYMBOLS[symbol]!!
 
                 val (newDuration: Duration, durationSegment: Long) = previousDuration
                     .extractUnit(ofUnit, toUnit, minUnit)
 
                 val identifierLength = pattern
                     .drop(patternIndex)
-                    .takeWhile { it == pattern[patternIndex] }
+                    .takeWhile { it == symbol }
                     .length
 
                 previousDuration = newDuration
                 Pair("$durationSegment".padStart(identifierLength, '0'), identifierLength)
             }
-            //Match a quote, entering text mode
-            pattern[patternIndex] == '\'' -> {
+            '\'' -> {
                 val result = TEXT_REGEX.find(pattern.drop(patternIndex))
                         ?: throw IllegalArgumentException("Unterminated quote")
-                val (text) = result.destructured
+                val text = result.groupValues[1]
                 val parsedText = text
                     //Remove surrounding quotes
                     .substring(1, text.length - 1)
@@ -60,9 +58,8 @@ fun Duration.format(pattern: String = "d:HH:mm:ss.SSS"): String {
                 //quotation marks
                 Pair(parsedText, text.length)
             }
-            //Match something else entirely, assume text mode for 1 character
             else -> {
-                Pair(pattern[patternIndex].toString(), 1)
+                Pair(symbol.toString(), 1)
             }
         }
         builder.append(segment)

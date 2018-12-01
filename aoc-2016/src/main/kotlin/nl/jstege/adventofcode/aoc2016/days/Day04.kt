@@ -38,7 +38,7 @@ class Day04 : Day(title = "Security Through Obscurity") {
     private fun Sequence<String>.getValidRooms(): Sequence<Room> {
         return this
             .map { it.extractValues(INPUT_REGEX, *PARAM_INDICES) }
-            .map { (_, name, id, checksum) -> Room(name, id.toInt(), checksum) }
+            .map { (name, id, checksum) -> Room(name, id.toInt(), checksum) }
             .filter { room ->
                 room.checksum == room.encryptedName
                     .filter { it != '-' }

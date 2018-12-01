@@ -32,10 +32,8 @@ fun <T, R> Sequence<T>.scan(initial: R, operation: (acc: R, T) -> R): Sequence<R
  * @param destination The destination to transform all elements in the given sequence to
  * @param transform The transform function to.
  */
-fun <T, R> Sequence<T>.transformTo(destination: R, transform: (R, T) -> Unit): R {
-    this.forEach { transform(destination, it) }
-    return destination
-}
+fun <T, R> Sequence<T>.transformTo(destination: R, transform: (R, T) -> Unit): R =
+    destination.apply { this@transformTo.forEach { transform(this, it) } }
 
 private class ScanningSequence<out T, R> constructor(
     private val iterator: Iterator<T>,
