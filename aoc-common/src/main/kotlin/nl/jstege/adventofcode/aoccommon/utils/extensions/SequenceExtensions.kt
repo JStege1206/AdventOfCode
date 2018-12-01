@@ -35,6 +35,14 @@ fun <T, R> Sequence<T>.scan(initial: R, operation: (acc: R, T) -> R): Sequence<R
 fun <T, R> Sequence<T>.transformTo(destination: R, transform: (R, T) -> Unit): R =
     destination.apply { this@transformTo.forEach { transform(this, it) } }
 
+/**
+ * Returns an endless sequence based on the given sequence. Once the end of the original sequence
+ * has been reached, it will start again from the beginning.
+ * @receiver Sequence<T> The original sequence, to be iterated over endlessly.
+ * @return Sequence<T> An endless sequence, iterating over the original members
+ */
+fun <T> Sequence<T>.cycle(): Sequence<T> = generateSequence { this }.flatten()
+
 private class ScanningSequence<out T, R> constructor(
     private val iterator: Iterator<T>,
     private val initial: R,
