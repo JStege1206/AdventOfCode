@@ -43,6 +43,22 @@ fun <T, R> Sequence<T>.transformTo(destination: R, transform: (R, T) -> Unit): R
  */
 fun <T> Sequence<T>.cycle(): Sequence<T> = generateSequence { this }.flatten()
 
+/**
+ * Copies a sequence [n] and returns it as a single sequence.
+ * @receiver Sequence<T> The sequence to copy.
+ * @param n Int Amount of times to copy the given sequence
+ * @return Sequence<T> The resulting sequence, which is n * the original sequence.
+ */
+operator fun <T> Sequence<T>.times(n: Int) = generateSequence { this }.take(n).flatten()
+
+/**
+ * Returns the first element of the Sequence
+ *
+ * @receiver The sequence to get the first element of.
+ * @return The first element of the Sequence.
+ */
+inline val <E> Sequence<E>.head get() = this.first()
+
 private class ScanningSequence<out T, R> constructor(
     private val iterator: Iterator<T>,
     private val initial: R,
@@ -56,19 +72,17 @@ private class ScanningSequence<out T, R> constructor(
 
     override fun iterator(): Iterator<R> = object : Iterator<R> {
         var previous = initial
+        var hasElement = iterator.hasNext()
+        override fun next(): R {
+            val result = previous
+            hasElement =
+                    if (iterator.hasNext()) true.also {
+                        previous = operation(previous, iterator.next())
+                    }
+                    else false
+            return result
+        }
 
-        override fun next(): R = previous.also { previous = operation(previous, iterator.next()) }
-
-        override fun hasNext(): Boolean = iterator.hasNext()
+        override fun hasNext(): Boolean = hasElement
     }
 }
-
-operator fun <T> Sequence<T>.times(n: Int) = generateSequence { this }.take(n).flatten()
-
-/**
- * Returns the first element of the Sequence
- *
- * @receiver The sequence to get the first element of.
- * @return The first element of the Sequence.
- */
-inline val <E> Sequence<E>.head get() = this.first()

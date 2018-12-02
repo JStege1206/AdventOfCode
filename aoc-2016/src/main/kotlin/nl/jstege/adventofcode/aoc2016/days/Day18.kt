@@ -31,9 +31,8 @@ class Day18 : Day(title = "Like a Rogue") {
         .computeRule90(iterations)
 
 
-    private fun BigInteger.computeRule90(iterations: Int): Int = (0 until iterations)
+    private fun BigInteger.computeRule90(iterations: Int): Int = (0 until iterations - 1)
         .asSequence()
         .scan(this) { row, _ -> (row shr 1) xor ((row shl 1) and ROW_MASK) }
         .sumBy { ROW_LENGTH - it.bitCount() }
-
 }

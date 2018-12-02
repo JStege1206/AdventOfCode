@@ -122,3 +122,20 @@ fun <E> List<E>.reverse(start: Int, length: Int): List<E> =
             list.swap(f % this.size, s % this.size)
             list
         }
+
+/**
+ * Returns a list of each element and their tails in the given list. 
+ * E.g. ["a", "b", "c"] -> [["a", "b", "c"], ["b", "c"], ["c"]] 
+ * @receiver List<E> 
+ * @return List<List<E>> all elements and their tails.
+ */
+fun <E> List<E>.tails(): List<List<E>> {
+    tailrec fun tails(current: List<E>, acc: List<List<E>>): List<List<E>> =
+        if (current.isEmpty()) acc
+        else tails(current.drop(1), acc + listOf(current))
+    return tails(this, listOf())
+}
+
+fun main(vararg args: String) {
+    println(listOf("abc", "def", "ghi").tails())
+}
