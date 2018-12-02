@@ -135,7 +135,3 @@ fun <E> List<E>.tails(): List<List<E>> {
         else tails(current.drop(1), acc + listOf(current))
     return tails(this, listOf())
 }
-
-fun main(vararg args: String) {
-    println(listOf("abc", "def", "ghi").tails())
-}

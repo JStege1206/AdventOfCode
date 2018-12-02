@@ -21,6 +21,7 @@ class Day02 : Day(title = "Inventory Management System") {
         return input
             .toList()
             .tails()
+            .asSequence()
             .mapNotNull { ids ->
                 val currentId = ids.head
                 ids.tail.asSequence()
@@ -35,9 +36,19 @@ class Day02 : Day(title = "Inventory Management System") {
         .values
         .any { it.size == n }
 
-    private fun String.keepCommon(s: String): String =
-        this.asSequence()
-            .zip(s.asSequence())
-            .filter { (i, j) -> i == j }
-            .joinToString("") { (i, _) -> "$i" }
+    private fun String.keepCommon(s: String): String {
+        val r = StringBuilder()
+        var differences = 0
+        for (i in 0 until length) {
+            if (this[i] != s[i]) {
+                differences += 1
+            } else {
+                r.append(this[i])
+            }
+            if (differences > 1) {
+                break
+            }
+        }
+        return r.toString()
+    }
 }
