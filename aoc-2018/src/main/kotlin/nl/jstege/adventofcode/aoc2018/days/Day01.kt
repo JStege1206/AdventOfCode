@@ -9,9 +9,8 @@ class Day01 : Day(title = "Chronal Calibration") {
         private const val STARTING_FREQUENCY = 0
     }
 
-    override fun first(input: Sequence<String>): Any = input
-        .map(String::toInt)
-        .fold(STARTING_FREQUENCY, Int::plus)
+    override fun first(input: Sequence<String>): Any =
+        input.map(String::toInt).sum() + STARTING_FREQUENCY
 
     override fun second(input: Sequence<String>): Any =
         mutableSetOf<Int>().let { frequencies ->

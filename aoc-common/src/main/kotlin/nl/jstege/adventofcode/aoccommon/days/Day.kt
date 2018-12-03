@@ -72,7 +72,7 @@ abstract class Day(private val title: String) {
         val startTime = System.nanoTime()
         val output = action()
         val timeTaken = System.nanoTime() - startTime
-        return Pair(output, timeTaken)
+        return Solution(output, timeTaken)
     }
 
 

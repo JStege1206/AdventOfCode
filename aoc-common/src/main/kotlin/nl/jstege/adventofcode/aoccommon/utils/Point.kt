@@ -44,7 +44,7 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
          * @return A [List] of [Point]s for the given ranges.
          */
         fun of(xs: IntProgression, ys: IntProgression) =
-            xs.flatMap { x -> ys.map { y -> Point.of(x, y) } }
+            ys.flatMap { y -> xs.map { x -> Point.of(x, y) } }
 
         fun of(from: Point, to: Point) =
             (from.x..to.x).asSequence().flatMap { x ->
@@ -220,8 +220,3 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
      */
     override fun toString(): String = "($x,$y)"
 }
-
-fun pointOf(x: Int, y: Int) = Point.of(x, y)
-fun pointOf() = Point.ZERO_ZERO
-fun pointOf(xs: IntProgression, ys: IntProgression) = Point.of(xs, ys)
-fun pointOf(p: Pair<Int, Int>) = Point.of(p)

@@ -124,9 +124,9 @@ fun <E> List<E>.reverse(start: Int, length: Int): List<E> =
         }
 
 /**
- * Returns a list of each element and their tails in the given list. 
- * E.g. ["a", "b", "c"] -> [["a", "b", "c"], ["b", "c"], ["c"]] 
- * @receiver List<E> 
+ * Returns a list of each element and their tails in the given list.
+ * E.g. ["a", "b", "c"] -> [["a", "b", "c"], ["b", "c"], ["c"]]
+ * @receiver List<E>
  * @return List<List<E>> all elements and their tails.
  */
 fun <E> List<E>.tails(): List<List<E>> {

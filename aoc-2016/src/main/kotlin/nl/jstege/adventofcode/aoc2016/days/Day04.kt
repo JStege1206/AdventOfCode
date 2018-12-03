@@ -1,7 +1,6 @@
 package nl.jstege.adventofcode.aoc2016.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
-import nl.jstege.adventofcode.aoccommon.utils.extensions.extractValue
 import nl.jstege.adventofcode.aoccommon.utils.extensions.extractValues
 
 /**
