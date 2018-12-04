@@ -17,7 +17,7 @@ class Day03 : Day(title = "No Matter How You Slice It") {
         private const val Y_INDEX = 3
         private const val WIDTH_INDEX = 4
         private const val HEIGHT_INDEX = 5
-        
+
         private val PARAM_INDICES = intArrayOf(
             ID_INDEX,
             X_INDEX,
@@ -38,7 +38,7 @@ class Day03 : Day(title = "No Matter How You Slice It") {
             input
                 .parse()
                 .onEach(grid::set)
-                .toList()
+                .toList() //Make sure all claims have been processed.
                 .first { claim -> grid[claim].all { it == 1 } }
                 .id
         }
@@ -68,8 +68,8 @@ class Day03 : Day(title = "No Matter How You Slice It") {
                 }
             }
 
-        operator fun get(claim: Claim): List<Int> = claim
-            .let { (_, startX, startY, endX, endY) ->
+        operator fun get(claim: Claim): List<Int> =
+            claim.let { (_, startX, startY, endX, endY) ->
                 (startY until endY).flatMap { y ->
                     grid.copyOfRange(y * width + startX, y * width + endX).toList()
                 }
