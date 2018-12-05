@@ -14,20 +14,20 @@ class Day04 : Day(title = "Repose Record") {
     override fun first(input: Sequence<String>): Any = input
         .parse()
         .maxBy { (_, sleepSessions) -> sleepSessions.sumBy { it.size } }
-        ?.let { (guard, sleepSessions) ->
-            sleepSessions.findMinuteMostAsleep()?.key?.let { guard * it }
+        ?.let { (guardId, sleepSessions) ->
+            sleepSessions.findMinuteMostAsleep()?.key?.let { guardId * it }
         } ?: throw IllegalStateException()
 
     override fun second(input: Sequence<String>): Any = input
-        .parse().entries
-        .mapNotNull { (g, sleepSessions) ->
+        .parse()
+        .mapNotNull { (guardId, sleepSessions) ->
             sleepSessions
                 .findMinuteMostAsleep()
-                ?.let { (minute, amount) -> Triple(g, minute, amount) }
+                ?.let { (minute, amount) -> Triple(guardId, minute, amount) }
         }
         .maxBy { (_, _, minuteAmount) -> minuteAmount }
-        ?.let { (g, minute) ->
-            g * minute
+        ?.let { (guardId, minute) ->
+            guardId * minute
         } ?: throw IllegalStateException()
 
     private fun Sequence<String>.parse(): Map<Int, List<List<Int>>> =
@@ -42,7 +42,7 @@ class Day04 : Day(title = "Repose Record") {
                         else -> -1 to computeIfAbsent(id.toInt()) { mutableListOf() }
                     }
                 }
-        }.toMap()
+        }
 
     private fun Int.minutesTo(other: Int): List<Int> =
         if (this >= other) (this until (other + 60)).map { it % 60 }
