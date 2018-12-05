@@ -11,7 +11,7 @@ class Day05 : Day(title = "Alchemical Reduction") {
     override fun second(input: Sequence<String>): Any =
         ('a'..'z').map { c ->
             input.head
-                .filter { it == c.toLowerCase() || it == c.toUpperCase() }
+                .filterNot { it == c.toLowerCase() || it == c.toUpperCase() }
                 .collapse()
         }.min() ?: throw IllegalStateException()
 
