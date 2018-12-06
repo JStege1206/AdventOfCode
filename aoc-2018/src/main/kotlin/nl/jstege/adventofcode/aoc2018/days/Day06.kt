@@ -59,7 +59,7 @@ class Day06 : Day(title = "Chronal Coordinates") {
                 Point.of(x, y)
             }
             .toList()
-            .let { Triple(it, Point.of(minX - 1, minY - 1), Point.of(maxX + 1, maxY + 1)) }
+            .let { Triple(it, Point.of(minX, minY), Point.of(maxX, maxY)) }
     }
 
     private fun Point.onEdge(min: Point, max: Point): Boolean =
