@@ -6,7 +6,7 @@ package nl.jstege.adventofcode.aoccommon.utils.extensions
  */
 inline fun <E> E.applyIf(condition: E.() -> Boolean, block: E.() -> Unit): E {
     if (this.condition()) {
-        block()
+        this.block()
     }
     return this
 }

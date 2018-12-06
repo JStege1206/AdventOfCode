@@ -8,7 +8,10 @@ class Day02 : Day(title = "Inventory Management System") {
         .asSequence()
         .map { id -> id.groupingBy { it }.eachCount().values }
         .fold(Pair(0, 0)) { (twos, threes), counts ->
-            Pair(if (2 in counts) twos + 1 else twos, if (3 in counts) threes + 1 else threes)
+            Pair(
+                if (2 in counts) twos + 1 else twos,
+                if (3 in counts) threes + 1 else threes
+            )
         }.let { (twos, threes) -> twos * threes }
 
     override fun second(input: Sequence<String>): Any = input
