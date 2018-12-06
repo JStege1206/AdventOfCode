@@ -2,7 +2,6 @@ package nl.jstege.adventofcode.aoc2018.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.Point
-import nl.jstege.adventofcode.aoccommon.utils.extensions.applyIf
 
 class Day06 : Day(title = "Chronal Coordinates") {
     companion object Configuration {
@@ -13,19 +12,7 @@ class Day06 : Day(title = "Chronal Coordinates") {
         .parse()
         .let { (points, min, max) ->
             min.createGridTo(max)
-                .mapNotNull { gridPoint ->
-                    points.fold(mutableListOf<Pair<Point, Int>>()) { nearest, c ->
-                        c.manhattan(gridPoint).let { distance ->
-                            if (nearest.isNotEmpty() && distance < nearest.first().second) {
-                                mutableListOf(c to distance)
-                            } else {
-                                nearest.applyIf({ isEmpty() || first().second == distance }) {
-                                    add(c to distance)
-                                }
-                            }
-                        }
-                    }.takeIf { it.size == 1 }?.let { gridPoint to it.first().first }
-                }
+                .mapNotNull { gridPoint -> points.findNearest(gridPoint) }
                 .groupBy { it.second }
                 .values
                 .asSequence()
@@ -33,6 +20,7 @@ class Day06 : Day(title = "Chronal Coordinates") {
                 .map { it.size }
                 .max() ?: 0
         }
+
 
     override fun second(input: Sequence<String>): Any = input
         .parse()
@@ -62,6 +50,21 @@ class Day06 : Day(title = "Chronal Coordinates") {
             .let { Triple(it, Point.of(minX, minY), Point.of(maxX, maxY)) }
     }
 
+    private fun List<Point>.findNearest(origin: Point): Pair<Point, Point>? = this
+        .fold(
+            Closest(Pair(Point.ZERO_ZERO, Int.MAX_VALUE), false)
+        ) { closest, destination ->
+            destination.manhattan(origin).let { distance ->
+                when {
+                    distance < closest.coord.second -> Closest(destination to distance)
+                    distance == closest.coord.second -> closest.apply { valid = false }
+                    else -> closest
+                }
+            }
+        }
+        .takeIf { it.valid }
+        ?.let { origin to it.coord.first }
+
     private fun Point.onEdge(min: Point, max: Point): Boolean =
         x == min.x || x == max.x || y == min.y || y == max.y
 
@@ -72,5 +75,7 @@ class Day06 : Day(title = "Chronal Coordinates") {
             generateSequence { Point.of(x + n % width, y + n / width).also { n++ } }
                 .take((p.y - y + if (including) 1 else 0) * width)
         }
+
+    data class Closest(var coord: Pair<Point, Int>, var valid: Boolean = true)
 }
 
