@@ -28,7 +28,7 @@ class Day06 : Day(title = "Chronal Coordinates") {
             val xLimit = (MAX_DISTANCE_SUM - (max.x - min.x)) / points.size
             val yLimit = (MAX_DISTANCE_SUM - (max.y - min.y)) / points.size
             Point.of(min.x - xLimit, min.y - yLimit)
-                .createGridTo(Point.of(max.x + xLimit, max.y + yLimit)).toList()
+                .createGridTo(Point.of(max.x + xLimit, max.y + yLimit))
                 .count { gp -> points.sumBy { p -> p.manhattan(gp) } < MAX_DISTANCE_SUM }
         }
 
@@ -78,4 +78,3 @@ class Day06 : Day(title = "Chronal Coordinates") {
 
     data class Closest(var coord: Pair<Point, Int>, var valid: Boolean = true)
 }
-
