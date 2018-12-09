@@ -3,21 +3,20 @@ package nl.jstege.adventofcode.aoc2018.days
 import nl.jstege.adventofcode.aoccommon.days.Day
 import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 
-class Day08 : Day(title = "") {
+class Day08 : Day(title = "Memory Maneuver") {
     override fun first(input: Sequence<String>): Any =
         input.head
             .parse()
-            .buildTree()
-            .walk()
-            .sumBy { it.metadata.sum() }
+            .sumMetadata()
 
     override fun second(input: Sequence<String>): Any =
         input.head
             .parse()
-            .buildTree().value
+            .calculateNodeValues()
+            .sum()
 
     fun String.parse(): Iterator<Int> = object : Iterator<Int> {
-        val iterator = this@parse.iterator()
+        val iterator = this@parse.trim().iterator()
         override fun hasNext(): Boolean = iterator.hasNext()
 
         override fun next(): Int {
@@ -31,22 +30,23 @@ class Day08 : Day(title = "") {
             return n
         }
     }
-    
-    private fun Iterator<Int>.buildTree(): Node = (next() to next())
-        .let { (children, metadata) ->
-            Node(
-                (0 until children).map { buildTree() },
-                (0 until metadata).map { next() }
-            )
-        }
 
-    private data class Node(val children: List<Node>, val metadata: List<Int>) {
-        val value: Int
-            get() =
-                if (children.isEmpty()) metadata.sum()
-                else metadata.sumBy { if (it - 1 < children.size) children[it - 1].value else 0 }
+    private fun Iterator<Int>.sumMetadata(): Int =
+        (next() to next())
+            .let { (children, metadata) ->
+                (0 until children)
+                    .sumBy { sumMetadata() } + (0 until metadata).sumBy { next() }
+            }
 
-        fun walk(): Sequence<Node> =
-            sequenceOf(this) + this.children.asSequence().flatMap { it.walk() }
-    }
+    private fun Iterator<Int>.calculateNodeValues(): List<Int> =
+        (next() to next())
+            .let { (children, metadata) ->
+                if (children == 0)
+                    (0 until metadata).map { next() }
+                else
+                    (0 until children)
+                        .map { calculateNodeValues() }
+                        .slice((0 until metadata).map { next() - 1 }.filter { it < children })
+                        .flatten()
+            }
 }

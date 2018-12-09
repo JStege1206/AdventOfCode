@@ -37,11 +37,8 @@ class Day07 : Day(title = "The Sum of Its Parts") {
                 workingOnUntil.getOrPut(currentSecond + (it - 'A' + 61)) { mutableListOf() } += it
             }
 
-        return if (accumulator.size == allInstructions.size) {
-            currentSecond
-        } else {
-            calculateTimeTaken(accumulator, workingOnUntil, currentSecond + 1)
-        }
+        return if (accumulator.size == allInstructions.size) currentSecond
+        else calculateTimeTaken(accumulator, workingOnUntil, currentSecond + 1)
     }
 
 

@@ -177,6 +177,3 @@ private fun StringBuilder.appendln(
     lineSeparator: String = System.lineSeparator()
 ) = this.append(stringBuilder).append(lineSeparator)
 
-
-fun String.splitOnIndex(index: Int): List<String> =
-    listOf(this.substring(0, index), this.substring(index))
