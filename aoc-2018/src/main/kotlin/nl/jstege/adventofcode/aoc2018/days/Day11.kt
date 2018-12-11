@@ -1,7 +1,6 @@
 package nl.jstege.adventofcode.aoc2018.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
-import nl.jstege.adventofcode.aoccommon.utils.Point
 import nl.jstege.adventofcode.aoccommon.utils.extensions.applyIf
 import nl.jstege.adventofcode.aoccommon.utils.extensions.head
 import nl.jstege.adventofcode.aoccommon.utils.extensions.min
@@ -15,34 +14,42 @@ class Day11 : Day(title = "Chronal Charge") {
         private const val FIRST_SQUARE_SIZE = 3
     }
 
-    override fun first(input: Sequence<String>): Any = input.head.toInt()
-        .solve(FIRST_SQUARE_SIZE, FIRST_SQUARE_SIZE)
-        .let { (p, size) -> "${p.x - size + 1},${p.y - size + 1}" }
+    override fun first(input: Sequence<String>): Any = input.head.toInt().let { serialNumber ->
+        solve(serialNumber, FIRST_SQUARE_SIZE, FIRST_SQUARE_SIZE)
+            .let { (x, y, size) -> "${x - size + 1},${y - size + 1}" }
+    }
 
-    override fun second(input: Sequence<String>): Any = input.head.toInt()
-        .solve(1, min(GRID_WIDTH, GRID_HEIGHT))
-        .let { (p, size) -> "${p.x - size + 1},${p.y - size + 1},$size" }
 
-    private fun Int.solve(minSquareSize: Int, maxSquareSize: Int): Pair<Point, Int> {
+    override fun second(input: Sequence<String>): Any = input.head.toInt().let { serialNumber ->
+        solve(serialNumber, 1, min(GRID_WIDTH, GRID_HEIGHT))
+            .let { (x, y, size) -> "${x - size + 1},${y - size + 1},$size" }
+    }
+
+    private fun solve(
+        serialNumber: Int,
+        minSquareSize: Int,
+        maxSquareSize: Int
+    ): Triple<Int, Int, Int> {
         val grid = IntArray((GRID_HEIGHT + 1) * (GRID_WIDTH + 1))
-        var max = Pair(Point.ZERO_ZERO, Int.MIN_VALUE)
 
+        var max = Triple(0, 0, Int.MIN_VALUE)
         var maxValue = Int.MIN_VALUE
 
-        for (y in 1..GRID_WIDTH) {
-            for (x in 1..GRID_HEIGHT) {
-                grid[x, y] = powerInCell(this, x, y) + grid[x, y - 1] + grid[x - 1, y] -
+        for (y in 1..GRID_HEIGHT) {
+            for (x in 1..GRID_WIDTH) {
+                grid[x, y] = powerInCell(serialNumber, x, y) + grid[x, y - 1] + grid[x - 1, y] -
                         grid[x - 1, y - 1]
 
                 for (size in minSquareSize..min(maxSquareSize, x, y)) {
                     grid.getSumOfSquare(x, y, size)
                         .applyIf({ this > maxValue }) {
                             maxValue = this
-                            max = Pair(Point.of(x, y), size)
+                            max = Triple(x, y, size)
                         }
                 }
             }
         }
+
         return max
     }
 
