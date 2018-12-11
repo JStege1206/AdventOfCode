@@ -96,6 +96,7 @@ data class Point internal constructor(val x: Int, val y: Int) : Comparable<Point
      */
     fun manhattan(other: Point) = abs(x - other.x) + abs(y - other.y)
 
+    fun area(other: Point): Long = abs(x.toLong() - other.x) * abs(y - other.y)
     /**
      * Adds some values to the x and y values of this point.
      * Results in a new point.
