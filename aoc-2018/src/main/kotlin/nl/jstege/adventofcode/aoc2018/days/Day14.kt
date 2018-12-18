@@ -37,7 +37,7 @@ class Day14 : Day(title = "Chocolate Charts") {
         else -> pow(a * a, b ushr 1, acc * a)
     }
 
-    class RecipeSequence() : Sequence<Int> {
+    class RecipeSequence : Sequence<Int> {
         override fun iterator(): Iterator<Int> = object : Iterator<Int> {
             var scores = mutableListOf(*INITIAL)
             var remaining = ArrayDeque<Int>(scores)

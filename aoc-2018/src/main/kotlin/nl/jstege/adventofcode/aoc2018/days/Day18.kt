@@ -1,7 +1,6 @@
 package nl.jstege.adventofcode.aoc2018.days
 
 import nl.jstege.adventofcode.aoccommon.days.Day
-import nl.jstege.adventofcode.aoccommon.utils.Point
 
 class Day18 : Day(title = "Settlers of The North Pole") {
     private companion object Configuration {
@@ -46,7 +45,6 @@ class Day18 : Day(title = "Settlers of The North Pole") {
         fun countScores(): Map<Char, Int> = grid.groupingBy { it }.eachCount()
 
         private fun toIndex(x: Int, y: Int) = y * width + x
-        private fun fromIndex(index: Int) = Point.of(index % width, index / width)
 
         fun nextGrid(): Grid = Grid(
             width,
@@ -58,10 +56,8 @@ class Day18 : Day(title = "Settlers of The North Pole") {
         )
 
         private fun Int.neighborValues(): Map<Char, Int> =
-            fromIndex(this)
-                .neighbors8
-                .filter { (x, y) -> x in (0 until width) && y in (0 until height) }
-                .map { grid[toIndex(it.x, it.y)] }
+            this
+                .neighbors()
                 .groupingBy { it }
                 .eachCount()
                 .withDefault { 0 }
@@ -73,6 +69,28 @@ class Day18 : Day(title = "Settlers of The North Pole") {
                 if (ns.getValue(TREE) >= 1 && ns.getValue(LUMBERYARD) >= 1) LUMBERYARD
                 else OPEN_GROUND
             else -> throw IllegalStateException()
+        }
+
+        private fun Int.neighbors(): List<Char> {
+            val result = mutableListOf<Char>()
+            val x = this % width
+            val y = this / width
+
+            if (y > 0) result += grid[toIndex(x, y - 1)]
+            if (y + 1 < height) result += grid[toIndex(x, y + 1)]
+
+            if (x > 0) {
+                result += grid[toIndex(x - 1, y)]
+                if (y > 0) result += grid[toIndex(x - 1, y - 1)]
+                if (y + 1 < height) result += grid[toIndex(x - 1, y + 1)]
+            }
+
+            if (x + 1 < width) {
+                result += grid[toIndex(x + 1, y)]
+                if (y > 0) result += grid[toIndex(x + 1, y - 1)]
+                if (y + 1 < height) result += grid[toIndex(x + 1, y + 1)]
+            }
+            return result
         }
     }
 }
