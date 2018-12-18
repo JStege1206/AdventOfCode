@@ -40,6 +40,8 @@ val Int.isEven: Boolean get() = this % 2 == 0
  */
 val Int.isOdd: Boolean get() = this % 2 != 0
 
+
+val Long.isEven: Boolean get() = this % 2 == 0L
 /**
  * Casts an integer x within range 0 <= x <= 15 to it's hexadecimal character.
  *

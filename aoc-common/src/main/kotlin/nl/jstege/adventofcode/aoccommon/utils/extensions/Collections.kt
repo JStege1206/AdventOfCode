@@ -94,11 +94,11 @@ fun <E> Collection<E>.combinations(n: Int): Sequence<Set<E>> {
     }
 }
 
+fun <E> List<E>.cycle(): Sequence<E> =
+    generateSequence(0) { (it + 1) % this.size }.map { this[it] }
 
-fun <E : Any> List<E>.cycle(): Sequence<E> {
-    var i = 0
-    return generateSequence { this[i++ % this.size] }
-}
+fun <E> List<E>.copy(vararg replacement: Pair<Int, E>): List<E> =
+    this.toMutableList().apply { replacement.forEach { (i, r) -> this[i] = r } }
 
 /**
  * Swaps two elements in the given MutableList
@@ -119,8 +119,7 @@ fun <E> List<E>.reverse(start: Int, length: Int): List<E> =
         .asSequence()
         .take(length / 2)
         .fold(this.toMutableList()) { list, (f, s) ->
-            list.swap(f % this.size, s % this.size)
-            list
+            list.apply { swap(f % this.size, s % this.size) }
         }
 
 /**

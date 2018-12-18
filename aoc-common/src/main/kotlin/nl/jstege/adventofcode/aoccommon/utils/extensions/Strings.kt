@@ -166,6 +166,21 @@ fun String.wrap(
 }
 
 /**
+ * Returns the string between the first occurence of [firstChar] and the last occurence of
+ * [lastChar]. Returns the original string of both [firstChar] and [lastChar] are not present.
+ * If indexOf(firstChar) > indexOf(lastchar) will return the substring starting with firstChar up to
+ * the end of the original string. If [firstChar] not present and [lastChar] is, returns the
+ * substring starting with the beginning of the original string up to the last ocurrence of
+ * [lastChar].
+ * @receiver String The original string.
+ * @param firstChar Char The starting position to cut at, will start at the first occurence.
+ * @param lastChar Char The end position to cut at, will end at the last occurence.
+ * @return String The cut up string, or more if above mentioned edge cases hold.
+ */
+fun String.substringBetween(firstChar: Char, lastChar: Char): String =
+    this.substringAfter(firstChar).substringBeforeLast(lastChar)
+
+/**
  * Appends a [StringBuilder] to this [StringBuilder] and a custom line seperator.
  * @receiver StringBuilder The [StringBuilder] to append to.
  * @param stringBuilder StringBuilder The [StringBuilder] to append.
