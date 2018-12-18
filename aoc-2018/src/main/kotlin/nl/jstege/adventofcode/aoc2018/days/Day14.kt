@@ -12,8 +12,7 @@ class Day14 : Day(title = "Chocolate Charts") {
     }
 
     override fun first(input: Sequence<String>): Any {
-        return generateRecipes()
-            .asSequence()
+        return RecipeSequence()
             .drop(input.head.toInt())
             .take(10)
             .joinToString("")
@@ -23,8 +22,7 @@ class Day14 : Day(title = "Chocolate Charts") {
         val pattern = input.head
         val target = input.head.toLong()
         val mod = pow(10, pattern.length.toLong())
-        return generateRecipes()
-            .asSequence()
+        return RecipeSequence()
             .scan(0L to 0) { (current, i), v ->
                 (10 * current + v) % mod to i + 1
             }
@@ -39,37 +37,40 @@ class Day14 : Day(title = "Chocolate Charts") {
         else -> pow(a * a, b ushr 1, acc * a)
     }
 
-    private fun generateRecipes(): Iterator<Int> = object : Iterator<Int> {
-        var scores = mutableListOf(*INITIAL)
-        var remaining = ArrayDeque<Int>(scores)
-        var i = 0
-        var j = 1
+    class RecipeSequence() : Sequence<Int> {
+        override fun iterator(): Iterator<Int> = object : Iterator<Int> {
+            var scores = mutableListOf(*INITIAL)
+            var remaining = ArrayDeque<Int>(scores)
+            var i = 0
+            var j = 1
 
-        override fun hasNext(): Boolean = true
+            override fun hasNext(): Boolean = true
 
-        override fun next(): Int {
-            if (remaining.isNotEmpty()) {
-                return remaining.removeFirst()
-            }
+            override fun next(): Int {
+                if (remaining.isNotEmpty()) {
+                    return remaining.removeFirst()
+                }
 
-            val x = scores[i] + scores[j]
+                val x = scores[i] + scores[j]
 
-            if (x >= 10) {
-                scores.add(1)
-                scores.add(x - 10)
-                remaining.add(x - 10)
+                if (x >= 10) {
+                    scores.add(1)
+                    scores.add(x - 10)
+                    remaining.add(x - 10)
+
+                    i = (i + 1 + scores[i]) % scores.size
+                    j = (j + 1 + scores[j]) % scores.size
+                    return 1
+                }
+
+                scores.add(x)
 
                 i = (i + 1 + scores[i]) % scores.size
                 j = (j + 1 + scores[j]) % scores.size
-                return 1
+
+                return x
             }
-
-            scores.add(x)
-            
-            i = (i + 1 + scores[i]) % scores.size
-            j = (j + 1 + scores[j]) % scores.size
-
-            return x
         }
+
     }
 }
