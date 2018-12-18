@@ -23,13 +23,10 @@ class Day14 : Day(title = "Chocolate Charts") {
         val pattern = input.head
         val target = input.head.toLong()
         val mod = pow(10, pattern.length.toLong())
-        println(mod)
         return generateRecipes()
             .asSequence()
             .scan(0L to 0) { (current, i), v ->
-                var c = (10 * current + v)
-                while (c >= mod) c -= mod
-                c to i + 1
+                (10 * current + v) % mod to i + 1
             }
             .first { it.first == target }
             .let { (_, i) -> i - pattern.length }
@@ -62,19 +59,15 @@ class Day14 : Day(title = "Chocolate Charts") {
                 scores.add(x - 10)
                 remaining.add(x - 10)
 
-                i += 1 + scores[i]
-                while (i >= scores.size) i -= scores.size
-                j += 1 + scores[j]
-                while (j >= scores.size) j -= scores.size
+                i = (i + 1 + scores[i]) % scores.size
+                j = (j + 1 + scores[j]) % scores.size
                 return 1
             }
 
             scores.add(x)
-
-            i += 1 + scores[i]
-            while (i >= scores.size) i -= scores.size
-            j += 1 + scores[j]
-            while (j >= scores.size) j -= scores.size
+            
+            i = (i + 1 + scores[i]) % scores.size
+            j = (j + 1 + scores[j]) % scores.size
 
             return x
         }
