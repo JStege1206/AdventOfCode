@@ -1,7 +1,9 @@
 package nl.jstege.adventofcode.aoc2018.days
 
+import nl.jstege.adventofcode.aoc2018.days.instructionset.Instruction.OpCodeInstruction
+import nl.jstege.adventofcode.aoc2018.days.instructionset.Op
+import nl.jstege.adventofcode.aoc2018.days.instructionset.RegisterBank
 import nl.jstege.adventofcode.aoccommon.days.Day
-import nl.jstege.adventofcode.aoccommon.utils.extensions.copy
 import nl.jstege.adventofcode.aoccommon.utils.extensions.substringBetween
 
 class Day16 : Day(title = "Chronal Classification") {
@@ -22,14 +24,14 @@ class Day16 : Day(title = "Chronal Classification") {
                 }[0]
         }
 
-    private fun Sequence<String>.parseProgram(): List<Instruction> = this
+    private fun Sequence<String>.parseProgram(): List<OpCodeInstruction> = this
         .joinToString("\n")
         .split("\n\n\n")[1]
         .split("\n")
         .filter { it.isNotEmpty() }
         .map { it.split(" ") }
         .map { it.map(String::toInt) }
-        .map { (opCode, op1, op2, op3) -> Instruction(opCode, op1, op2, op3) }
+        .map { (opCode, op1, op2, op3) -> OpCodeInstruction(opCode, op1, op2, op3) }
 
 
     private fun Sequence<String>.parseSamples() = this
@@ -44,7 +46,7 @@ class Day16 : Day(title = "Chronal Classification") {
             val opCode = opLine
                 .split(" ")
                 .map { it.toInt() }
-                .let { (code, op1, op2, op3) -> Instruction(code, op1, op2, op3) }
+                .let { (code, op1, op2, op3) -> OpCodeInstruction(code, op1, op2, op3) }
 
             val after = RegisterBank(afterLine
                 .substringBetween('[', ']')
@@ -102,40 +104,9 @@ class Day16 : Day(title = "Chronal Classification") {
             .reduceToSingleEntries()
     }
 
-    enum class Op(val instr: (Int, Int, RegisterBank) -> Int) {
-        ADDR({ ra, rb, rs -> rs[ra] + rs[rb] }),
-        ADDI({ ra, vb, rs -> rs[ra] + vb }),
-        MULR({ ra, rb, rs -> rs[ra] * rs[rb] }),
-        MULI({ ra, vb, rs -> rs[ra] * vb }),
-        BANR({ ra, rb, rs -> rs[ra] and rs[rb] }),
-        BANI({ ra, vb, rs -> rs[ra] and vb }),
-        BORR({ ra, rb, rs -> rs[ra] or rs[rb] }),
-        BORI({ ra, vb, rs -> rs[ra] or vb }),
-        SETR({ ra, _, rs -> rs[ra] }),
-        SETI({ va, _, _ -> va }),
-        GTIR({ va, rb, rs -> if (va > rs[rb]) 1 else 0 }),
-        GTRI({ ra, vb, rs -> if (rs[ra] > vb) 1 else 0 }),
-        GTRR({ ra, rb, rs -> if (rs[ra] > rs[rb]) 1 else 0 }),
-        EQIR({ va, rb, rs -> if (va == rs[rb]) 1 else 0 }),
-        EQRI({ ra, vb, rs -> if (rs[ra] == vb) 1 else 0 }),
-        EQRR({ ra, rb, rs -> if (rs[ra] == rs[rb]) 1 else 0 });
-
-        operator fun invoke(op1: Int, op2: Int, op3: Int, rs: RegisterBank): RegisterBank =
-            rs.copyAndUpdate(op3, instr(op1, op2, rs))
-    }
-
-    data class RegisterBank(private val registers: List<Int>) : List<Int> by registers {
-        constructor(r0: Int, r1: Int, r2: Int, r3: Int) : this(listOf(r0, r1, r2, r3))
-
-        fun copyAndUpdate(r: Int, v: Int): RegisterBank = RegisterBank(registers.copy(r to v))
-    }
-
-
     data class Sample(
-        val instruction: Instruction,
+        val instruction: OpCodeInstruction,
         val before: RegisterBank,
         val after: RegisterBank
     )
-
-    data class Instruction(val opCode: Int, val op1: Int, val op2: Int, val op3: Int)
 }
