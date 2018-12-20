@@ -24,19 +24,21 @@ class Day10 : Day(title = "Elves Look, Elves Say") {
         .size
 
     private fun List<Int>.iterate(iterations: Int): List<Int> = (0 until iterations)
-        .fold(this.toList()) { old, _ ->
-            val new = mutableListOf<Int>()
-            var j = 0
-            while (j < old.size) {
-                val nr = old[j]
-                var k = 1
-                while ((j + k) < old.size && old[j + k] == nr) {
-                    k++
-                }
-                new += k
-                new += nr
-                j += k
-            }
-            new
+        .fold(this) { old, _ -> old.calculateNew() }
+
+    private tailrec fun List<Int>.calculateNew(
+        index: Int = 0,
+        acc: MutableList<Int> = mutableListOf()
+    ): List<Int> =
+        if (index >= size) acc
+        else {
+            val nr = this[index]
+            val amount = calculateNextIndex(index, nr)
+
+            calculateNew(index + amount, acc.apply { add(amount); add(nr) })
         }
+
+    private tailrec fun List<Int>.calculateNextIndex(index: Int, v: Int, acc: Int = 1): Int =
+        if ((index + acc) >= size || this[index + acc] != v) acc
+        else calculateNextIndex(index, v, acc + 1)
 }
