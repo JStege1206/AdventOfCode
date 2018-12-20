@@ -17,33 +17,46 @@ class Day20 : Day(title = "A Regular Map") {
     }
 
     override fun first(input: Sequence<String>): Any =
-        input.head.solve().values.max() ?: 0
+        input.head.iterator().determineRoutes().values.max() ?: 0
 
     override fun second(input: Sequence<String>): Any =
-        input.head.solve().count { (_, v) -> v >= 1000 }
+        input.head.iterator().determineRoutes().count { (_, v) -> v >= 1000 }
 
-    private fun String.solve(): Map<Point, Int> = mutableMapOf(Point.ZERO_ZERO to 0).apply {
-        fold(ArrayDeque<Point>() to Point.ZERO_ZERO) { (remainingPaths, currentLocation), c ->
-            remainingPaths to when (c) {
-                //On entering branched directions, add the currentLocation to remainingPaths, 
-                //this will ensure that we can continue on this point to follow a different 
-                //path.
-                '(' -> currentLocation.also { remainingPaths.addFirst(it) }
-                //On closing a branch we remove the last position we were on before entering
-                //the branch and just go on.
-                ')' -> remainingPaths.removeFirst()
-                //As soon as we encounter a new branch (which is always preceeded by |), get the
-                //last known location and use it to follow the directions.
-                '|' -> remainingPaths.peekFirst()
-                //Regular NESW directions, just follow it and update the distance if needed.
-                in "NESW" -> currentLocation.moveDirection(DIRECTIONS[c]!!).also { newLocation ->
-                    this.merge(newLocation, this[currentLocation]!! + 1) { newLength, prevLength ->
+    private tailrec fun CharIterator.determineRoutes(
+        crossroads: ArrayDeque<Point> = ArrayDeque(),
+        currentLocation: Point = Point.ZERO_ZERO,
+        distances: MutableMap<Point, Int> = mutableMapOf(Point.ZERO_ZERO to 0)
+    ): Map<Point, Int> =
+        if (!hasNext()) distances
+        else when (val c = next()) {
+            //On entering branched directions, add the currentLocation to crossroads, 
+            //this will ensure that we can continue on this point to follow a different 
+            //path.
+            '(' -> determineRoutes(
+                crossroads.apply { addFirst(currentLocation) },
+                currentLocation,
+                distances
+            )
+
+            //On closing a branch we remove the last crossroad we were on before entering
+            //the branch and just go on.
+            ')' -> determineRoutes(crossroads, crossroads.removeFirst(), distances)
+
+            //As soon as we encounter a new branch, get the
+            //last known crossroad and use it to follow the directions.
+            '|' -> determineRoutes(crossroads, crossroads.peekFirst(), distances)
+
+            //Regular NESW directions, just follow it and update the distance if needed.
+            in "NESW" -> {
+                val newLocation = currentLocation.moveDirection(DIRECTIONS[c]!!)
+                determineRoutes(crossroads, newLocation, distances.apply {
+                    merge(newLocation, this[currentLocation]!! + 1) { newLength, prevLength ->
                         if (newLength > prevLength - 1) prevLength else newLength
                     }
-                }
-                //Non-necessary characters, e.g. ^ and $
-                else -> currentLocation
+                })
             }
+
+            //Non-necessary characters, e.g. ^ and $
+            else -> determineRoutes(crossroads, currentLocation, distances)
         }
-    }
 }
